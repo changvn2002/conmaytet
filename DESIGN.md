@@ -1,27 +1,31 @@
 ---
 name: Còn Mấy Cái Tết Nữa?
-description: Đếm số Tết còn bên bố mẹ bằng thống kê tuổi thọ — ấm, trang trọng, đầy hy vọng.
+description: Đếm số Tết còn bên bố mẹ bằng thống kê tuổi thọ — sân khấu sáng, ấm, đầy hy vọng. (REDESIGN-V2 «Sân Khấu Sáng Đầu Năm»: Full-viewport Scene Flow, pine + gold. Đã promote thành DESIGN.md hiện hành ngày 2026-10-24, sau khi Panel #02 PASS 5/5 + §6 5/5 trên live 084bb36.)
 colors:
-  primary: "#8C1D18"
-  primary-deep: "#6E130E"
-  primary-soft: "#F6E3DE"
-  gold: "#A87E1F"
-  paper: "#FAF6EF"
+  primary: "#1F4D3A"
+  primary-deep: "#14342A"
+  primary-hover: "#2A6248"
+  primary-tint: "#E3EDE6"
+  gold: "#C9A227"
+  gold-soft: "#E9D48A"
+  gold-text: "#6B5510"
+  paper: "#FBF7EC"
   card: "#FFFFFF"
-  ink: "#221D1A"
-  muted: "#6E6259"
-  line: "#E8DCCB"
-  notice-warn-bg: "#FBF3DC"
-  notice-warn-text: "#7A5B12"
+  ink: "#1C2420"
+  muted: "#44564B"
+  line: "#D8DDD0"
+  input-line: "#7E9384"
+  notice-warn-bg: "#FBF0D3"
+  notice-warn-text: "#5C4A0E"
+  notice-error-bg: "#FDECEA"
+  notice-error-text: "#8A2A20"
 typography:
   display:
-    fontFamily: "Outfit, Be Vietnam Pro, ui-sans-serif, system-ui, sans-serif"
-    fontWeight: 700
+    fontFamily: "Baloo 2, Be Vietnam Pro, ui-sans-serif, system-ui, sans-serif"
+    fontWeight: 800
   headline:
-    fontFamily: "Outfit, Be Vietnam Pro, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Baloo 2, Be Vietnam Pro, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 700
-    fontSize: "1.5rem"
-    lineHeight: 1.25
   body:
     fontFamily: "Be Vietnam Pro, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 400
@@ -43,6 +47,11 @@ spacing:
   xl: "20px"
   2xl: "24px"
   3xl: "32px"
+  4xl: "40px"
+  5xl: "56px"
+  6xl: "80px"
+measure:
+  prose: "34rem"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -50,7 +59,7 @@ components:
     rounded: "{rounded.md}"
     padding: "12px 24px"
   button-primary-hover:
-    backgroundColor: "{colors.primary-deep}"
+    backgroundColor: "{colors.primary-hover}"
     textColor: "#FFFFFF"
     rounded: "{rounded.md}"
     padding: "12px 24px"
@@ -79,175 +88,293 @@ components:
     rounded: "{rounded.md}"
     padding: "10px 14px"
   stat-tile:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.primary-tint}"
     rounded: "{rounded.md}"
     padding: "12px"
+  stage-number:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.primary}"
+    rounded: "0"
+    padding: "0"
 ---
 
-# Design System: Còn Mấy Cái Tết Nữa?
+# Design System: Còn Mấy Cái Tết Nữa? (ĐỀ XUẤT — REDESIGN-V2)
 
 ## Overview
 
-**Creative North Star: "Mâm Cơm Giao Thừa"**
+**Creative North Star: «Sân Khấu Sáng Đầu Năm»**
 
-Một mâm cơm giao thừa không ồn ào: nền giấy ấm như tờ lịch treo tường nhà bố
-mẹ, mực nâu đen, và một màu đỏ sơn mài trầm — màu của bao lì xì, của câu đối,
-của sự sum vầy — nói rất ít nhưng mỗi lần xuất hiện đều có trọng lượng. Hệ
-thống này phục vụ một khoảnh khắc cảm xúc cao trên điện thoại: người trẻ xa
-quê nhìn thấy con số của gia đình mình. Vì vậy mọi quyết định thị giác đều
-quy về một câu hỏi: người đọc có thấy được nâng niu không?
+Trang là một dãy cảnh, mỗi cảnh chiếm trọn một màn hình và chỉ có một
+nhân vật: Cảnh 1 là lời mời, Cảnh 2 là con số, Cảnh 3 là câu chuyện
+tuần đời, Cảnh 4 là hành động gửi đi. Con số Tết không còn nằm trong
+thẻ kết quả: nó đứng trần giữa sân khấu giấy sáng, to như chữ trang
+bìa, với khoảng trống xung quanh là một phần của thiết kế. Hệ tham
+chiếu chính là Apple (sân khấu hoá một con số, prose bị kỷ luật bề
+ngang) và Spotify Wrapped (khoảnh khắc reveal cá nhân hoá, thẻ chia
+sẻ đáng gửi đi), phụ là Airbnb (giọng lời mời ấm áp). Học cấu trúc
+của các hệ đó, không học màu sân khấu của chúng: ở đây sân khấu luôn
+sáng.
 
-Con số lớn là nhân vật chính và luôn được khung như một lời nhắc yêu thương —
-"còn 14 cái Tết — đủ để trân trọng từng lần về nhà" — không bao giờ như một
-đồng hồ đếm ngược. Trang trọng không có nghĩa là tang tóc: không nền tối,
-không hiệu ứng gây sợ, không chữ xám nhỏ cho thông tin quan trọng. Độ sâu đến
-từ hai bóng đổ mềm và sự phân tầng giấy/trắng, không phải từ màu mè.
+Mọi con số là ước tính thống kê từ một hệ số liệu duy nhất (bảng sống
+WHO Việt Nam 2019), luôn có nguồn đứng cạnh, không bao giờ là bói
+toán hay dự đoán cá nhân, và luôn đi kèm một câu hy vọng viết riêng
+cho đúng người được nói tới.
 
 **Key Characteristics:**
 
-- Màu đặc 100%; đỏ sơn mài chỉ dành cho con số chính, hành động chính, lựa chọn đang chọn và tuần đã sống trong lưới đời.
-- Nền giấy ấm `#FAF6EF`, thẻ trắng, mực `#221D1A` — tương phản cao cho người đọc ở mọi độ tuổi, kể cả bố mẹ của người dùng khi nhận kết quả được gửi tới.
-- Con số chính cỡ chữ 72px (text-7xl) bằng Outfit; không thông tin cốt lõi nào nằm dưới cỡ chữ thân bài.
-- Số liệu và nguồn thống kê luôn đứng ngay dưới kết quả, trang trọng, cùng cột đọc — không chôn ở chân trang.
-- Vàng đồng xuất hiện tối thiểu: nhuỵ hoa mai trong logo, dấu mốc "tuần này" trong lưới tuần, vài đường nhấn hiếm hoi.
+- Bốn cảnh toàn viewport; luồng lõi nhập → thấy số tốn tối đa 1 lần cuộn trên mobile.
+- Con số sân khấu Baloo 2 800, clamp(120px, 38vw, 168px), màu Xanh Thông trên Giấy Ấm — không thẻ, không viền, không bóng.
+- Mọi khối prose khoá bề ngang 34rem (~65 ký tự/dòng) trên mọi breakpoint.
+- Vàng chỉ là điểm chạm đồ hoạ; không bao giờ là chữ trên nền sáng.
+- Không nền tối ở bất kỳ cảnh/trạng thái nào; không gradient dưới mọi hình thức.
 
 ## Colors
 
-Một bảng màu mượn từ vật liệu ngày Tết: sơn mài, giấy, mực tàu và một vệt vàng
-đồng. Đỏ là tiếng nói duy nhất; phần còn lại là nền ấm trung tính.
+| Token | Hex | Vai trò |
+|---|---|---|
+| Xanh Thông Sâu | `#14342A` | Tiêu đề cảnh, chữ trên tint thông |
+| Xanh Thông (brand) | `#1F4D3A` | Con số sân khấu, nút chính, trạng thái chọn, tuần đã sống |
+| Xanh Thông Hover | `#2A6248` | Hover/pressed của hành động chính |
+| Xanh Thông Nhạt | `#E3EDE6` | Nền ô thống kê, dải offline, khối phụ |
+| Vàng Lì Xì | `#C9A227` | Chỉ đồ hoạ: đường nhấn dưới số, vòng tuần này, hạt nắng |
+| Vàng Nắng Mềm | `#E9D48A` | Chi tiết sáng trên nền thông |
+| Vàng Chữ | `#6B5510` | Dạng duy nhất của vàng được làm chữ trên nền sáng |
+| Giấy Ấm | `#FBF7EC` | Nền trang, nền sân khấu, nền ô nhập |
+| Trắng Thẻ | `#FFFFFF` | Ô nhập nổi, thẻ chia sẻ, khối disclosure |
+| Mực | `#1C2420` | Chữ chính |
+| Mực Nhạt | `#44564B` | Chữ phụ — chỉ trên Giấy Ấm/Trắng Thẻ, đạt AAA |
+| Đường Kẻ Ấm | `#D8DDD0` | Đường chia, chấm tuần chưa sống |
+| Đường Kẻ Nhập | `#7E9384` | Viền ô nhập trạng thái nghỉ (đạt non-text 3:1) |
+| Cảnh báo | `#FBF0D3` / `#5C4A0E` | Cảnh báo mềm không chặn |
+| Lỗi | `#FDECEA` / `#8A2A20` | Lỗi nhập liệu (màu ngữ nghĩa, không phải brand) |
 
-### Primary
+### Bảng contrast (WCAG relative-luminance, tính bằng script từ hex, 2026-10-23 — đo lại trên render thật ở implementation)
 
-- **Đỏ Sơn Mài** (#8C1D18): màu thương hiệu — con số Tết còn lại, nút hành động chính, trạng thái đang chọn, chấm tuần đã sống. Sẫm và nâu hơn đỏ crimson của các app chị em; trầm, không chói.
-- **Đỏ Sơn Mài Sâu** (#6E130E): trạng thái hover của hành động chính và chữ trên nền tint đỏ; không bao giờ dùng làm nền diện rộng.
+| Cặp | Nền thật | Tỉ lệ | Ngưỡng | Kết luận |
+|---|---|---|---|---|
+| Trắng trên Xanh Thông | nút primary | 9.63:1 | 4.5 | Đạt AAA |
+| Xanh Thông trên Giấy Ấm | con số sân khấu, chữ nhấn | 9.00:1 | 4.5 (3.0 cỡ lớn) | Đạt AAA |
+| Xanh Thông Sâu trên Giấy Ấm | tiêu đề cảnh | 12.62:1 | 4.5 | Đạt AAA |
+| Trắng trên Xanh Thông Sâu | (dự phòng bề mặt đặc) | 13.51:1 | 4.5 | Đạt AAA |
+| Trắng trên Xanh Thông Hover | hover nút chính | 7.15:1 | 4.5 | Đạt AAA |
+| Mực trên Giấy Ấm | body | 14.83:1 | 4.5 | Đạt AAA |
+| Mực trên Trắng Thẻ | body trong khối phụ | 15.88:1 | 4.5 | Đạt AAA |
+| Mực Nhạt trên Giấy Ấm | chữ phụ | 7.32:1 | 4.5 | Đạt AAA |
+| Mực Nhạt trên Trắng Thẻ | chữ phụ | 7.84:1 | 4.5 | Đạt AAA |
+| Xanh Thông Sâu trên Xanh Thông Nhạt | dải offline, ô thống kê | 11.27:1 | 4.5 | Đạt AAA |
+| Vàng Nắng Mềm trên Xanh Thông | chi tiết/chữ phụ trên pine khi thật cần | 6.53:1 | 4.5 | Đạt AA |
+| Vàng Chữ trên Giấy Ấm | nhãn vàng dạng chữ | 6.69:1 | 4.5 | Đạt AA |
+| Chữ cảnh báo trên nền cảnh báo | `#5C4A0E` / `#FBF0D3` | 7.58:1 | 4.5 | Đạt AAA |
+| Chữ lỗi trên nền lỗi | `#8A2A20` / `#FDECEA` | 7.55:1 | 4.5 | Đạt AAA |
+| Viền nhập trên Giấy Ấm | `#7E9384` / `#FBF7EC` (phi chữ) | 3.07:1 | 3.0 | Đạt non-text |
+| **Vàng Lì Xì trên Giấy Ấm** | `#C9A227` / `#FBF7EC` | **2.26:1** | — | **CẤM làm chữ** — chỉ đồ hoạ ≥3px kèm tín hiệu khác |
+| Vàng Lì Xì trên Xanh Thông | chi tiết đồ hoạ trên pine | 3.98:1 | 3.0 (phi chữ) | Đạt non-text |
 
-### Secondary
-
-- **Vàng Đồng** (#A87E1F): điểm nhấn khan hiếm — nhuỵ hoa mai, chấm "tuần này" trong lưới cuộc đời, mốc phân tách hiếm. Không làm nền khối lớn, không làm chữ thân bài.
-
-### Tertiary
-
-- **Hồng Sơn Mài Nhạt** (#F6E3DE): tint của đỏ — nền khối báo lỗi nhập liệu và nền hover của nút viền. Chữ trên nền này luôn là Đỏ Sơn Mài Sâu hoặc Mực, không bao giờ xám.
-
-### Neutral
-
-- **Giấy Ấm** (#FAF6EF): nền toàn trang và nền ô nhập liệu; ấm hơn trắng, gợi giấy lịch và trang vở.
-- **Trắng Thẻ** (#FFFFFF): bề mặt của thẻ nội dung và thẻ kết quả trên nền giấy.
-- **Mực** (#221D1A): chữ chính, tiêu đề, con số phụ — nâu đen mềm hơn đen thuần nhưng vẫn tương phản rất cao trên Giấy Ấm.
-- **Mực Nhạt** (#6E6259): chữ phụ, giải thích, chú thích — chỉ trên nền Giấy Ấm hoặc Trắng Thẻ, không bao giờ trên nền có màu.
-- **Đường Kẻ Ấm** (#E8DCCB): viền thẻ, đường chia, và chấm tuần chưa sống trong lưới cuộc đời.
+Phương pháp: tỉ lệ = (L1 + 0,05) / (L2 + 0,05) với L là độ chói tương
+đối WCAG 2.x tính từ hex sRGB. Mọi cặp chữ trong bảng đều tính trên
+đúng nền mà chữ đó sẽ đứng trong Scene Flow (sân khấu = Giấy Ấm, khối
+phụ = Trắng Thẻ/tint), không tính trên nền «lý tưởng».
 
 ### Named Rules
 
-**The One Red Rule.** Đỏ sơn mài chỉ xuất hiện khi nó mang ý nghĩa: con số chính, hành động chính, lựa chọn, tuần đã sống. Một màn hình mà đỏ làm nền trang trí là một màn hình sai.
+**The One Pine Rule.** Xanh thông chỉ xuất hiện khi mang ý nghĩa: con
+số chính, hành động chính, lựa chọn đã chọn, tuần đã sống. Trạng thái
+chưa chọn không được nhuộm brand (diệt finding chip «Không chọn» đặc
+màu của bản live).
 
-**The Hope Rule.** Không nền đen/tối, không khung viền tang, không hiệu ứng mờ dần kiểu tưởng niệm. Bất kỳ thành phần nào khiến người đọc liên tưởng đến đám tang đều bị loại, dù nó "đẹp".
+**The Gold Is Graphic Rule.** Vàng Lì Xì `#C9A227` không làm chữ trên
+nền sáng (2.26:1), không làm nền khối lớn, không làm tín hiệu duy
+nhất. Vàng làm chữ trên nền sáng chỉ có một dạng hợp lệ: Vàng Chữ
+`#6B5510`.
 
-**The Source Stays Close Rule.** Khối nguồn số liệu (DATA_SOURCE_VI) đứng ngay dưới kết quả trong cùng cột đọc, không thu nhỏ dưới 12px và không tách sang trang/cột khác.
+**The Hope Rule.** Không nền đen/tối, không khung tang, không hiệu
+ứng tưởng niệm, không đếm ngược. Sân khấu của con số là giấy sáng —
+kể cả khi hệ tham chiếu dùng sân khấu tối.
+
+**The Source Stays Close Rule.** Dòng nguồn rút gọn (≥13px) đứng
+trong cùng Cảnh 2 với con số; nguyên văn ở disclosure cùng trang, mở
+bằng một chạm từ dòng rút gọn.
 
 ## Typography
 
-**Display Font:** Outfit (với Be Vietnam Pro dự phòng — Outfit thiếu một số dấu tiếng Việt nên mọi chữ hiển thị đều phải kiểm tra dấu với font dự phòng)
-**Body Font:** Be Vietnam Pro (với ui-sans-serif, system-ui dự phòng)
-**Label Font:** Be Vietnam Pro semibold
+**Display Font:** Baloo 2 — đã kiểm chứng ở mức file/glyph bằng
+fontTools trên file thật do Google Fonts phân phối (variable +
+static 700 + static 800): **90/90 ký tự tiền hợp tiếng Việt có
+glyph**, feature `tnum` có thật → số tabular hoạt động. (Đối chứng:
+Outfit của bản live thiếu 88/90 trên cùng phép kiểm — bị loại vĩnh
+viễn. Be Vietnam Pro phải nạp đúng subset `vietnamese`.)
 
-**Character:** Outfit hình học, tròn và chắc, cho các con số cảm giác "khắc trên gỗ" — vững, không lạnh. Be Vietnam Pro mang đủ dấu tiếng Việt hoàn hảo cho thân bài dài, giọng văn ấm và rõ. Cặp font này nói cùng một thứ: hiện đại nhưng gốc gác gia đình.
+**Body Font:** Be Vietnam Pro (400/500/600/700), subset vietnamese +
+latin, WOFF2 tự host, `font-display: swap`.
 
 ### Hierarchy
 
-- **Display / Số Tết** (Outfit, 700, 72px, line-height 1): con số "cái Tết nữa" trong thẻ kết quả của bố và mẹ — phần tử lớn nhất trang, luôn màu Đỏ Sơn Mài.
-- **Display / H1** (Outfit, 700, 30–36px, line-height 1.25): câu hỏi tên sản phẩm, một lần duy nhất.
-- **Headline** (Outfit, 700, 24px): tiêu đề các mục nội dung ("Cuộc đời bạn trong một trang", các H2 giải thích/FAQ).
-- **Title** (Outfit, 700, 18–20px): tên sản phẩm ở header, nhãn "cái Tết nữa" dưới con số chính.
-- **Body** (Be Vietnam Pro, 400, 16px, line-height 1.625): mọi đoạn giải thích; độ dài dòng giữ trong cột tối đa 4xl của trang, phần mở đầu giới hạn ~65 ký tự/dòng (max-w-2xl).
-- **Label** (Be Vietnam Pro, 600, 14px): nhãn trường nhập, nhãn thẻ kết quả (uppercase, tracking rộng cho thẻ bố/mẹ).
-- **Caption** (Be Vietnam Pro, 400, 12px): chỉ cho chú thích phụ trợ như nguồn số liệu rút gọn, thang slider, chú thích lưới tuần — không bao giờ cho nội dung người dùng buộc phải đọc để hiểu kết quả.
+- **Stage Number** (Baloo 2, 800, clamp(120px, 38vw, 168px), line-height 0.95, tabular): con số Tết ở Cảnh 2 — phần tử lớn nhất toàn app.
+- **Display 1** (Baloo 2, 700, 32px mobile / 44px desktop, line-height 1.15): câu mời Cảnh 1, tiêu đề Cảnh 3.
+- **Display 2** (Baloo 2, 700, 24–28px): tiêu đề Cảnh 4, tiêu đề disclosure.
+- **Body** (Be Vietnam Pro, 400, 16px, line-height 1.625, **max-width 34rem**): mọi prose.
+- **Body Strong** (Be Vietnam Pro, 600, 16px): câu hy vọng đi kèm số, cụm khoá trong miễn trừ.
+- **Label** (Be Vietnam Pro, 600, 14px): nhãn trường; nhãn người ở Cảnh 2 là 13px semibold, tracking rộng, Xanh Thông Sâu.
+- **Caption** (13–14px): chỉ chú thích phụ trợ thật sự. Miễn trừ (≥14px) và nguồn (≥13px) không phải caption — xem No Small Print.
 
 ### Named Rules
 
-**The Big Number Rule.** Con số Tết còn lại không bao giờ nhỏ hơn 60px và không bao giờ đứng một mình: ngay dưới nó phải có đơn vị ("cái Tết nữa") và một câu diễn giải đầy hy vọng trong cùng thẻ.
+**The Stage Number Rule.** Con số Tết không nhỏ hơn 120px trên
+mobile, không nằm trong thẻ/viền/bóng, và không bao giờ đứng một
+mình: cùng cảnh phải có đơn vị, câu hy vọng riêng của người đó, diễn
+giải, miễn trừ và nguồn.
 
-**The No Small Print Rule.** Miễn trừ thống kê và nguồn số liệu là nội dung hạng nhất: câu miễn trừ ở cỡ chữ thân bài nhỏ (14px, đậm các cụm khóa), nguồn ở tối thiểu 12px — không chôn, không làm mờ.
+**The Measure Rule.** Không khối prose nào rộng hơn 34rem trên bất
+kỳ breakpoint nào. Cột trang được phép rộng hơn cho lưới tuần và thẻ
+chia sẻ; prose thì không.
+
+**The No Small Print Rule.** Miễn trừ thống kê tối thiểu 14px (đậm
+cụm khoá), nguồn rút gọn tối thiểu 13px, nguyên văn tối thiểu 12px
+trong disclosure — không chôn, không làm mờ, không chân trang pháp lý.
 
 ## Layout
 
-Trang một cột, khung tối đa 4xl (896px), canh giữa, đệm ngang 16px (24px từ sm). Nhịp dọc: công cụ nhập liệu trước, kết quả ngay dưới, rồi các mục nội dung giải thích — phương pháp — FAQ, mỗi mục cách nhau 48–56px. Người dùng chính đọc trên điện thoại một tay: form xếp 1 cột trên mobile, 2 cột từ 640px; thẻ kết quả của bố/mẹ xếp chồng trên mobile, sóng đôi từ 640px.
+Scene Flow một cột: Cảnh 1 (lời mời, ≤1 viewport mobile) → Cảnh 2
+(sân khấu số, 1 viewport/người trên mobile; song song hai sân khấu từ
+1024px) → Cảnh 3 (lưới tuần kể chuyện, ~1.3 viewport, có mốc tuổi) →
+Cảnh 4 (gửi đi, ≤1 viewport) → tầng disclosure (Cách tính & nguồn ·
+Hỏi đáp, server-render, mặc định đóng). Luồng lõi nhập → thấy số tốn
+tối đa 1 lần cuộn viewport mobile; desktop 0–1 lần cuộn. Cảnh chưa có
+dữ liệu không tồn tại trong luồng cuộn. Chi tiết wireframe + bảng
+chiều cao: `LAYOUT-SPEC.md`.
 
-Lưới tuần cuộc đời là thành phần chữ ký: lưới chấm tròn 52 cột (một hàng = một năm), khoảng cách 3px, chấm đã sống màu đỏ, tuần hiện tại màu vàng đồng có vòng nhấn, tuần còn lại màu Đường Kẻ Ấm — luôn kèm chú thích bằng chữ, không dựa vào màu đơn độc. Các ô thống kê phụ dưới lưới xếp 2 cột trên mobile, 4 cột từ 640px.
+Lưới tuần ở Cảnh 3: 52 cột, gap 3px, chấm đã sống Xanh Thông, tuần
+này Vàng Lì Xì + vòng Xanh Thông 2px + nhãn chữ trỏ tại chỗ, tuần còn
+lại Đường Kẻ Ấm; dải mốc tuổi 30/40/50/60 neo vào đúng hàng lưới;
+chú thích 3 trạng thái bằng chữ luôn đi kèm; `role="img"` + aria-label
+tóm tắt bằng số.
 
 ## Elevation & Depth
 
-Độ sâu phẳng và ấm: thẻ trắng nổi trên nền giấy bằng một bóng đổ hai lớp rất mềm (ambient + contact) và viền Đường Kẻ Ấm 1px. Không có bề mặt nào nổi cao hơn thẻ; bóng "lift" chỉ dành cho lớp phủ tương lai (sheet/dialog) nếu có. Màu sắc không bao giờ mô phỏng độ sâu — không gradient dưới mọi hình thức.
+Sân khấu phẳng tuyệt đối: Cảnh 2 không bóng, không viền. Bóng chỉ
+còn hai token: `shadow-card` cho thẻ chia sẻ và khối disclosure,
+`shadow-lift` cho hàng hành động bám đáy trong Cảnh 4 và lớp phủ tạm
+thời. Không gradient dưới mọi hình thức — màu không mô phỏng độ sâu.
 
-### Shadow Vocabulary
-
-- **shadow-card** (`0 1px 2px rgba(34,29,26,0.05), 0 8px 24px rgba(34,29,26,0.06)`): mọi thẻ đang nghỉ — thẻ nhập liệu, thẻ kết quả, thẻ lưới tuần, mục FAQ.
-- **shadow-lift** (`0 2px 4px rgba(34,29,26,0.06), 0 16px 40px rgba(34,29,26,0.10)`): chỉ cho lớp phủ tạm thời nổi trên trang; hiện chưa có thành phần nào dùng.
-
-### Named Rules
-
-**The Flat Rows Rule.** Bên trong một thẻ, các hàng/ô con được phân tách bằng khoảng trống hoặc nền Giấy Ấm rất nhẹ (ô thống kê) — không lồng thẻ bo góc có viền trong thẻ khác.
+- **shadow-card** (`0 1px 2px rgba(28,36,32,0.05), 0 8px 24px rgba(28,36,32,0.06)`)
+- **shadow-lift** (`0 2px 4px rgba(28,36,32,0.06), 0 16px 40px rgba(28,36,32,0.10)`)
 
 ## Shapes
 
-Góc bo hào phóng và nhất quán: 16px (rounded-2xl) cho mọi thẻ, 12px (rounded-xl) cho ô nhập, nút, chip chọn và ô thống kê. Chấm của lưới tuần và chấm chú thích là hình tròn hoàn hảo. Viền luôn 1px Đường Kẻ Ấm khi cần tách nền; không viền dày, không góc vuông ở bất kỳ thành phần tương tác nào. Logo hoa mai giữ nguyên bo góc và tỉ lệ gốc từ file SVG — không cắt, không đặt lại màu.
+Thẻ/khối phụ bo 16px; ô nhập, nút, chip bo 12px; chấm tuần tròn
+hoàn hảo; sân khấu không có hình dạng (không khung). Logo giữ nguyên
+tỉ lệ gốc từ file SVG của bộ asset v2 — không cắt, không đặt lại màu.
+
+## Motion
+
+Một khoảnh khắc ngôi sao duy nhất: reveal con số ở Cảnh 2 (scale
+0.92 → 1 + fade, 480ms, `cubic-bezier(0.22, 1, 0.36, 1)`; câu hy vọng
+trễ 120ms). Cập nhật số khi sửa input chỉ cross-fade 160ms. Chấm
+«tuần này» pulse vòng 1 lần khi lưới vào viewport. Số không đếm tăng
+(không gợi đếm ngược). `prefers-reduced-motion`: tắt toàn bộ, cuộn
+nhảy tức thì.
 
 ## Components
 
 ### Buttons
 
-- **Shape:** bo 12px, chữ Be Vietnam Pro semibold 14px, vùng chạm tối thiểu 44px chiều cao.
-- **Primary:** nền Đỏ Sơn Mài, chữ trắng — dành cho hành động chia sẻ kết quả ("Copy kết quả gửi người thân"); hover chuyển Đỏ Sơn Mài Sâu trong 150ms; focus-visible có outline đỏ sâu rõ ràng.
-- **Outline:** viền Đỏ Sơn Mài, chữ Đỏ Sơn Mài trên nền thẻ — hành động phụ ("Tải ảnh thẻ kết quả"); hover phủ Hồng Sơn Mài Nhạt.
-- **Ghost:** viền Đường Kẻ Ấm, chữ Mực, nền Giấy Ấm — hành động phá huỷ nhẹ ("Làm lại từ đầu"); hover viền chuyển Đỏ Sơn Mài.
+Bo 12px, Be Vietnam Pro semibold 14px, vùng chạm tối thiểu 44px
+(nút chính 52px). Primary: nền Xanh Thông, chữ trắng — «Xem còn mấy
+cái Tết» (Cảnh 1), «Copy kết quả» (Cảnh 4). Outline: viền Xanh Thông,
+chữ Xanh Thông trên Trắng Thẻ — «Tải ảnh thẻ kết quả». Ghost: viền
+Đường Kẻ Ấm, chữ Mực — «Làm lại từ đầu», và nó **không bao giờ xoá
+ngay**: bấm → xác nhận tại chỗ → sau khi xoá có «Hoàn tác» 8 giây.
 
-### Chips
+### Segmented (giới tính)
 
-- **Radio chip (giới tính):** nhóm 3 chip chọn một, có role radio/aria-checked đầy đủ. Chip đang chọn: nền Đỏ Sơn Mài, chữ trắng. Chip chưa chọn: nền Giấy Ấm, viền Đường Kẻ Ấm, chữ Mực; hover viền ấm lên Đỏ Sơn Mài. Cả hàng chip cao tối thiểu 44px để chạm dễ trên điện thoại.
-
-### Cards / Containers
-
-- **Corner Style:** bo 16px.
-- **Background:** Trắng Thẻ trên nền Giấy Ấm; thẻ kết quả của bố/mẹ canh giữa toàn bộ nội dung.
-- **Shadow Strategy:** shadow-card khi nghỉ; không đổi bóng theo hover (thẻ không phải nút).
-- **Border:** 1px Đường Kẻ Ấm.
-- **Internal Padding:** 20px (mobile) / 24px (từ sm).
+3 ô chọn một, role radio/aria-checked đầy đủ, cao tối thiểu 44px.
+**Trạng thái ban đầu: cả 3 ô trung tính** (nền Giấy Ấm, viền Đường Kẻ
+Ấm, chữ Mực). Ô chỉ chuyển nền Xanh Thông/chữ trắng sau khi người
+dùng thực sự chọn.
 
 ### Inputs / Fields
 
-- **Style:** nền Giấy Ấm, viền 1px Đường Kẻ Ấm, bo 12px, chữ 16px Mực (16px là bắt buộc để iOS không tự phóng khi focus), đệm 10px 14px.
-- **Focus:** viền chuyển Đỏ Sơn Mài kèm outline đỏ sâu khi focus-visible — trạng thái focus phải nhìn thấy được bằng mắt thường, không chỉ đổi màu viền nhẹ.
-- **Slider (số lần về thăm):** accent Đỏ Sơn Mài; giá trị hiện tại hiển thị bằng số Outfit 18px màu đỏ ngay cạnh nhãn; thang mốc dưới slider bằng chữ 12px Mực Nhạt.
-- **Checkbox (sống cùng bố mẹ):** ô 20px accent Đỏ Sơn Mài, cả khối nhãn bấm được, kèm câu giải thích 14px.
+Nền Giấy Ấm (trong cảnh) hoặc Trắng Thẻ, viền 1px Đường Kẻ Nhập, bo
+12px, chữ 16px (bắt buộc để iOS không tự phóng). Focus: viền Xanh
+Thông + outline 2px Xanh Thông Sâu. Giải thích tại chỗ (13–14px, Mực
+Nhạt trên Giấy Ấm = 7.32:1) đứng ngay dưới trường liên quan. Slider:
+accent Xanh Thông, núm 26px, vùng chạm dọc 44px, thang mốc đúng tỉ
+lệ 0/6/12/18/24.
 
 ### Notices
 
-- **Lỗi nhập liệu:** nền Hồng Sơn Mài Nhạt, chữ Đỏ Sơn Mài Sâu, có role="alert" — lỗi nói rõ vấn đề và cách sửa, đứng ngay trong form.
-- **Cảnh báo mềm:** nền vàng nhạt `#FBF3DC`, chữ `#7A5B12` — dành cho cảnh báo không chặn tính toán (ví dụ năm sinh bố mẹ sát tuổi con). Chữ trên hai nền này không bao giờ là Mực Nhạt.
+Lỗi: nền `#FDECEA`, chữ `#8A2A20`, `role="alert"`, đặt ngay dưới
+trường liên quan; validate theo từng phần — lỗi của một người không
+ẩn kết quả của người còn lại. Cảnh báo mềm: nền `#FBF0D3`, chữ
+`#5C4A0E`, vẫn tính kết quả. Cả hai tối thiểu 14px.
 
-### Signature: Parent Result Card (Thẻ Tết của bố/mẹ)
+### Signature: Stage Number (Cảnh 2)
 
-Thẻ trắng canh giữa: nhãn uppercase "CÒN KHOẢNG VỚI BỐ (… TUỔI)", con số 72px Đỏ Sơn Mài, đơn vị "cái Tết nữa", rồi một câu diễn giải có con số lần gặp/ngày bên nhau và mốc tuổi thọ kỳ vọng. Cấu trúc thẻ của bố và mẹ giống hệt nhau để hai con số đặt cạnh nhau tự kể câu chuyện — không trang trí thêm, không icon cảm xúc.
+Nhãn người → số sân khấu → đơn vị → đường nhấn vàng 48×3px → câu hy
+vọng riêng từng người → diễn giải lần gặp (chủ ngữ đúng người đó) →
+miễn trừ rút gọn → nguồn rút gọn + liên kết Cách tính. Không thẻ.
+Hai người = hai cảnh (mobile) hoặc hai sân khấu song song (desktop),
+văn bản **không dùng chung** ngoài cấu trúc.
 
-### Signature: Life Week Grid (Lưới tuần cuộc đời)
+### Signature: Story Week Grid (Cảnh 3)
 
-Lưới chấm 52 cột trong thẻ trắng, có role="img" và aria-label tóm tắt bằng số. Chú thích ba trạng thái luôn đi kèm. Dưới lưới là 4 ô thống kê nền Giấy Ấm (ngày đã sống, lần trăng tròn, số Tết đã qua, % đời đã qua) — các con số phụ dùng Outfit 20px màu Mực, giữ đỏ cho duy nhất con số chính của trang.
+Lưới tuần có dải mốc tuổi 30/40/50/60 neo vào hàng, chấm tuần này có
+vòng + nhãn trỏ + pulse 1 lần, chú thích chữ 3 trạng thái, 4 ô thống
+kê nền Xanh Thông Nhạt với số Mực (giữ Xanh Thông cho duy nhất con số
+chính của app).
+
+## App shell & offline
+
+Yêu cầu cứng W5-01 (chi tiết + nghiệm thu: `LAYOUT-SPEC.md` mục
+«App shell & offline»). App đăng ký **service worker** và **precache
+app shell** — HTML (gồm tầng disclosure server-render), CSS, JS, font
+WOFF2 thiết yếu, logo và bộ icon PWA v2 — ngay lần tải đầu có mạng;
+SW + manifest (standalone, icon gồm bản maskable) phải cùng đưa app
+tới **đạt tiêu chí cài đặt PWA (installable)**.
+
+App thuần client-side nên sau khi cache shell, **toàn bộ Scene Flow
+chạy offline hoàn toàn**: nhập liệu, tính toán, reveal, lưới tuần,
+Copy kết quả và Tải ảnh thẻ (canvas trên máy) — không bước nào bị
+khoá hay degrade, không nút nào bị vô hiệu hoá vì mất mạng.
+
+Chỉ báo offline là dải trạng thái **ngay dưới AppBar, trên Cảnh 1**:
+nền Xanh Thông Nhạt, chữ Xanh Thông Sâu (11.27:1), icon Lucide
+WifiOff luôn kèm chữ, chữ tối thiểu 14px, `role="status"`, chỉ hiện
+khi offline và tự ẩn khi có mạng lại. Mẫu câu chuẩn: «Bạn đang không
+có mạng — không sao, app vẫn tính Tết và tạo ảnh thẻ được như
+thường.»
+
+**The Offline Stays Warm Rule.** Ngoại tuyến không phải lỗi của
+người dùng và không bao giờ trình bày như sự cố: chỉ báo offline
+giữ giọng ấm của app (trấn an trước, nói rõ vẫn dùng được sau),
+không màu lỗi, không thuật ngữ kỹ thuật, không để lộ lỗi thô của
+trình duyệt — và tuân thủ Hope Rule + No Small Print như mọi nội
+dung hạng nhất.
+
+## Avatar & minh hoạ
+
+**Không dùng DiceBear**: app không có thực thể người nào cần avatar
+trong luồng (không tài khoản, không hồ sơ, không danh sách thành
+viên). Hình ảnh gợi con người bằng vật (tờ lịch, bao lì xì, ấm trà)
+theo hướng Airbnb — không vẽ mặt người. Minh hoạ duy nhất là
+`assets/illustration-calendar.svg` của bộ asset v2.
 
 ## Do's and Don'ts
 
-### Do:
+### Do
 
-- **Do** trình bày mọi con số kết quả kèm một câu diễn giải đầy hy vọng ngay trong cùng thẻ ("còn khoảng… nếu giữ nhịp về thăm như hiện tại").
-- **Do** giữ khối nguồn số liệu ngay dưới kết quả, tối thiểu 12px, trong cùng cột đọc (The Source Stays Close Rule).
-- **Do** dùng Đỏ Sơn Mài đúng bốn việc: con số chính, hành động chính, trạng thái chọn, tuần đã sống.
-- **Do** giữ mọi vùng chạm từ 44px và trạng thái focus-visible nhìn rõ trên mọi thành phần tương tác.
-- **Do** kiểm tra dấu tiếng Việt của mọi chữ hiển thị bằng Outfit (font dự phòng Be Vietnam Pro) trước khi chốt một tiêu đề mới.
+- **Do** giữ con số ở sân khấu trần trên giấy sáng, kèm câu hy vọng riêng của đúng người đó trong cùng cảnh.
+- **Do** khoá mọi prose ở 34rem, kể cả trên desktop 1440px.
+- **Do** giữ nguồn rút gọn trong Cảnh 2 và nguyên văn ở disclosure cùng trang.
+- **Do** để trạng thái chưa chọn trung tính; brand chỉ xuất hiện sau lựa chọn thật.
+- **Do** kiểm tra chuỗi dấu tiếng Việt bằng Baloo 2 trên bản render thật trước khi chốt tiêu đề mới.
 
-### Don't:
+### Don't
 
-- **Don't** dùng gradient dưới bất kỳ hình thức nào — nền, chữ, hay trang trí.
-- **Don't** dùng nền tối, khung tang, hình ảnh u ám, hiệu ứng tưởng niệm hay bất kỳ ẩn dụ cái chết trực diện nào (The Hope Rule).
-- **Don't** đặt chữ Mực Nhạt/xám lên nền có màu (tint đỏ, vàng nhạt); trên nền màu, chữ là Mực, Đỏ Sơn Mài Sâu hoặc màu thông báo tương ứng.
-- **Don't** lồng thẻ trong thẻ; phân tách nội bộ bằng khoảng trống hoặc nền Giấy Ấm nhẹ (The Flat Rows Rule).
-- **Don't** thu nhỏ con số chính, câu miễn trừ thống kê, hay nguồn số liệu xuống dạng "chữ nhỏ chân trang".
-- **Don't** dùng emoji hoặc glyph unicode làm icon — icon chỉ từ Lucide, cùng một độ dày nét.
+- **Don't** đặt con số chính vào thẻ/card có viền hoặc bóng dưới bất kỳ biến thể nào.
+- **Don't** dùng nền tối, gradient, hiệu ứng tưởng niệm, hay số đếm tăng kiểu đếm ngược.
+- **Don't** dùng Vàng Lì Xì làm chữ trên nền sáng hoặc làm tín hiệu duy nhất.
+- **Don't** viết cùng một câu chữ cho thẻ/cảnh của bố và của mẹ.
+- **Don't** khẳng định về hành vi của «nhiều người» khi không có số liệu trích được.
+- **Don't** để một trường lỗi ẩn kết quả của các phần không liên quan.
+- **Don't** dùng emoji/glyph unicode làm icon — chỉ Lucide, một độ dày nét.
