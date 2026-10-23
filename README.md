@@ -6,7 +6,7 @@ cần đăng nhập, không cài app, mở link là tính được ngay trên tr
 <p align="center">
   <img src="docs/screenshots/conmaytet-desktop.png" alt="Còn Mấy Cái Tết Nữa? — kết quả: còn 16 cái Tết với bố và 24 cái Tết với mẹ" width="900">
 </p>
-<p align="center"><em>Một người sinh năm 1995, bố sinh 1965, mẹ sinh 1968, mỗi năm về nhà 2 lần: app tính ra còn khoảng <strong>16 cái Tết với bố</strong> (32 lần gặp) và <strong>24 cái Tết với mẹ</strong> (47 lần gặp), kèm lưới tuần cuộc đời ngay bên dưới. Ảnh chụp thật từ bản production đang chạy.</em></p>
+<p align="center"><em>Một người sinh năm 1995, bố sinh 1965, mẹ sinh 1968, mỗi năm về nhà 2 lần: app tính ra còn khoảng <strong>16 cái Tết với bố</strong> (32 lần gặp) và <strong>24 cái Tết với mẹ</strong> (47 lần gặp) — mỗi con số đứng trần trên một sân khấu riêng, không thẻ, không khung. Ảnh chụp thật từ bản production đang chạy.</em></p>
 
 Đi làm xa, mỗi năm về nhà được một hai lần — vậy **còn bao nhiêu cái Tết với bố
 mẹ** nữa? **Còn Mấy Cái Tết Nữa?** giúp bạn nhìn thấy con số đó: nhập năm sinh
@@ -27,42 +27,59 @@ Tất cả ảnh dưới đây được chụp trực tiếp từ bản producti
 [https://conmaytet.vercel.app](https://conmaytet.vercel.app) khi app đang ở
 trạng thái **đã nhập xong một bộ dữ liệu đầy đủ và hiển thị kết quả** — đúng
 những gì người dùng nhìn thấy sau khi nhập, không phải màn hình trống lúc mới
-mở app hay ảnh dựng sẵn. Bộ dữ liệu trong ảnh: bạn sinh 15/06/1995, bố sinh
-1965, mẹ sinh 1968, về thăm nhà 2 lần/năm.
+mở app hay ảnh dựng sẵn. Giao diện là một luồng 4 cảnh nối tiếp nhau (Scene
+Flow): Lời mời → Sân khấu số → Câu chuyện tuần đời → Gửi đi. Bộ dữ liệu trong
+ảnh: bạn sinh 15/06/1995, giới tính Nam, bố sinh 1965, mẹ sinh 1968, về thăm
+nhà 2 lần/năm.
 
-### Kết quả — giá trị cốt lõi của app
+### Cảnh 2 — Sân khấu số: giá trị cốt lõi của app
 
-![Desktop 1440×900 — hai thẻ kết quả bố/mẹ và đầu lưới tuần cuộc đời](docs/screenshots/conmaytet-desktop.png)
+![Desktop 1440×900 — Cảnh 2: hai sân khấu số lớn của bố và mẹ đứng cạnh nhau](docs/screenshots/conmaytet-desktop.png)
 
-_Trên desktop: hai thẻ kết quả nằm cạnh nhau — **với bố (61 tuổi): 16 cái Tết
-nữa, khoảng 32 lần gặp**; **với mẹ (58 tuổi): 24 cái Tết nữa, khoảng 47 lần
-gặp** — kèm dòng lưu ý đây là ước tính thống kê, và ngay bên dưới là lưới tuần
-cuộc đời bắt đầu hiện ra._
+_Trên desktop, hai sân khấu số đứng cạnh nhau, con số đứng trần giữa nền giấy
+— không thẻ, không viền: **với bố (61 tuổi): 16 cái Tết nữa, khoảng 32 lần
+gặp**; **với mẹ (58 tuổi): 24 cái Tết nữa, khoảng 47 lần gặp**. Dưới mỗi con
+số là một câu riêng cho từng người, dòng lưu ý đây là ước tính thống kê và
+nguồn bảng sống WHO Việt Nam 2019._
 
 | Mobile (390×844) | Social / link-preview (1280×640) |
 | --- | --- |
-| ![Mobile — hai thẻ kết quả xếp dọc trên điện thoại](docs/screenshots/conmaytet-mobile.png) | ![Social — khung ngang vẫn thấy trọn hai thẻ kết quả](docs/screenshots/conmaytet-social.png) |
-| _Trên điện thoại, hai thẻ kết quả xếp dọc: con số Tết lớn đọc rõ trong một màn hình, cuộn nhẹ là thấy thẻ của mẹ và phần giải thích._ | _Khung 1280×640 dùng khi gửi link app qua Zalo/Facebook — vẫn thấy trọn hai thẻ kết quả và đầu lưới tuần._ |
+| ![Mobile — sân khấu số của bố chiếm trọn màn hình điện thoại](docs/screenshots/conmaytet-mobile.png) | ![Social — khung ngang vẫn thấy trọn hai sân khấu số](docs/screenshots/conmaytet-social.png) |
+| _Trên điện thoại, mỗi sân khấu chiếm trọn một màn hình: trong ảnh là sân khấu của bố — số 16 thật lớn, đọc rõ cùng câu riêng và dòng ước tính thống kê; cuộn xuống là sân khấu của mẹ._ | _Khung 1280×640 dùng khi gửi link app qua Zalo/Facebook — vẫn thấy trọn cả hai sân khấu số và đủ phần giải thích dưới mỗi con số._ |
 
-### Theo từng bước sử dụng
+### Theo từng cảnh
 
-**Bước 1 — Nhập ngày sinh của bạn, năm sinh của bố mẹ và nhịp về thăm.** Kết
-quả tự cập nhật ngay khi nhập, không cần bấm nút tính.
+**Cảnh 1 — Lời mời: nhập ngày sinh của bạn, năm sinh của bố mẹ và nhịp về
+thăm.** Kết quả tự cập nhật ngay khi nhập, không cần bấm nút tính; nút "Xem
+còn mấy cái Tết" chỉ để cuộn xuống sân khấu số.
 
-![Bước 1 — form đã nhập: sinh 1995, bố 1965, mẹ 1968, về thăm 2 lần/năm](docs/screenshots/gallery-01-form-da-nhap.png)
+![Cảnh 1 — lời mời đã nhập: sinh 15/06/1995, Nam, bố 1965, mẹ 1968, về thăm 2 lần/năm](docs/screenshots/gallery-01-form-da-nhap.png)
 
-**Bước 2 — Đọc con số của từng người.** Mỗi thẻ hiện số cái Tết còn lại bằng
-số lớn, số lần gặp còn lại theo nhịp về thăm hiện tại, và mốc tuổi thọ kỳ vọng
-trung bình mà phép tính dựa vào.
+**Cảnh 2 — Sân khấu số: đọc con số của từng người.** Mỗi người một sân khấu
+riêng: số cái Tết còn lại bằng số Baloo 2 thật lớn, số lần gặp còn lại theo
+nhịp về thăm hiện tại, câu riêng cho bố và cho mẹ, và dòng nguồn số liệu ngay
+dưới con số.
 
-![Bước 2 — hai thẻ kết quả: 16 Tết với bố, 24 Tết với mẹ](docs/screenshots/gallery-02-ket-qua-bo-me.png)
+![Cảnh 2 — hai sân khấu số: 16 cái Tết với bố, 24 cái Tết với mẹ](docs/screenshots/gallery-02-ket-qua-bo-me.png)
 
-**Bước 3 — Nhìn cuộc đời mình trong một trang.** Mỗi chấm là một tuần: phần
-đỏ là những tuần đã sống, chấm vàng là tuần này, phần nhạt là những tuần còn
-lại theo kỳ vọng thống kê — trong ảnh là 1.636 tuần đã qua trên tổng số khoảng
-3.780 tuần (43,3%) của một người sinh năm 1995.
+**Cảnh 3 — Cuộc đời bạn, kể bằng tuần.** Mỗi chấm là một tuần: chấm xanh
+thông là những tuần đã sống, chấm vàng có nhãn "Bạn đang ở tuần này" là tuần
+hiện tại, phần nhạt là những tuần còn lại theo kỳ vọng thống kê. Các mốc tuổi
+30 · 40 · 50 · 60 neo ngay trước hàng tuần tương ứng (trong ảnh: 30 tuổi ·
+2025, 40 tuổi · 2035, 50 tuổi · 2045, 60 tuổi · 2055). Người trong ảnh đã
+sống 1.636 tuần trên tổng số khoảng 3.780 tuần (43,3%); ngay dưới lưới là 4
+con số của chính bạn: 11.453 ngày đã sống, ≈ 387 lần trăng tròn đã qua, 31
+cái Tết đã trải qua và 43,3% đời người đã qua theo thống kê.
 
-![Bước 3 — lưới tuần cuộc đời: tuần đã sống, tuần này và tuần còn lại](docs/screenshots/gallery-03-luoi-tuan-cuoc-doi.png)
+![Cảnh 3 — lưới tuần cuộc đời: tuần đã sống, tuần này có nhãn, các mốc tuổi và tuần còn lại](docs/screenshots/gallery-03-luoi-tuan-cuoc-doi.png)
+
+**Cảnh 4 — Gửi đi: xem trước thẻ kết quả thật trước khi chia sẻ.** Thẻ do
+chính app vẽ bằng canvas ngay trên trình duyệt, mang cả hai con số (16 với
+bố, 24 với mẹ), câu riêng của từng người và dòng "ước tính thống kê — không
+phải dự đoán" in ngay trên thẻ. Từ đây bạn copy đoạn text kết quả hoặc tải
+ảnh thẻ về máy.
+
+![Cảnh 4 — gửi đi: thẻ kết quả xem trước cùng nút Copy kết quả và Tải ảnh thẻ kết quả](docs/screenshots/gallery-04-tien-the-chia-se.png)
 
 ## Tính năng
 
