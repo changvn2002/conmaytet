@@ -100,6 +100,14 @@ input {
   caret-color: var(--brand);
 }
 
+/* Placeholder ô nhập: token Mực Nhạt toàn opacity — 7,84:1 trên nền ô
+   trắng, thay cho màu mặc định của trình duyệt chỉ đạt 3,19:1
+   (điều kiện chấm lại Panel #01). */
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
 /* Mũi tên mở/đóng của FAQ theo màu thương hiệu. */
 summary::marker {
   color: var(--brand);

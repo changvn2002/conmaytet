@@ -97,10 +97,23 @@ function scrollToEl(el: HTMLElement | null) {
   el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/** Khối lỗi/cảnh báo đặt ngay dưới trường liên quan trong Cảnh 1. */
-function FieldNotices({ errors, warnings }: { errors: string[]; warnings: string[] }) {
+/**
+ * Khối lỗi/cảnh báo đặt ngay dưới trường liên quan trong Cảnh 1.
+ * `id` là đích của aria-describedby từ ô nhập tương ứng — ô lỗi đồng
+ * thời mang aria-invalid (điều kiện chấm lại Panel #01).
+ */
+function FieldNotices({
+  errors,
+  warnings,
+  id,
+}: {
+  errors: string[];
+  warnings: string[];
+  id?: string;
+}) {
+  if (errors.length === 0 && warnings.length === 0) return null;
   return (
-    <>
+    <div id={id}>
       {errors.map((e) => (
         <p
           key={e}
@@ -118,7 +131,7 @@ function FieldNotices({ errors, warnings }: { errors: string[]; warnings: string
           {w}
         </p>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -164,6 +177,8 @@ export function ConMayTetTool() {
   const snapshotRef = useRef<FormState | null>(null);
   const snapshotSexTouchedRef = useRef(false);
   const keepButtonRef = useRef<HTMLButtonElement>(null);
+  const resetButtonRef = useRef<HTMLButtonElement>(null);
+  const undoButtonRef = useRef<HTMLButtonElement>(null);
 
   const scene1Ref = useRef<HTMLElement>(null);
   const scene2Ref = useRef<HTMLElement>(null);
@@ -191,6 +206,22 @@ export function ConMayTetTool() {
   // Mở khối xác nhận xoá: focus vào «Giữ lại» — lựa chọn an toàn là mặc định.
   useEffect(() => {
     if (deletePhase === 'confirming') keepButtonRef.current?.focus();
+  }, [deletePhase]);
+
+  // Sau khi xoá: focus vào «Hoàn tác» trên thanh trạng thái của component
+  // cha — đích focus không bao giờ rơi về BODY (cụm C1, điều kiện §8.4).
+  useEffect(() => {
+    if (deletePhase === 'deleted') undoButtonRef.current?.focus();
+  }, [deletePhase]);
+
+  // Esc khi khối xác nhận đang mở = đi theo nhánh «Giữ lại».
+  useEffect(() => {
+    if (deletePhase !== 'confirming') return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') cancelReset();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [deletePhase]);
 
   // Cửa sổ hoàn tác 8 giây sau khi xoá: hết giờ thì bỏ snapshot, về idle
@@ -268,6 +299,13 @@ export function ConMayTetTool() {
   const hasParentResult = !!(result.father || result.mother);
   const hasAnyResult = !!(result.father || result.mother || result.life);
 
+  // Huỷ xoá (nút «Giữ lại» hoặc Esc): dữ liệu nguyên vẹn, focus trả về
+  // nút «Làm lại từ đầu» vừa mount lại thay cho khối xác nhận (cụm C1).
+  function cancelReset() {
+    setDeletePhase('idle');
+    window.setTimeout(() => resetButtonRef.current?.focus(), 0);
+  }
+
   function confirmReset() {
     snapshotRef.current = form;
     snapshotSexTouchedRef.current = sexTouched;
@@ -288,6 +326,10 @@ export function ConMayTetTool() {
     }
     setDeletePhase('idle');
     setSecondsLeft(0);
+    // Thanh trạng thái sắp unmount: đưa người dùng về Cảnh 1 — nơi dữ
+    // liệu vừa khôi phục đang hiện — và focus vào trường đầu tiên.
+    scrollToEl(scene1Ref.current);
+    window.setTimeout(() => document.getElementById('birth')?.focus({ preventScroll: true }), 0);
   }
 
   async function copyText() {
@@ -336,7 +378,12 @@ export function ConMayTetTool() {
     scrollToEl(document.getElementById('cach-tinh'));
   }
 
-  const goScene1 = () => scrollToEl(scene1Ref.current);
+  // «Sửa lại»: về Cảnh 1 và đưa focus vào trường đầu tiên — không thả
+  // focus về BODY khi nút vừa bấm biến mất theo cảnh (cụm C1, §8.4).
+  const goScene1 = () => {
+    scrollToEl(scene1Ref.current);
+    window.setTimeout(() => document.getElementById('birth')?.focus({ preventScroll: true }), 0);
+  };
   const goScene2 = () => scrollToEl(scene2Ref.current);
   const goScene3 = () => scrollToEl(scene3Ref.current);
   const goScene4 = () => scrollToEl(scene4Ref.current);
@@ -374,12 +421,22 @@ export function ConMayTetTool() {
             value={form.birth}
             max={now.toISOString().slice(0, 10)}
             onChange={(e) => updateForm({ ...form, birth: e.target.value })}
+            aria-invalid={notices.errors.self.length > 0 || undefined}
+            aria-describedby={
+              notices.errors.self.length + notices.warnings.self.length > 0
+                ? 'notices-self'
+                : undefined
+            }
             className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
           />
           <p className="mt-1.5 max-w-[34rem] text-sm text-muted">
             Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
           </p>
-          <FieldNotices errors={notices.errors.self} warnings={notices.warnings.self} />
+          <FieldNotices
+            id="notices-self"
+            errors={notices.errors.self}
+            warnings={notices.warnings.self}
+          />
         </div>
 
         <div className="mt-6">
@@ -406,7 +463,7 @@ export function ConMayTetTool() {
                   className={`flex min-h-11 flex-1 items-center justify-center rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
                     selected
                       ? 'border-brand bg-brand text-white'
-                      : 'border-line bg-paper text-ink hover:border-brand'
+                      : 'border-input-line bg-paper text-ink hover:border-brand'
                   }`}
                 >
                   {label}
@@ -431,9 +488,19 @@ export function ConMayTetTool() {
                 min={1900}
                 max={now.getFullYear()}
                 onChange={(e) => updateForm({ ...form, father: e.target.value })}
+                aria-invalid={notices.errors.father.length > 0 || undefined}
+                aria-describedby={
+                  notices.errors.father.length + notices.warnings.father.length > 0
+                    ? 'notices-father'
+                    : undefined
+                }
                 className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
               />
-              <FieldNotices errors={notices.errors.father} warnings={notices.warnings.father} />
+              <FieldNotices
+                id="notices-father"
+                errors={notices.errors.father}
+                warnings={notices.warnings.father}
+              />
             </div>
             <div>
               <label htmlFor="mother-year" className="mb-1.5 block text-sm font-semibold text-ink">
@@ -448,9 +515,19 @@ export function ConMayTetTool() {
                 min={1900}
                 max={now.getFullYear()}
                 onChange={(e) => updateForm({ ...form, mother: e.target.value })}
+                aria-invalid={notices.errors.mother.length > 0 || undefined}
+                aria-describedby={
+                  notices.errors.mother.length + notices.warnings.mother.length > 0
+                    ? 'notices-mother'
+                    : undefined
+                }
                 className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
               />
-              <FieldNotices errors={notices.errors.mother} warnings={notices.warnings.mother} />
+              <FieldNotices
+                id="notices-mother"
+                errors={notices.errors.mother}
+                warnings={notices.warnings.mother}
+              />
             </div>
           </div>
           <p className="mt-1.5 max-w-[34rem] text-sm text-muted">
@@ -503,6 +580,12 @@ export function ConMayTetTool() {
               step={1}
               value={form.visits}
               onChange={(e) => updateForm({ ...form, visits: Number(e.target.value) })}
+              aria-invalid={notices.errors.visits.length > 0 || undefined}
+              aria-describedby={
+                notices.errors.visits.length + notices.warnings.visits.length > 0
+                  ? 'notices-visits'
+                  : undefined
+              }
               className="w-full"
             />
             {/* Các mốc nằm đúng tỉ lệ trên thang 0–24 (0%, 25%, 50%, 75%, 100%). */}
@@ -513,11 +596,19 @@ export function ConMayTetTool() {
               <span>18</span>
               <span>24</span>
             </div>
-            <FieldNotices errors={notices.errors.visits} warnings={notices.warnings.visits} />
+            <FieldNotices
+              id="notices-visits"
+              errors={notices.errors.visits}
+              warnings={notices.warnings.visits}
+            />
           </div>
         )}
         {form.livesWith && (
-          <FieldNotices errors={notices.errors.visits} warnings={notices.warnings.visits} />
+          <FieldNotices
+            id="notices-visits"
+            errors={notices.errors.visits}
+            warnings={notices.warnings.visits}
+          />
         )}
 
         <div className="mt-8">
@@ -604,14 +695,39 @@ export function ConMayTetTool() {
           onCopy={copyText}
           onDownload={downloadCard}
           deletePhase={deletePhase}
-          secondsLeft={secondsLeft}
           keepButtonRef={keepButtonRef}
+          resetButtonRef={resetButtonRef}
           onRequestReset={() => setDeletePhase('confirming')}
-          onCancelReset={() => setDeletePhase('idle')}
+          onCancelReset={cancelReset}
           onConfirmReset={confirmReset}
-          onUndoReset={undoReset}
           onEdit={goScene1}
         />
+      )}
+
+      {/* ── Thanh trạng thái sau xoá (TC-1): render ở component cha,
+          KHÔNG nằm trong ShareScene — ShareScene bị cổng hasAnyResult
+          unmount ngay trong commit xoá dữ liệu, nên lớp hoàn tác đặt
+          trong đó không bao giờ xuất hiện. Thanh này chỉ phụ thuộc
+          deletePhase nên sống trọn cửa sổ 8 giây. */}
+      {deletePhase === 'deleted' && (
+        <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-4">
+          <div className="mx-auto flex max-w-[34rem] flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-line bg-card p-4 shadow-[var(--shadow-lift)]">
+            <p role="status" className="text-sm font-medium text-ink">
+              Đã xoá.{' '}
+              <span aria-hidden="true" className="text-muted">
+                (còn {secondsLeft} giây để hoàn tác)
+              </span>
+            </p>
+            <button
+              type="button"
+              ref={undoButtonRef}
+              onClick={undoReset}
+              className="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
+            >
+              Hoàn tác
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -760,7 +876,7 @@ const LifeStory = memo(function LifeStory({
           }`}
         >
           <span className="flex-1 border-t border-dashed border-line" />
-          <span className="text-xs font-semibold text-gold-text">
+          <span className="text-[13px] font-semibold text-gold-text">
             {m} tuổi · {birthYear + m}
           </span>
         </div>,
@@ -775,11 +891,15 @@ const LifeStory = memo(function LifeStory({
         {Array.from({ length: 52 }, (_, c) => {
           const i = r * 52 + c;
           if (i >= life.totalWeeks) return <span key={c} className="aspect-square w-full" />;
+          // Chấm «tuần này»: lõi VÀNG ĐẬM (gold-text) thay cho gold
+          // tươi — lõi cũ chỉ đạt 1,75:1 trên nền giấy (tồn dư T-F,
+          // Panel #01); vòng pine + nhãn ghim bên dưới vẫn là kênh
+          // nhận diện chính, giữ nguyên.
           const cls =
             i < life.weeksLived
               ? 'bg-brand'
               : i === life.weeksLived
-                ? `bg-gold ring-2 ring-brand ${weekRevealed ? 'week-pulse' : ''}`
+                ? `bg-gold-text ring-2 ring-brand ${weekRevealed ? 'week-pulse' : ''}`
                 : 'bg-line';
           return <span key={c} className={`aspect-square w-full rounded-full ${cls}`} />;
         })}
@@ -811,8 +931,8 @@ const LifeStory = memo(function LifeStory({
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand" /> Đã sống
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gold ring-2 ring-brand" /> Tuần
-          này
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gold-text ring-2 ring-brand" />{' '}
+          Tuần này
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-line" /> Còn lại (ước tính)
@@ -857,12 +977,11 @@ function ShareScene({
   onCopy,
   onDownload,
   deletePhase,
-  secondsLeft,
   keepButtonRef,
+  resetButtonRef,
   onRequestReset,
   onCancelReset,
   onConfirmReset,
-  onUndoReset,
   onEdit,
 }: {
   ref: React.Ref<HTMLElement>;
@@ -872,12 +991,11 @@ function ShareScene({
   onCopy: () => void;
   onDownload: () => void;
   deletePhase: 'idle' | 'confirming' | 'deleted';
-  secondsLeft: number;
   keepButtonRef: React.RefObject<HTMLButtonElement | null>;
+  resetButtonRef: React.RefObject<HTMLButtonElement | null>;
   onRequestReset: () => void;
   onCancelReset: () => void;
   onConfirmReset: () => void;
-  onUndoReset: () => void;
   onEdit: () => void;
 }) {
   const [cardUrl, setCardUrl] = useState<string | null>(null);
@@ -960,6 +1078,7 @@ function ShareScene({
         {deletePhase === 'idle' && (
           <button
             type="button"
+            ref={resetButtonRef}
             onClick={onRequestReset}
             className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-paper px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand"
           >
@@ -990,20 +1109,9 @@ function ShareScene({
           </div>
         )}
 
-        {deletePhase === 'deleted' && (
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line bg-paper p-4">
-            <p className="text-sm font-medium text-ink">
-              Đã xoá. <span className="text-muted">(còn {secondsLeft} giây để hoàn tác)</span>
-            </p>
-            <button
-              type="button"
-              onClick={onUndoReset}
-              className="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
-            >
-              Hoàn tác
-            </button>
-          </div>
-        )}
+        {/* Pha 'deleted' không render ở đây: ShareScene bị unmount
+            ngay khi xoá (cổng hasAnyResult) — thanh «Đã xoá — Hoàn
+            tác» sống ở component cha (TC-1). */}
       </div>
 
       <p className="mt-4 text-sm text-muted">Không tài khoản, không gửi dữ liệu đi.</p>

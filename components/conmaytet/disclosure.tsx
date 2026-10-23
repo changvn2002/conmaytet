@@ -43,8 +43,17 @@ export function DisclosureSections() {
         onToggle={(e) => setCalcOpen(e.currentTarget.open)}
         className="rounded-2xl border border-line bg-card px-5 py-4 shadow-[var(--shadow-card)]"
       >
-        <summary className="cursor-pointer font-semibold text-ink">
-          Cách tính: còn bao nhiêu cái Tết với bố mẹ?
+        <summary className="min-h-11 cursor-pointer py-[10px]">
+          {/* H2 trong summary: cây heading hết nhảy H1→H3 ở trạng
+              thái mặc định (TC-2, Panel #01). H2 phải để inline:
+              summary flex hoặc H2 block đều đẩy ::marker (mũi tên
+              disclosure) sang dòng riêng/khỏi hộp trong Chrome —
+              inline giữ marker + tiêu đề cùng dòng như thiết kế
+              gốc. py-[10px] + min-h-11 nâng summary 1 dòng lên
+              đúng vùng chạm 44px của panel. */}
+          <h2 className="inline font-semibold text-ink">
+            Cách tính: còn bao nhiêu cái Tết với bố mẹ?
+          </h2>
         </summary>
         <div className="mt-3 max-w-[34rem] space-y-3 leading-relaxed text-muted">
           <p className="text-base">
@@ -62,7 +71,9 @@ export function DisclosureSections() {
       </details>
 
       <details className="rounded-2xl border border-line bg-card px-5 py-4 shadow-[var(--shadow-card)]">
-        <summary className="cursor-pointer font-semibold text-ink">Hỏi đáp</summary>
+        <summary className="min-h-11 cursor-pointer py-[10px]">
+          <h2 className="inline font-semibold text-ink">Hỏi đáp</h2>
+        </summary>
         <div className="mt-4 max-w-[34rem] space-y-5">
           {FAQ_ITEMS.map((f) => (
             <div key={f.q}>
