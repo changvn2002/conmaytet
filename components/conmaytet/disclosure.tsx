@@ -83,6 +83,39 @@ export function DisclosureSections() {
           ))}
         </div>
       </details>
+
+      <details className="rounded-2xl border border-line bg-card px-5 py-4 shadow-[var(--shadow-card)]">
+        <summary className="min-h-11 cursor-pointer py-[10px]">
+          <h2 className="inline font-semibold text-ink">Quyền riêng tư & dữ liệu của bạn</h2>
+        </summary>
+        <div className="mt-3 max-w-[34rem] space-y-3 leading-relaxed text-muted">
+          <p className="text-base">
+            Dữ liệu bạn nhập — ngày sinh và giới tính của bạn, năm sinh của bố và của mẹ, số lần về
+            thăm mỗi năm (hoặc chế độ đang sống cùng bố mẹ) — chỉ lưu trong localStorage của trình
+            duyệt trên chính máy bạn, ở khoá conmaytet:input:v1. App không có tài khoản, không có
+            máy chủ thu thập dữ liệu và không gắn công cụ theo dõi.
+          </p>
+          <p className="text-base">
+            Chia sẻ là do bạn chủ động bấm: đoạn chữ và ảnh thẻ đều được tạo ngay trên máy bạn, app
+            không tự gửi dữ liệu đi đâu.
+          </p>
+          <p className="text-base">
+            Muốn xoá, bấm «Làm lại từ đầu» ở cuối trang rồi xác nhận — dữ liệu đã lưu sẽ bị xoá
+            ngay; nếu bấm nhầm, bạn có 8 giây để bấm «Hoàn tác». Xoá dữ liệu duyệt web của trình
+            duyệt cũng xoá dữ liệu này.
+          </p>
+          <p className="text-base">
+            Câu hỏi hay góp ý, hãy mở một issue tại{' '}
+            <a
+              href="https://github.com/changvn2002/conmaytet/issues"
+              className="font-semibold text-brand underline"
+            >
+              GitHub Issues của dự án
+            </a>
+            .
+          </p>
+        </div>
+      </details>
     </section>
   );
 }

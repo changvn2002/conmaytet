@@ -179,6 +179,7 @@ export function ConMayTetTool() {
   const keepButtonRef = useRef<HTMLButtonElement>(null);
   const resetButtonRef = useRef<HTMLButtonElement>(null);
   const undoButtonRef = useRef<HTMLButtonElement>(null);
+  const deletedBarRef = useRef<HTMLDivElement>(null);
 
   const scene1Ref = useRef<HTMLElement>(null);
   const scene2Ref = useRef<HTMLElement>(null);
@@ -231,6 +232,17 @@ export function ConMayTetTool() {
     const tick = window.setInterval(() => setSecondsLeft((s) => Math.max(0, s - 1)), 1000);
     const expire = window.setTimeout(() => {
       snapshotRef.current = null;
+      // OBS-A (Panel #02, §8.1): thanh sắp unmount — nếu focus đang
+      // nằm trong thanh (nút «Hoàn tác») thì đưa focus về ô #birth
+      // TRƯỚC khi gỡ thanh, không để focus rơi về BODY. Guard: người
+      // dùng đã tự di chuyển focus đi nơi khác trong cửa sổ thì
+      // không giành lại. KHÔNG dùng preventScroll: lúc hết hạn #birth
+      // nằm ngoài mép trên viewport nên focus phải cuộn nó vào view
+      // (khác nhánh hoàn tác/huỷ vốn dùng preventScroll — giữ nguyên).
+      const active = document.activeElement;
+      if (active && deletedBarRef.current?.contains(active)) {
+        document.getElementById('birth')?.focus();
+      }
       setDeletePhase('idle');
       setSecondsLeft(0);
     }, 8000);
@@ -407,7 +419,7 @@ export function ConMayTetTool() {
         aria-label="Lời mời"
         className="flex min-h-[calc(100dvh-60px)] flex-col justify-center py-8"
       >
-        <h1 className="font-display text-[32px] leading-[1.15] font-bold text-brand-deep sm:text-[44px]">
+        <h1 className="font-display text-[32px] leading-[1.15] font-bold text-balance text-brand-deep sm:text-[44px]">
           Đếm thử: còn mấy cái Tết bên bố mẹ?
         </h1>
 
@@ -418,6 +430,7 @@ export function ConMayTetTool() {
           <input
             id="birth"
             type="date"
+            autoComplete="bday"
             value={form.birth}
             max={now.toISOString().slice(0, 10)}
             onChange={(e) => updateForm({ ...form, birth: e.target.value })}
@@ -429,7 +442,7 @@ export function ConMayTetTool() {
             }
             className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
           />
-          <p className="mt-1.5 max-w-[34rem] text-sm text-muted">
+          <p className="mt-1.5 max-w-[34rem] text-sm text-pretty text-muted">
             Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
           </p>
           <FieldNotices
@@ -711,18 +724,29 @@ export function ConMayTetTool() {
           deletePhase nên sống trọn cửa sổ 8 giây. */}
       {deletePhase === 'deleted' && (
         <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-4">
-          <div className="mx-auto flex max-w-[34rem] flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-line bg-card p-4 shadow-[var(--shadow-lift)]">
-            <p role="status" className="text-sm font-medium text-ink">
+          {/* R1-F5 (Panel #02): khoá MỘT trạng thái bố cục cho toàn
+              cửa sổ 8 giây — flex-nowrap + nút shrink-0 + khoảng gap
+              nhỏ hơn để tổng bề ngang luôn dưới ngưỡng quấn, và chữ số
+              giây nằm trong hộp 1ch canh giữa (tabular-nums) để bề
+              ngang dòng chữ không đổi theo chữ số (trước đây chữ «1»
+              hẹp hơn ~3,5px làm thanh tự lật 2 dòng → 1 dòng ở ~7,05s). */}
+          <div
+            ref={deletedBarRef}
+            className="mx-auto flex max-w-[34rem] flex-nowrap items-center gap-x-2 rounded-xl border border-line bg-card p-4 shadow-[var(--shadow-lift)]"
+          >
+            <p role="status" className="min-w-0 text-sm font-medium text-ink">
               Đã xoá.{' '}
               <span aria-hidden="true" className="text-muted">
-                (còn {secondsLeft} giây để hoàn tác)
+                (còn{' '}
+                <span className="inline-block w-[1ch] text-center tabular-nums">{secondsLeft}</span>{' '}
+                giây để hoàn tác)
               </span>
             </p>
             <button
               type="button"
               ref={undoButtonRef}
               onClick={undoReset}
-              className="flex min-h-11 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
+              className="flex min-h-11 shrink-0 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
             >
               Hoàn tác
             </button>
@@ -797,8 +821,13 @@ function ParentStage({
       <p className="font-display mt-1 text-[24px] font-bold text-ink">cái Tết nữa</p>
       <div aria-hidden className="mt-3 h-[3px] w-12 rounded bg-gold" />
 
+      {/* R1-F4 (Panel #02): trên desktop, dự trữ sẵn chiều cao 2 dòng
+          cho câu hy vọng (lg:min-h-12 = 48px) để vị trí con số không
+          phụ thuộc số dòng của câu — chân số hai sân khấu thẳng hàng
+          (trước đây lệch ±12px: bố 1 dòng 24px vs mẹ 2 dòng 48px,
+          canh giữa chia đôi chênh lệch). Mobile giữ nguyên. */}
       <p
-        className={`mt-5 max-w-[34rem] text-base font-semibold text-ink ${
+        className={`mt-5 max-w-[34rem] text-base font-semibold text-ink lg:min-h-12 ${
           revealed ? 'animate-hope-in' : 'opacity-0'
         }`}
       >
@@ -939,7 +968,11 @@ const LifeStory = memo(function LifeStory({
         </span>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* R1-F3 (Panel #02): auto-rows-fr khoá hai hàng mobile cao
+          bằng nhau (trước đây 75,5/95px, Δ19,5px vì nhãn hàng 2
+          xuống dòng mà hàng không khoá chiều cao). Desktop 1 hàng
+          không đổi. */}
+      <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="rounded-xl bg-brand-soft px-3 py-3 text-center">
           <p className="font-display text-[20px] font-bold text-ink">{nf.format(life.daysLived)}</p>
           <p className="mt-0.5 text-[13px] text-muted">ngày đã sống</p>

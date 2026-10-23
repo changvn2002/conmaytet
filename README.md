@@ -2,6 +2,7 @@
 
 **▶ Dùng ngay: [https://conmaytet.vercel.app](https://conmaytet.vercel.app)** — không
 cần đăng nhập, không cài app, mở link là tính được ngay trên trình duyệt.
+Repo: https://github.com/changvn2002/conmaytet
 
 <p align="center">
   <img src="docs/screenshots/conmaytet-desktop.png" alt="Còn Mấy Cái Tết Nữa? — kết quả: còn 16 cái Tết với bố và 24 cái Tết với mẹ" width="900">
@@ -18,19 +19,18 @@ lưới tuần của chính bạn.
 toán, không phải dự đoán cho bất kỳ cá nhân nào. Con số chỉ để nhắc chúng ta
 trân trọng và chủ động sắp xếp thời gian bên bố mẹ.
 
-Không cần đăng nhập. Không có máy chủ. Mọi phép tính chạy ngay trong trình
-duyệt của bạn.
+Không cần đăng nhập. Không có máy chủ thu thập dữ liệu. Mọi phép tính chạy
+ngay trong trình duyệt của bạn.
 
 ## 🖼️ Ảnh chụp từ bản live
 
 Tất cả ảnh dưới đây được chụp trực tiếp từ bản production
 [https://conmaytet.vercel.app](https://conmaytet.vercel.app) khi app đang ở
 trạng thái **đã nhập xong một bộ dữ liệu đầy đủ và hiển thị kết quả** — đúng
-những gì người dùng nhìn thấy sau khi nhập, không phải màn hình trống lúc mới
-mở app hay ảnh dựng sẵn. Giao diện là một luồng 4 cảnh nối tiếp nhau (Scene
-Flow): Lời mời → Sân khấu số → Câu chuyện tuần đời → Gửi đi. Bộ dữ liệu trong
-ảnh: bạn sinh 15/06/1995, giới tính Nam, bố sinh 1965, mẹ sinh 1968, về thăm
-nhà 2 lần/năm.
+những gì người dùng nhìn thấy sau khi nhập. Giao diện là một luồng 4 cảnh nối
+tiếp nhau (Scene Flow): Lời mời → Sân khấu số → Câu chuyện tuần đời → Gửi đi.
+Bộ dữ liệu trong ảnh: bạn sinh 15/06/1995, giới tính Nam, bố sinh 1965, mẹ
+sinh 1968, về thăm nhà 2 lần/năm.
 
 ### Cảnh 2 — Sân khấu số: giá trị cốt lõi của app
 
@@ -94,9 +94,14 @@ phải dự đoán" in ngay trên thẻ. Từ đây bạn copy đoạn text kế
   tuần đời bạn, kèm số ngày đã sống, số lần trăng tròn xấp xỉ và số cái Tết
   bạn đã trải qua.
 - **Chia sẻ kết quả** — copy đoạn text gửi Zalo/Facebook hoặc tải ảnh thẻ kết
-  quả vẽ bằng canvas ngay trên trình duyệt.
-- **Nhớ dữ liệu cho lần sau** — input lưu trong localStorage của chính trình
-  duyệt bạn; nút "Làm lại từ đầu" xoá sạch.
+  quả vẽ bằng canvas ngay trên trình duyệt; cả hai đều sinh ra trên máy bạn
+  khi bạn chủ động bấm.
+- **Nhớ dữ liệu cho lần sau** — thông tin bạn nhập lưu trong localStorage của
+  chính trình duyệt bạn; "Làm lại từ đầu" xoá sạch (có xác nhận tại chỗ và
+  lớp Hoàn tác 8 giây nếu bấm nhầm).
+- **Chạy offline (PWA)** — service worker viết tay lưu app shell, cài được
+  lên màn hình chính và mở được khi mất mạng; toàn bộ luồng tính chạy trên
+  máy nên không bước nào bị chặn vì offline.
 
 ## Số liệu & phương pháp
 
@@ -110,34 +115,126 @@ phải dự đoán" in ngay trên thẻ. Từ đây bạn copy đoạn text kế
 - Ngày Tết được tính bằng thuật toán âm lịch, đã kiểm chứng khớp 12/12 năm
   2024–2035 với bảng ngày Tết theo giờ Hà Nội (UTC+7).
 
-## Công nghệ
+## 🚀 Bắt đầu nhanh
 
-- Next.js 16 + React 19 + Tailwind CSS 4, hoàn toàn client-side.
-- Logic thuần tách riêng trong `lib/` (`lunar`, `life-table`, `data`, `calc`,
-  `share-card`, `storage`) và được kiểm chứng bằng Vitest — gồm test thuật
-  toán âm lịch với ground truth ngày Tết 2024–2035 đã verify độc lập.
-- Nội dung giải thích + FAQ được render phía server; JSON-LD WebApplication +
-  FAQPage; SEO/PWA đầy đủ: metadata + Open Graph, sitemap, robots, web app
-  manifest, icon cài lên màn hình chính, chạy standalone.
-
-## Chạy local
+Yêu cầu: Node.js **24.x** (ghim trong `.nvmrc` và `engines` của
+`package.json`) và pnpm **10.32.1** (ghim qua `packageManager` — dùng
+corepack hoặc `npx -y pnpm@10.32.1`).
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:3100
-pnpm test       # unit test cho âm lịch, bảng tuổi thọ và phép tính kết quả
-pnpm build      # bản production
+git clone https://github.com/changvn2002/conmaytet.git
+cd conmaytet
+cp .env.example .env.local   # tuỳ chọn — giá trị mặc định đã chạy được
+pnpm install --frozen-lockfile
+pnpm dev                     # http://localhost:3100
 ```
 
 Biến môi trường duy nhất (tuỳ chọn): `NEXT_PUBLIC_SITE_URL` — URL gốc của bản
-production cho SEO, mặc định `https://conmaytet.vercel.app`. Xem `.env.example`.
+production cho SEO (canonical, Open Graph, sitemap, robots), mặc định
+`https://conmaytet.vercel.app`. App hoàn toàn client-side nên không có biến
+môi trường nào khác và không cần khoá bí mật nào. Xem `.env.example`.
+
+### Scripts
+
+| Lệnh | Việc |
+| --- | --- |
+| `pnpm dev` | Chạy dev server ở cổng 3100 |
+| `pnpm build` | Build bản production |
+| `pnpm start` | Chạy bản production đã build (cổng 3100) |
+| `pnpm test` | Chạy bộ test Vitest |
+| `pnpm test:e2e` | Chạy bộ test trình duyệt Playwright trong `e2e/` |
+| `pnpm typecheck` | Kiểm tra kiểu (`tsc --noEmit`) |
+| `pnpm lint` | ESLint trên toàn repo |
+| `pnpm format` / `pnpm format:check` | Prettier ghi / kiểm tra định dạng |
+
+Cùng dãy lệnh này chạy trên CI (GitHub Actions: typecheck, lint, format,
+test, `pnpm audit --prod` như cổng chặn lỗ hổng dependency, build, và job
+quét bí mật gitleaks) — xem `.github/workflows/ci.yml`.
+
+## Kiến trúc
+
+App Next.js 16 + React 19 + Tailwind CSS 4, **hoàn toàn client-side** —
+không backend, không cơ sở dữ liệu, không tài khoản:
+
+- `app/` — vỏ trang: layout (metadata + JSON-LD), `robots.ts`, `sitemap.ts`,
+  `manifest.ts` (PWA), trang chủ gắn component sản phẩm.
+- `components/conmaytet/` — toàn bộ giao diện Scene Flow (`app.tsx`), các
+  khối disclosure, thanh báo offline và đăng ký service worker.
+- `lib/` — logic thuần tách riêng: `lunar` (âm lịch), `life-table` +
+  `data` (bảng sống WHO 2019), `calc` (phép tính kết quả), `share-card`
+  (vẽ thẻ PNG bằng canvas), `content` (giải thích + FAQ), `site` (thông
+  tin site cho SEO) và `storage`.
+- **Một storage adapter duy nhất:** mọi lần đọc/ghi dữ liệu người dùng đều
+  qua `lib/storage.ts` (`loadInput` / `saveInput` / `clearInput`, qua lớp
+  lọc `sanitize()`), khoá `localStorage` là `conmaytet:input:v1`.
+- Nội dung giải thích + FAQ được render phía server; JSON-LD WebApplication
+  + FAQPage; SEO/PWA đầy đủ: metadata + Open Graph, sitemap, robots, web
+  app manifest, icon cài lên màn hình chính, chạy standalone.
+- Minh hoạ duy nhất của app là `illustration-calendar.svg` từ bộ asset
+  thiết kế v2 (bản trong repo: `public/images/calendar-spot.svg` /
+  `.webp`) — hình ảnh gợi con người bằng vật, không vẽ mặt người.
+
+## Kiểm thử
+
+- **Vitest — 184 test** (tất cả đạt): thuật toán âm lịch với ground truth
+  ngày Tết 2024–2035 đã verify độc lập, bảng tuổi thọ và nội suy, phép tính
+  kết quả, lớp lọc của storage, và luồng xoá + hoàn tác của biểu mẫu. Chạy
+  bằng `pnpm test`.
+- **Playwright — bộ test trình duyệt trong `e2e/`:** ba flow smoke chạy
+  trên bản build production local ở hai project (desktop 1440×900 và
+  mobile 390×844) — (1) nhập đủ dữ liệu panel ra đúng con số (bố 16 Tết /
+  32 lần gặp, mẹ 24 Tết / 47 lần gặp) kèm lưới tuần và thẻ chia sẻ, (2) xoá
+  + hoàn tác ở ~7,4 giây khôi phục dữ liệu byte-equal và nhánh hết hạn 8
+  giây đưa focus về ô ngày sinh, (3) copy text chứa đủ hai câu riêng của
+  bố và mẹ + tải thẻ PNG đúng khổ 1080×1350. Chạy bằng `pnpm test:e2e`
+  (cần cài browser một lần: `pnpm exec playwright install chromium`).
+  Cấu hình ở `playwright.config.ts` — webServer tự build và khởi động
+  bản production ở cổng 3417.
 
 ## Quyền riêng tư
 
-App không thu thập dữ liệu: mọi thông tin bạn nhập chỉ nằm trong
-`localStorage` của chính trình duyệt bạn đang dùng, không gửi đi đâu cả.
+App không thu thập dữ liệu: không tài khoản, không máy chủ nhận dữ liệu,
+không analytics/tracker, không cookie. Mọi thông tin bạn nhập chỉ nằm
+trong `localStorage` của chính trình duyệt bạn (khoá
+`conmaytet:input:v1`), không gửi đi đâu cả; chia sẻ chỉ xảy ra khi bạn
+tự bấm copy hoặc tải ảnh — cả hai đều được tạo ngay trên máy bạn. Xoá
+dữ liệu bằng "Làm lại từ đầu" trong app (có Hoàn tác 8 giây nếu bấm
+nhầm) hoặc xoá dữ liệu duyệt web của trình duyệt.
+
+- Chính sách đầy đủ: [PRIVACY.md](PRIVACY.md)
+- Bản đồ từng trường dữ liệu: [DATA-MAP.md](DATA-MAP.md)
+
+## Khả năng tiếp cận
+
+Số đo từ hồ sơ chấm checklist (vòng 2) và Panel #02 trên bản live:
+
+- **Tương phản:** chữ thân bài đạt mức AAA — cặp chữ thân bài thấp nhất
+  trên nền giấy là 7,32:1 (mực trên giấy 14,83:1); mọi cặp chữ của hệ
+  token đều ≥ 4,5:1, cặp thấp nhất toàn hệ là 6,54:1.
+- **Mục tiêu chạm:** các điều khiển chính ≥ 44px (đo trên bản live:
+  nút Hoàn tác dạng pill 44px, disclosure "Hỏi đáp" 44px ở cả hai
+  viewport).
+- **Focus rõ ràng:** trạng thái `:focus-visible` có outline 2px màu
+  brand-deep, độ tương phản của chỉ báo focus là 12,62:1 trên nền giấy;
+  cây heading H1 → H2 → H3 không nhảy cấp.
+
+## Đóng góp & hỗ trợ
+
+- Báo lỗi, góp ý hoặc câu hỏi về riêng tư: mở issue tại
+  [github.com/changvn2002/conmaytet/issues](https://github.com/changvn2002/conmaytet/issues)
+  — đây là kênh liên hệ duy nhất của dự án.
+- Đóng góp mã nguồn: fork → nhánh → pull request về `main`; trước khi mở
+  PR hãy chạy đủ cổng local `pnpm typecheck && pnpm lint &&
+  pnpm format:check && pnpm test && pnpm build` (đúng dãy CI chạy).
+- Vận hành production: quy trình rollback và bảng mốc deployment nằm ở
+  [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md); lịch sử thay đổi ở
+  [CHANGELOG.md](CHANGELOG.md).
 
 ## Giấy phép
 
-MIT — xem `LICENSE`. Riêng tài sản thương hiệu (logo, artwork trong
-`public/`) không thuộc phạm vi MIT, xem `BRAND.md`.
+MIT — xem [LICENSE](LICENSE). © chang2tech.
+
+Riêng tài sản thương hiệu (logo, mascot, wordmark và banner artwork
+trong `public/` và các file mô tả trong `BRAND.md`) **không** thuộc
+phạm vi giấy phép MIT — xem [NOTICE](NOTICE). Nếu fork dự án, hãy thay
+bằng tài sản thương hiệu của riêng bạn.

@@ -1,0 +1,994 @@
+{
+  "measuredAt": "2026-10-23T18:13:58.148Z",
+  "thresholdPx": 44,
+  "viewports": {
+    "mobile-390x844": {
+      "empty": {
+        "totalInteractive": 13,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 358,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 358,
+            "height": 52
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 316,
+            "height": 68
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      },
+      "filled": {
+        "totalInteractive": 22,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 358,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 358,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Cách tính",
+            "width": 86.6,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Cách tính",
+            "width": 86.6,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tiếp",
+            "width": 85.3,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Sửa lại",
+            "width": 101,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tiếp",
+            "width": 85.3,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Sửa lại",
+            "width": 101,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Copy kết quả",
+            "width": 358,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tải ảnh thẻ kết quả",
+            "width": 358,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Làm lại từ đầu",
+            "width": 152.4,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 316,
+            "height": 68
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      },
+      "deletedBar": {
+        "totalInteractive": 14,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 358,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 114,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 171,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 358,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 358,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Hoàn tác",
+            "width": 87.8,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 316,
+            "height": 68
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 316,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      }
+    },
+    "desktop-1440x900": {
+      "empty": {
+        "totalInteractive": 13,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 672,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 672,
+            "height": 52
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      },
+      "filled": {
+        "totalInteractive": 22,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 672,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 672,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Cách tính",
+            "width": 86.6,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Cách tính",
+            "width": 86.6,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tiếp",
+            "width": 85.3,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Sửa lại",
+            "width": 101,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tiếp",
+            "width": 85.3,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Sửa lại",
+            "width": 101,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Copy kết quả",
+            "width": 329,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Tải ảnh thẻ kết quả",
+            "width": 331,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Làm lại từ đầu",
+            "width": 152.4,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      },
+      "deletedBar": {
+        "totalInteractive": 14,
+        "below44Count": 1,
+        "below44": [
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ],
+        "all": [
+          {
+            "tag": "input",
+            "id": "birth",
+            "role": null,
+            "type": "date",
+            "label": "birth",
+            "width": 672,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nữ",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Nam",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "radio",
+            "type": "button",
+            "label": "Không chọn",
+            "width": 218.7,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "father-year",
+            "role": null,
+            "type": "number",
+            "label": "father-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "input",
+            "id": "mother-year",
+            "role": null,
+            "type": "number",
+            "label": "mother-year",
+            "width": 328,
+            "height": 48
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": "switch",
+            "type": "button",
+            "label": "Tôi đang sống cùng bố mẹSống cùng: tính theo ngày.",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "input",
+            "id": "visits",
+            "role": null,
+            "type": "range",
+            "label": "visits",
+            "width": 672,
+            "height": 44
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Xem còn mấy cái Tết",
+            "width": 672,
+            "height": 52
+          },
+          {
+            "tag": "button",
+            "id": null,
+            "role": null,
+            "type": "button",
+            "label": "Hoàn tác",
+            "width": 87.8,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Cách tính: còn bao nhiêu cái Tết với bố mẹ?",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Hỏi đáp",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "summary",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "Quyền riêng tư & dữ liệu của bạn",
+            "width": 630,
+            "height": 44
+          },
+          {
+            "tag": "a",
+            "id": null,
+            "role": null,
+            "type": null,
+            "label": "GitHub Issues của dự án",
+            "width": 189.3,
+            "height": 20
+          }
+        ]
+      }
+    }
+  }
+}

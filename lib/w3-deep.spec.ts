@@ -267,9 +267,18 @@ describe('W3-1 lớp storage sanitize (cổng thứ hai của UI) — stub local
 
 describe('W3-2 ngày Tết 2024–2035 đối chiếu DATA-VERIFIED.md mục 3', () => {
   const TRUTH: [number, number, number][] = [
-    [2024, 10, 2], [2025, 29, 1], [2026, 17, 2], [2027, 6, 2],
-    [2028, 26, 1], [2029, 13, 2], [2030, 2, 2], [2031, 23, 1],
-    [2032, 11, 2], [2033, 31, 1], [2034, 19, 2], [2035, 8, 2],
+    [2024, 10, 2],
+    [2025, 29, 1],
+    [2026, 17, 2],
+    [2027, 6, 2],
+    [2028, 26, 1],
+    [2029, 13, 2],
+    [2030, 2, 2],
+    [2031, 23, 1],
+    [2032, 11, 2],
+    [2033, 31, 1],
+    [2034, 19, 2],
+    [2035, 8, 2],
   ];
   it.each(TRUTH)('Tết %i = %i/%i (2030 = 02/02 theo đa số 4/5 nguồn)', (y, d, m) => {
     const t = tetDate(y);
@@ -313,7 +322,10 @@ describe('W3-2 roundtrip dương → âm → dương phải khớp tuyệt đố
       for (const lm of [1, 4, 8, 12]) {
         const s = lunarToSolar(15, lm, ly, false);
         expect(solarToLunar(s.day, s.month, s.year)).toMatchObject({
-          day: 15, month: lm, year: ly, leap: false,
+          day: 15,
+          month: lm,
+          year: ly,
+          leap: false,
         });
       }
     }
@@ -340,7 +352,10 @@ describe('W3-2 tháng nhuận trong dải 1950–2050', () => {
       if (leaps.length === 1) {
         const s = lunarToSolar(10, leaps[0], ly, true);
         expect(solarToLunar(s.day, s.month, s.year)).toMatchObject({
-          day: 10, month: leaps[0], year: ly, leap: true,
+          day: 10,
+          month: leaps[0],
+          year: ly,
+          leap: true,
         });
       }
     }
@@ -377,7 +392,11 @@ describe('W3-2 tháng nhuận trong dải 1950–2050', () => {
   });
 
   it('ngày âm 30/31 vượt độ dài tháng: lăn sang tháng sau một cách xác định, không crash, không ngày 0/âm', () => {
-    for (const [d, m, y] of [[30, 2, 2025], [31, 1, 2025], [31, 12, 2030]] as const) {
+    for (const [d, m, y] of [
+      [30, 2, 2025],
+      [31, 1, 2025],
+      [31, 12, 2030],
+    ] as const) {
       const s = lunarToSolar(d, m, y, false);
       expect(s.day).toBeGreaterThanOrEqual(1);
       expect(s.day).toBeLessThanOrEqual(31);
@@ -485,7 +504,13 @@ describe('W3-3 share text — mọi nhánh', () => {
 
   it('Tết còn lại = 0 (kết quả biên dựng trực tiếp): text vẫn đúng ngữ pháp, đủ số 0', () => {
     const zeroResult = {
-      father: { currentAge: 110, remainingYears: 0.2, horizonDate: NOW, tetsLeft: 0, meetingsLeft: 0 },
+      father: {
+        currentAge: 110,
+        remainingYears: 0.2,
+        horizonDate: NOW,
+        tetsLeft: 0,
+        meetingsLeft: 0,
+      },
       mother: null,
       life: null,
     } as Parameters<typeof buildShareText>[0];
@@ -501,7 +526,9 @@ describe('W3-3 share text — mọi nhánh', () => {
     checkClean(text);
     expect(text).not.toContain('Với bố');
     expect(text).not.toContain('Với mẹ');
-    expect(text).toContain(`${nf.format(r.life!.weeksLived)} / ${nf.format(r.life!.totalWeeks)} tuần`);
+    expect(text).toContain(
+      `${nf.format(r.life!.weeksLived)} / ${nf.format(r.life!.totalWeeks)} tuần`,
+    );
   });
 
   it('kết quả rỗng hoàn toàn: text vẫn sạch (tiêu đề + miễn trừ + URL), không crash', () => {
@@ -569,8 +596,11 @@ describe('W3-4 cận số Tết còn lại', () => {
     // sau now lẫn Tết rơi đúng ngày horizon sau ~35 chu kỳ âm lịch lệch
     // pha — xem test tái hiện F5 ngay dưới.
     const nows = [
-      new Date(2026, 0, 1), new Date(2026, 1, 16), new Date(2026, 1, 17),
-      new Date(2026, 9, 23), new Date(2026, 11, 31),
+      new Date(2026, 0, 1),
+      new Date(2026, 1, 16),
+      new Date(2026, 1, 17),
+      new Date(2026, 9, 23),
+      new Date(2026, 11, 31),
     ];
     for (const now of nows)
       for (let age = 0; age <= 110; age++)
@@ -578,7 +608,9 @@ describe('W3-4 cận số Tết còn lại', () => {
           const r = calculate(inp({ [key]: now.getFullYear() - age }), now);
           const est = key === 'fatherBirthYear' ? r.father! : r.mother!;
           expect(est.tetsLeft).toBeLessThanOrEqual(Math.floor(est.remainingYears) + 2);
-          expect(est.tetsLeft).toBeGreaterThanOrEqual(Math.max(0, Math.floor(est.remainingYears) - 1));
+          expect(est.tetsLeft).toBeGreaterThanOrEqual(
+            Math.max(0, Math.floor(est.remainingYears) - 1),
+          );
         }
   }, 120_000);
 
@@ -612,7 +644,12 @@ describe('W3-4 cận số Tết còn lại', () => {
 });
 
 describe('W3-4 tính đơn điệu: tuổi phụ huynh tăng 1 → số Tết không tăng', () => {
-  const NOWS = [new Date(2026, 0, 5), new Date(2026, 1, 17), new Date(2026, 9, 23), new Date(2027, 0, 1)];
+  const NOWS = [
+    new Date(2026, 0, 5),
+    new Date(2026, 1, 17),
+    new Date(2026, 9, 23),
+    new Date(2027, 0, 1),
+  ];
 
   it('đơn điệu không tăng trên tuổi 2–110 tại 4 thời điểm now khác nhau', () => {
     for (const now of NOWS)
@@ -653,14 +690,46 @@ describe('W3-5 bảng sống trong code = bảng WHO Vietnam 2019 (DATA-VERIFIED
   // các mốc 60/65/70/75/80 + e0 được kiểm chứng độc lập bởi DATA-VERIFIED
   // và danh sách mốc chuẩn trong nhiệm vụ W3.
   const EXPECTED_MALE: [number, number][] = [
-    [0, 69.56], [1, 69.8], [5, 66.17], [10, 61.25], [15, 56.37], [20, 51.65],
-    [25, 47.02], [30, 42.35], [35, 37.68], [40, 33.1], [45, 28.66], [50, 24.45],
-    [55, 20.51], [60, 16.88], [65, 13.6], [70, 10.68], [75, 8.21], [80, 6.12], [85, 4.44],
+    [0, 69.56],
+    [1, 69.8],
+    [5, 66.17],
+    [10, 61.25],
+    [15, 56.37],
+    [20, 51.65],
+    [25, 47.02],
+    [30, 42.35],
+    [35, 37.68],
+    [40, 33.1],
+    [45, 28.66],
+    [50, 24.45],
+    [55, 20.51],
+    [60, 16.88],
+    [65, 13.6],
+    [70, 10.68],
+    [75, 8.21],
+    [80, 6.12],
+    [85, 4.44],
   ];
   const EXPECTED_FEMALE: [number, number][] = [
-    [0, 78.11], [1, 78.17], [5, 74.38], [10, 69.43], [15, 64.51], [20, 59.62],
-    [25, 54.73], [30, 49.86], [35, 45.0], [40, 40.2], [45, 35.47], [50, 30.85],
-    [55, 26.36], [60, 22.03], [65, 17.92], [70, 14.1], [75, 10.69], [80, 7.76], [85, 5.43],
+    [0, 78.11],
+    [1, 78.17],
+    [5, 74.38],
+    [10, 69.43],
+    [15, 64.51],
+    [20, 59.62],
+    [25, 54.73],
+    [30, 49.86],
+    [35, 45.0],
+    [40, 40.2],
+    [45, 35.47],
+    [50, 30.85],
+    [55, 26.36],
+    [60, 22.03],
+    [65, 17.92],
+    [70, 14.1],
+    [75, 10.69],
+    [80, 7.76],
+    [85, 5.43],
   ];
 
   it('toàn bộ 19 mốc × 2 giới trong lib/data.ts khớp số gốc từng mốc', () => {
@@ -677,7 +746,11 @@ describe('W3-5 bảng sống trong code = bảng WHO Vietnam 2019 (DATA-VERIFIED
 
   it('mốc chuẩn nhiệm vụ: e60 M 16,88/F 22,03 · e65 13,60/17,92 · e70 10,68/14,10 · e75 8,21/10,69 · e80 6,12/7,76', () => {
     const std: [number, number, number][] = [
-      [60, 16.88, 22.03], [65, 13.6, 17.92], [70, 10.68, 14.1], [75, 8.21, 10.69], [80, 6.12, 7.76],
+      [60, 16.88, 22.03],
+      [65, 13.6, 17.92],
+      [70, 10.68, 14.1],
+      [75, 8.21, 10.69],
+      [80, 6.12, 7.76],
     ];
     for (const [age, m, f] of std) {
       expect(remainingLifeExpectancy(age, 'male')).toBeCloseTo(m, 2);
@@ -688,7 +761,11 @@ describe('W3-5 bảng sống trong code = bảng WHO Vietnam 2019 (DATA-VERIFIED
   it('khớp DATA-VERIFIED 2.1 ở độ chính xác 1 chữ số thập phân (16,9/22,0 · 13,6/17,9 · 10,7/14,1 · 8,2/10,7 · 6,1/7,8)', () => {
     const round1 = (n: number) => Math.round(n * 10) / 10;
     const dv: [number, number, number][] = [
-      [60, 16.9, 22.0], [65, 13.6, 17.9], [70, 10.7, 14.1], [75, 8.2, 10.7], [80, 6.1, 7.8],
+      [60, 16.9, 22.0],
+      [65, 13.6, 17.9],
+      [70, 10.7, 14.1],
+      [75, 8.2, 10.7],
+      [80, 6.1, 7.8],
     ];
     for (const [age, m, f] of dv) {
       expect(round1(remainingLifeExpectancy(age, 'male'))).toBeCloseTo(m, 6);

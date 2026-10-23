@@ -212,12 +212,16 @@ describe('Gói kèm Panel #01 — TC-3 + aria ô lỗi', () => {
 });
 
 describe('TC-2 — cây heading của tầng disclosure', () => {
-  it('Hai tiêu đề disclosure là H2 nằm trong summary; FAQ là H3 bên dưới H2', () => {
+  it('Các tiêu đề disclosure là H2 nằm trong summary; FAQ là H3 bên dưới H2', () => {
     const { container } = render(<DisclosureSections />);
     const headings = container.querySelectorAll('summary > h2');
-    expect(headings).toHaveLength(2);
+    // Hygiene wave: thêm mục thứ ba «Quyền riêng tư & dữ liệu của bạn»
+    // (DATA-01/05 in-app) theo đúng pattern H2-trong-summary — cây
+    // heading giữ nguyên kỷ luật, chỉ tăng số mục 2 → 3.
+    expect(headings).toHaveLength(3);
     expect(headings[0].textContent).toContain('Cách tính');
     expect(headings[1].textContent).toContain('Hỏi đáp');
+    expect(headings[2].textContent).toContain('Quyền riêng tư');
     expect(container.querySelectorAll('h3').length).toBeGreaterThan(0);
     // Vùng chạm 44px của panel khai trên chính summary (H2 để inline
     // để ::marker không bị flex/block đẩy khỏi dòng trong Chrome).

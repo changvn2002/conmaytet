@@ -30,3 +30,7 @@ next-env.d.ts
 
 # impeccable runtime
 /.impeccable/
+
+# playwright artifacts
+/test-results/
+/playwright-report/

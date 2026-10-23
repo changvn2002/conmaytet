@@ -1,0 +1,336 @@
+{
+  "measuredAt": "2026-10-23T18:13:58.148Z",
+  "method": "Token pairs computed from app/globals.css :root values with the WCAG 2.x relative-luminance formula; computed styles sampled live from the local production build (system Chromium 152 via CDP/Playwright, route-fulfilled from 127.0.0.1:3417).",
+  "tokens": {
+    "ink": "#1C2420",
+    "muted": "#44564B",
+    "line": "#D8DDD0",
+    "paper": "#FBF7EC",
+    "card": "#FFFFFF",
+    "brand": "#1F4D3A",
+    "brand-deep": "#14342A",
+    "brand-hover": "#2A6248",
+    "brand-soft": "#E3EDE6",
+    "gold": "#C9A227",
+    "gold-soft": "#E9D48A",
+    "gold-text": "#6B5510",
+    "input-line": "#7E9384",
+    "warn-bg": "#FBF0D3",
+    "warn-text": "#5C4A0E",
+    "error-bg": "#FDECEA",
+    "error-text": "#8A2A20",
+    "white": "#FFFFFF"
+  },
+  "tokenPairs": [
+    {
+      "pair": "thân bài: ink trên paper",
+      "fg": "ink #1C2420",
+      "bg": "paper #FBF7EC",
+      "ratio": 14.83,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "thân bài: ink trên card",
+      "fg": "ink #1C2420",
+      "bg": "card #FFFFFF",
+      "ratio": 15.88,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "chữ phụ: muted trên paper",
+      "fg": "muted #44564B",
+      "bg": "paper #FBF7EC",
+      "ratio": 7.32,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "chữ phụ: muted trên card",
+      "fg": "muted #44564B",
+      "bg": "card #FFFFFF",
+      "ratio": 7.84,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "chữ phụ: muted trên brand-soft (nhãn ô thống kê)",
+      "fg": "muted #44564B",
+      "bg": "brand-soft #E3EDE6",
+      "ratio": 6.54,
+      "role": "text",
+      "grade": "AA"
+    },
+    {
+      "pair": "số thống kê: ink trên brand-soft",
+      "fg": "ink #1C2420",
+      "bg": "brand-soft #E3EDE6",
+      "ratio": 13.25,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "tiêu đề: brand-deep trên paper",
+      "fg": "brand-deep #14342A",
+      "bg": "paper #FBF7EC",
+      "ratio": 12.62,
+      "role": "large",
+      "grade": "AAA (large)"
+    },
+    {
+      "pair": "link/nút chữ: brand trên paper",
+      "fg": "brand #1F4D3A",
+      "bg": "paper #FBF7EC",
+      "ratio": 9,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "link/nút chữ: brand trên card",
+      "fg": "brand #1F4D3A",
+      "bg": "card #FFFFFF",
+      "ratio": 9.63,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "nút Hoàn tác/nav: brand trên brand-soft (hover)",
+      "fg": "brand #1F4D3A",
+      "bg": "brand-soft #E3EDE6",
+      "ratio": 8.03,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "số lần về thăm: brand trên paper",
+      "fg": "brand #1F4D3A",
+      "bg": "paper #FBF7EC",
+      "ratio": 9,
+      "role": "large",
+      "grade": "AAA (large)"
+    },
+    {
+      "pair": "chữ vàng hợp lệ: gold-text trên paper (mốc tuổi)",
+      "fg": "gold-text #6B5510",
+      "bg": "paper #FBF7EC",
+      "ratio": 6.69,
+      "role": "text",
+      "grade": "AA"
+    },
+    {
+      "pair": "nút chính: white trên brand",
+      "fg": "white #FFFFFF",
+      "bg": "brand #1F4D3A",
+      "ratio": 9.63,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "nút chính hover: white trên brand-hover",
+      "fg": "white #FFFFFF",
+      "bg": "brand-hover #2A6248",
+      "ratio": 7.15,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "nút Xoá: white trên error-text",
+      "fg": "white #FFFFFF",
+      "bg": "error-text #8A2A20",
+      "ratio": 8.63,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "cảnh báo: warn-text trên warn-bg",
+      "fg": "warn-text #5C4A0E",
+      "bg": "warn-bg #FBF0D3",
+      "ratio": 7.58,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "lỗi: error-text trên error-bg",
+      "fg": "error-text #8A2A20",
+      "bg": "error-bg #FDECEA",
+      "ratio": 7.55,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "placeholder ô nhập: muted trên card",
+      "fg": "muted #44564B",
+      "bg": "card #FFFFFF",
+      "ratio": 7.84,
+      "role": "text",
+      "grade": "AAA"
+    },
+    {
+      "pair": "viền ô nhập (nghỉ): input-line trên card",
+      "fg": "input-line #7E9384",
+      "bg": "card #FFFFFF",
+      "ratio": 3.28,
+      "role": "non-text",
+      "grade": "PASS ≥3:1 (non-text)"
+    },
+    {
+      "pair": "viền ô nhập trên paper: input-line trên paper",
+      "fg": "input-line #7E9384",
+      "bg": "paper #FBF7EC",
+      "ratio": 3.07,
+      "role": "non-text",
+      "grade": "PASS ≥3:1 (non-text)"
+    },
+    {
+      "pair": "chỉ báo focus: brand-deep trên paper",
+      "fg": "brand-deep #14342A",
+      "bg": "paper #FBF7EC",
+      "ratio": 12.62,
+      "role": "non-text",
+      "grade": "PASS ≥3:1 (non-text)"
+    },
+    {
+      "pair": "chỉ báo focus: brand-deep trên card",
+      "fg": "brand-deep #14342A",
+      "bg": "card #FFFFFF",
+      "ratio": 13.51,
+      "role": "non-text",
+      "grade": "PASS ≥3:1 (non-text)"
+    },
+    {
+      "pair": "viền trang trí: line trên paper",
+      "fg": "line #D8DDD0",
+      "bg": "paper #FBF7EC",
+      "ratio": 1.29,
+      "role": "non-text",
+      "grade": "FAIL <3:1 (non-text)"
+    },
+    {
+      "pair": "đồ hoạ gold: gold trên paper (đường nhấn, không phải chữ)",
+      "fg": "gold #C9A227",
+      "bg": "paper #FBF7EC",
+      "ratio": 2.26,
+      "role": "non-text",
+      "grade": "FAIL <3:1 (non-text)"
+    },
+    {
+      "pair": "chấm tuần này: gold-text trên paper (đồ hoạ)",
+      "fg": "gold-text #6B5510",
+      "bg": "paper #FBF7EC",
+      "ratio": 6.69,
+      "role": "non-text",
+      "grade": "PASS ≥3:1 (non-text)"
+    },
+    {
+      "pair": "vùng chọn chữ: brand-deep trên brand-soft (selection)",
+      "fg": "brand-deep #14342A",
+      "bg": "brand-soft #E3EDE6",
+      "ratio": 11.27,
+      "role": "text",
+      "grade": "AAA"
+    }
+  ],
+  "computedStyles": [
+    {
+      "name": "H1 tiêu đề",
+      "text": "Đếm thử: còn mấy cái Tết bên bố mẹ?",
+      "color": "#14342A",
+      "background": "#FBF7EC",
+      "fontSizePx": 44,
+      "fontWeight": "700",
+      "ratio": 12.62,
+      "grade": "AAA (large)"
+    },
+    {
+      "name": "ô ngày sinh #birth (chữ nhập)",
+      "text": "",
+      "color": "#1C2420",
+      "background": "#FFFFFF",
+      "fontSizePx": 16,
+      "fontWeight": "400",
+      "ratio": 15.88,
+      "grade": "AAA"
+    },
+    {
+      "name": "nút chính «Xem còn mấy cái Tết»",
+      "text": "Xem còn mấy cái Tết",
+      "color": "#FFFFFF",
+      "background": "#1F4D3A",
+      "fontSizePx": 14,
+      "fontWeight": "600",
+      "ratio": 9.63,
+      "grade": "AAA"
+    },
+    {
+      "name": "sân khấu bố: nhãn «Với BỐ»",
+      "text": "Với BỐ · 61 tuổi",
+      "color": "#14342A",
+      "background": "#FBF7EC",
+      "fontSizePx": 13,
+      "fontWeight": "600",
+      "ratio": 12.62,
+      "grade": "AAA"
+    },
+    {
+      "name": "sân khấu bố: con số 16",
+      "text": "16",
+      "color": "#1F4D3A",
+      "background": "#FBF7EC",
+      "fontSizePx": 168,
+      "fontWeight": "800",
+      "ratio": 9,
+      "grade": "AAA (large)"
+    },
+    {
+      "name": "sân khấu bố: câu hy vọng",
+      "text": "Đủ để trân trọng từng lần về nhà với bố.",
+      "color": "#1C2420",
+      "background": "#FBF7EC",
+      "fontSizePx": 16,
+      "fontWeight": "600",
+      "ratio": 14.83,
+      "grade": "AAA"
+    },
+    {
+      "name": "lưới tuần: nhãn mốc tuổi",
+      "text": "30 tuổi · 2025",
+      "color": "#6B5510",
+      "background": "#FBF7EC",
+      "fontSizePx": 13,
+      "fontWeight": "600",
+      "ratio": 6.69,
+      "grade": "AA"
+    },
+    {
+      "name": "nút Copy kết quả",
+      "text": "Copy kết quả",
+      "color": "#FFFFFF",
+      "background": "#1F4D3A",
+      "fontSizePx": 14,
+      "fontWeight": "600",
+      "ratio": 9.63,
+      "grade": "AAA"
+    },
+    {
+      "name": "summary disclosure «Hỏi đáp»",
+      "text": "Hỏi đáp",
+      "color": "#1C2420",
+      "background": "#FFFFFF",
+      "fontSizePx": 16,
+      "fontWeight": "400",
+      "ratio": 15.88,
+      "grade": "AAA"
+    },
+    {
+      "name": "placeholder ô «Năm sinh của bố»",
+      "color": "#44564B",
+      "background": "#FFFFFF",
+      "fontSizePx": 16,
+      "fontWeight": "400",
+      "opacity": "1",
+      "ratio": 7.84,
+      "grade": "AAA"
+    }
+  ]
+}

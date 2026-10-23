@@ -219,9 +219,14 @@ export function drawShareCard(result: CalcResult, input: InputData): HTMLCanvasE
   // Nhịp y của một khối người (đã tính lại để thêm dòng câu hy vọng
   // ~34px dưới dòng lần gặp mà chân trang không bị đè):
   // nhãn y · số y+150 · đơn vị y+205 · lần gặp y+258 · hy vọng y+310,
-  // bước khối 410. Hai khối: 320 → 730, dòng hy vọng cuối ở 1040,
-  // đường gold chân trang ở H-240 = 1110.
-  let y = 320;
+  // bước khối 451. Hai khối: 277 → 728, dòng hy vọng cuối ở 1038,
+  // đường gold chân trang ở H-201 = 1149.
+  // (R1-F2, Panel #02: điểm bắt đầu khối 320 → 277 thu khoảng trống
+  // sau header 99px về ~56px ngang nhịp thẻ; chân trang dời xuống
+  // 39px để lề đáy 71px cân về ~32px ngang lề đầu; bước khối 410 →
+  // 451 chia phần dư còn lại đều cho khoảng liên khối và khoảng
+  // trước chân trang, hai khoảng này thành đối xứng ~105px.)
+  let y = 277;
   const block = (label: string, tets: number, meetings: number, hope: string) => {
     ctx.fillStyle = MUTED;
     ctx.font = `600 34px ${BODY_FONT}`;
@@ -244,7 +249,7 @@ export function drawShareCard(result: CalcResult, input: InputData): HTMLCanvasE
     ctx.fillStyle = INK;
     ctx.font = `600 34px ${BODY_FONT}`;
     ctx.fillText(hope, W / 2, y + 310);
-    y += 410;
+    y += 451;
   };
 
   if (result.father)
@@ -271,20 +276,20 @@ export function drawShareCard(result: CalcResult, input: InputData): HTMLCanvasE
   }
 
   ctx.fillStyle = GOLD;
-  ctx.fillRect(W / 2 - 60, H - 240, 120, 4);
+  ctx.fillRect(W / 2 - 60, H - 201, 120, 4);
   ctx.fillStyle = INK;
   ctx.font = `600 34px ${BODY_FONT}`;
-  ctx.fillText('Trân trọng từng cái Tết còn bên nhau.', W / 2, H - 176);
+  ctx.fillText('Trân trọng từng cái Tết còn bên nhau.', W / 2, H - 137);
   ctx.fillStyle = MUTED;
   ctx.font = `500 27px ${BODY_FONT}`;
   ctx.fillText(
     'Ước tính thống kê — không phải dự đoán dành cho bất kỳ cá nhân nào.',
     W / 2,
-    H - 128,
+    H - 89,
   );
   ctx.fillStyle = PINE_DEEP;
   ctx.font = `700 30px ${BODY_FONT}`;
-  ctx.fillText(SITE_URL.replace('https://', ''), W / 2, H - 76);
+  ctx.fillText(SITE_URL.replace('https://', ''), W / 2, H - 37);
 
   return canvas;
 }
