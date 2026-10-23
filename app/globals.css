@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+@source "../components";
+@source "../lib";
+@source "../app";
+
+:root {
+  color-scheme: light;
+  /* Font tự host (Fontsource, import trong app/layout.tsx). */
+  --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  --ink: #221d1a;
+  --muted: #6e6259;
+  --line: #e8dccb;
+  --paper: #faf6ef;
+  --card: #ffffff;
+  /* Màu thương hiệu: đỏ sơn mài — không gradient, không tím-xanh. */
+  --brand: #8c1d18;
+  --brand-deep: #6e130e;
+  --brand-soft: #f6e3de;
+  /* Vàng đồng — điểm nhấn rất hạn chế (mốc số liệu, đường kẻ). */
+  --gold: #a87e1f;
+  --shadow-card: 0 1px 2px rgba(34, 29, 26, 0.05), 0 8px 24px rgba(34, 29, 26, 0.06);
+  --shadow-lift: 0 2px 4px rgba(34, 29, 26, 0.06), 0 16px 40px rgba(34, 29, 26, 0.1);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-soft: var(--brand-soft);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  /* Con số không bao giờ nhảy bề ngang khi giá trị thay đổi. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Bề mặt trình duyệt cũng thuộc về thiết kế ─────────────────── */
+
+/* Bôi chọn văn bản: tint sơn mài, chữ đỏ sâu. */
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+/* Vòng focus bàn phím nhìn rõ trên mọi thành phần tương tác. */
+:focus-visible {
+  outline: 2px solid var(--brand-deep);
+  outline-offset: 2px;
+}
+
+/* Con trỏ soạn thảo trong ô nhập theo màu thương hiệu. */
+input {
+  caret-color: var(--brand);
+}
+
+/* Mũi tên mở/đóng của FAQ theo màu thương hiệu. */
+summary::marker {
+  color: var(--brand);
+}
+
+/* ── Slider số lần về thăm: track mảnh, núm 26px, vùng chạm dọc 44px ── */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* Chiều cao 44px chỉ nới vùng bắt chạm quanh track 6px ở giữa —
+     hình nhìn thấy (track + núm) không đổi (QA LOW-4). */
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--line);
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: var(--brand);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(34, 29, 26, 0.3);
+}
+input[type='range']::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--line);
+}
+input[type='range']::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--brand);
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(34, 29, 26, 0.3);
+}
+
+/* ── Một khoảnh khắc chuyển động duy nhất: kết quả hiện lên ───── */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise-in {
+  animation: rise-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
