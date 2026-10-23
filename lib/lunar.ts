@@ -187,6 +187,13 @@ export function lunarToSolar(
     a11 = getLunarMonth11(lunarYear, timeZone);
     b11 = getLunarMonth11(lunarYear + 1, timeZone);
   }
+  if (lunarLeap && b11 - a11 <= 365) {
+    // Năm âm lịch không có tháng nhuận → ngày nhuận không tồn tại. Trả
+    // sentinel {0,0,0} thay vì lặng lẽ bỏ qua cờ nhuận và trả ngày của
+    // tháng thường — nhất quán với ca năm nhuận nhưng sai tháng ở dưới
+    // (finding W3-F4).
+    return { day: 0, month: 0, year: 0 };
+  }
   const k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853);
   let off = lunarMonth - 11;
   if (off < 0) off += 12;
