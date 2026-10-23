@@ -1,5 +1,12 @@
 /**
- * Sinh các bản PNG phục vụ SEO/PWA từ SVG brand CHÍNH THỨC trong public/products/brand/:
+ * [LỊCH SỬ — không còn là nguồn sinh artwork chính thức]
+ * Nguồn sự thật hiện hành của logo/PNG/icon/OG là BỘ ASSET REDESIGN-V2:
+ * SVG nguồn + build-assets.mjs tại
+ * ~/workspace/mini-apps/redesign-v2/conmaytet/assets/ (xem BRAND.md).
+ * Script này chỉ còn giữ để tham khảo cách raster hoá cũ; đừng chạy nó để
+ * ghi đè bộ asset v2 trong public/.
+ *
+ * Sinh các bản PNG phục vụ SEO/PWA từ SVG brand trong public/products/brand/:
  *   public/og.png                        1200×630 — ảnh Open Graph / Twitter card
  *   public/icons/icon-192.png            192×192  — icon PWA (nền trong suốt)
  *   public/icons/icon-512.png            512×512  — icon PWA (nền trong suốt)
@@ -8,7 +15,7 @@
  *
  * Nguyên tắc brand (xem BRAND.md): artwork KHÔNG bị sửa — không đổi màu, không vẽ lại.
  * Script chỉ raster hoá nguyên bản SVG ở kích thước đích; khi nền tảng bắt buộc
- * nền đục (maskable, iOS) thì đặt nguyên bản logo vào giữa nền giấy #FAF6EF.
+ * nền đục (maskable, iOS) thì đặt nguyên bản logo vào giữa nền giấy #FBF7EC.
  * Riêng og.png là bố cục riêng cho mạng xã hội: nền giấy + logo nguyên bản + chữ
  * (font hệ thống Noto Sans có đủ dấu tiếng Việt).
  *
@@ -27,10 +34,10 @@ const anchor = process.env.RESVG_DIR
   : path.join(root, 'package.json');
 const { Resvg } = createRequire(anchor)('@resvg/resvg-js');
 
-const PAPER = '#FAF6EF'; // nền app (BRAND.md)
-const INK = '#221D1A';
-const MUTED = '#6E6259';
-const BRAND = '#8C1D18';
+const PAPER = '#FBF7EC'; // nền app (BRAND.md)
+const INK = '#1C2420';
+const MUTED = '#44564B';
+const BRAND = '#1F4D3A';
 
 function readBrand(file) {
   return readFileSync(path.join(root, 'public/products/brand', file), 'utf8');

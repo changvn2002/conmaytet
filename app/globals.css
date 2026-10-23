@@ -6,22 +6,34 @@
 
 :root {
   color-scheme: light;
-  /* Font tự host (Fontsource, import trong app/layout.tsx). */
+  /* Font tự host (Fontsource, import trong app/layout.tsx):
+     Baloo 2 cho chữ trưng bày/con số sân khấu, Be Vietnam Pro cho thân bài. */
   --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Outfit', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-  --ink: #221d1a;
-  --muted: #6e6259;
-  --line: #e8dccb;
-  --paper: #faf6ef;
+  --font-display: 'Baloo 2', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  --ink: #1c2420;
+  --muted: #44564b;
+  --line: #d8ddd0;
+  --paper: #fbf7ec;
   --card: #ffffff;
-  /* Màu thương hiệu: đỏ sơn mài — không gradient, không tím-xanh. */
-  --brand: #8c1d18;
-  --brand-deep: #6e130e;
-  --brand-soft: #f6e3de;
-  /* Vàng đồng — điểm nhấn rất hạn chế (mốc số liệu, đường kẻ). */
-  --gold: #a87e1f;
-  --shadow-card: 0 1px 2px rgba(34, 29, 26, 0.05), 0 8px 24px rgba(34, 29, 26, 0.06);
-  --shadow-lift: 0 2px 4px rgba(34, 29, 26, 0.06), 0 16px 40px rgba(34, 29, 26, 0.1);
+  /* Màu thương hiệu: xanh thông (pine) — không gradient. */
+  --brand: #1f4d3a;
+  --brand-deep: #14342a;
+  --brand-hover: #2a6248;
+  --brand-soft: #e3ede6;
+  /* Vàng lì xì — CHỈ đồ hoạ (đường nhấn, vòng mốc), không bao giờ làm chữ
+     trên nền sáng (2.26:1); dạng chữ hợp lệ duy nhất là --gold-text. */
+  --gold: #c9a227;
+  --gold-soft: #e9d48a;
+  --gold-text: #6b5510;
+  /* Viền ô nhập ở trạng thái nghỉ — đạt non-text 3:1 trên giấy ấm. */
+  --input-line: #7e9384;
+  /* Màu ngữ nghĩa cho thông báo (không phải màu brand). */
+  --warn-bg: #fbf0d3;
+  --warn-text: #5c4a0e;
+  --error-bg: #fdecea;
+  --error-text: #8a2a20;
+  --shadow-card: 0 1px 2px rgba(28, 36, 32, 0.05), 0 8px 24px rgba(28, 36, 32, 0.06);
+  --shadow-lift: 0 2px 4px rgba(28, 36, 32, 0.06), 0 16px 40px rgba(28, 36, 32, 0.1);
 }
 
 @theme inline {
@@ -32,10 +44,22 @@
   --color-card: var(--card);
   --color-brand: var(--brand);
   --color-brand-deep: var(--brand-deep);
+  --color-brand-hover: var(--brand-hover);
   --color-brand-soft: var(--brand-soft);
   --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-text: var(--gold-text);
+  --color-input-line: var(--input-line);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-text: var(--warn-text);
+  --color-error-bg: var(--error-bg);
+  --color-error-text: var(--error-text);
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -59,7 +83,7 @@ body {
 
 /* ── Bề mặt trình duyệt cũng thuộc về thiết kế ─────────────────── */
 
-/* Bôi chọn văn bản: tint sơn mài, chữ đỏ sâu. */
+/* Bôi chọn văn bản: tint xanh thông, chữ thông sâu. */
 ::selection {
   background: var(--brand-soft);
   color: var(--brand-deep);
@@ -105,7 +129,7 @@ input[type='range']::-webkit-slider-thumb {
   border-radius: 9999px;
   background: var(--brand);
   border: 3px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(34, 29, 26, 0.3);
+  box-shadow: 0 1px 3px rgba(28, 36, 32, 0.3);
 }
 input[type='range']::-moz-range-track {
   height: 6px;
@@ -118,25 +142,73 @@ input[type='range']::-moz-range-thumb {
   border-radius: 9999px;
   background: var(--brand);
   border: 3px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(34, 29, 26, 0.3);
+  box-shadow: 0 1px 3px rgba(28, 36, 32, 0.3);
 }
 
-/* ── Một khoảnh khắc chuyển động duy nhất: kết quả hiện lên ───── */
-@keyframes rise-in {
+/* ── Chuyển động: chỉ phục vụ khoảnh khắc con số lên sân khấu ──── */
+
+/* Reveal con số ở Cảnh 2: hiện như được lật mở (scale + fade), không
+   đếm tăng — số không bao giờ gợi đồng hồ đếm ngược. */
+@keyframes stage-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-stage-in {
+  animation: stage-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Câu hy vọng đi kèm con số: trễ 120ms sau số, nhẹ nhàng nhô lên. */
+@keyframes hope-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.rise-in {
-  animation: rise-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+.animate-hope-in {
+  animation: hope-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+/* Cập nhật số khi sửa input (đang ở Cảnh 2): chỉ cross-fade tại chỗ. */
+@keyframes num-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-num-in {
+  animation: num-in 160ms ease-out both;
+}
+
+/* Chấm «tuần này» trong lưới tuần: pulse vòng xanh thông đúng 1 lần
+   khi lưới vào khung hình, giúp mắt tìm thấy hiện tại giữa hàng nghìn chấm. */
+@keyframes week-pulse {
+  from {
+    box-shadow: 0 0 0 0 rgba(31, 77, 58, 0.45);
+  }
+  to {
+    box-shadow: 0 0 0 10px rgba(31, 77, 58, 0);
+  }
+}
+.week-pulse {
+  animation: week-pulse 600ms cubic-bezier(0.22, 1, 0.36, 1) 1 both;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {

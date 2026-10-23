@@ -1,4 +1,4 @@
-import { DATA_SOURCE_VI, LIFE_EXPECTANCY_AT_BIRTH } from './data';
+import { LIFE_EXPECTANCY_AT_BIRTH } from './data';
 
 /**
  * Nội dung tĩnh của trang (render phía server cho SEO): phần giải thích dưới
@@ -24,7 +24,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Số liệu tuổi thọ lấy từ đâu, có đáng tin không?',
-    a: `${DATA_SOURCE_VI} Đây là số liệu thống kê dân số chính thống dùng trong nghiên cứu y tế công cộng, không phải số liệu tự chế.`,
+    a: 'Số liệu lấy từ bảng sống Việt Nam 2019 của Tổ chức Y tế Thế giới (WHO), công bố năm 2020. Đây là số liệu thống kê dân số chính thống, được dùng trong nghiên cứu y tế công cộng, không phải số liệu tự chế. Nguồn đầy đủ và cách công cụ dùng số liệu này — xem mục Cách tính & nguồn.',
   },
   {
     q: 'Đây có phải bói toán hay xem số mệnh không?',
@@ -32,7 +32,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Vì sao nên tính còn mấy cái Tết với bố mẹ?',
-    a: 'Vì thời gian bên bố mẹ hữu hạn hơn chúng ta tưởng, nhất là khi đi làm xa và mỗi năm chỉ về nhà một hai lần. Một người về thăm nhà 2 lần mỗi năm, nếu bố mẹ còn khoảng 15 năm kỳ vọng, nghĩa là phía trước còn khoảng 30 lần gặp và 15 cái Tết để trân trọng. Nhìn thấy con số cụ thể giúp nhiều người chủ động hơn: gọi điện thường xuyên hơn, sắp xếp về thăm nhiều hơn, và trân trọng từng dịp sum vầy thay vì để dành đến "khi nào rảnh".',
+    a: 'Vì thời gian bên bố mẹ hữu hạn hơn chúng ta tưởng, nhất là khi đi làm xa và mỗi năm chỉ về nhà một hai lần. Một người về thăm nhà 2 lần mỗi năm, nếu bố mẹ còn khoảng 15 năm kỳ vọng, nghĩa là phía trước còn khoảng 30 lần gặp và 15 cái Tết để trân trọng. Nhìn thấy con số cụ thể giúp mỗi người tự quyết định rõ hơn cho chính mình: gọi điện thường xuyên hơn, sắp xếp về thăm nhiều hơn, và trân trọng từng dịp sum vầy thay vì để dành đến "khi nào rảnh".',
   },
   {
     q: 'Số lần gặp bố mẹ còn lại được tính ra sao?',

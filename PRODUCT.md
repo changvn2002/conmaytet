@@ -76,9 +76,9 @@ cùng lúc với độ minh bạch này.
 
 - Tên sản phẩm: "Còn Mấy Cái Tết Nữa?" — câu hỏi là tên gọi, giữ nguyên dấu
   hỏi trong mọi ngữ cảnh hiển thị chính thức.
-- Nhận diện: hoa mai năm cánh trên nền đỏ sơn mài (logo SVG tại
-  public/products/brand/conmaytet-logo.svg là nguồn sự thật duy nhất; xem
-  BRAND.md).
+- Nhận diện: bao lì xì vàng + cành thông trên nền xanh thông `#1F4D3A`
+  (logo SVG tại public/products/brand/conmaytet-logo.svg là nguồn sự thật
+  duy nhất; xem BRAND.md).
 - Giọng văn: ấm, trang trọng, đầy hy vọng. Con số dù nhỏ cũng được nói như
   lời nhắc trân trọng ("còn 14 cái Tết — đủ để trân trọng từng lần về nhà"),
   không bao giờ như lời đe doạ hay đếm ngược tang tóc.

@@ -3,8 +3,8 @@ import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/site';
 
 /**
  * Web App Manifest — cho phép cài app lên màn hình chính và chạy standalone
- * như app thật. Icon PNG sinh từ logo SVG chính thức bằng
- * scripts/generate-brand-pngs.mjs (artwork không sửa, xem BRAND.md).
+ * như app thật. Icon PNG lấy từ bộ asset redesign-v2, raster hoá từ logo
+ * SVG chính thức (artwork không sửa, xem BRAND.md).
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -16,9 +16,9 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    // Nền giấy ấm của app (màn hình chờ khi mở app đã cài) + đỏ sơn mài cho theme.
-    background_color: '#FAF6EF',
-    theme_color: '#8C1D18',
+    // Giấy ấm #FBF7EC (nền chờ khi mở app đã cài) + xanh thông #1F4D3A cho theme.
+    background_color: '#FBF7EC',
+    theme_color: '#1F4D3A',
     categories: ['lifestyle', 'utilities'],
     icons: [
       {

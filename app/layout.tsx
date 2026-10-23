@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from 'next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
+import RegisterSW from '@/components/conmaytet/register-sw';
 import './globals.css';
 
+import '@fontsource/baloo-2/700.css';
+import '@fontsource/baloo-2/800.css';
 import '@fontsource/be-vietnam-pro/400.css';
 import '@fontsource/be-vietnam-pro/500.css';
 import '@fontsource/be-vietnam-pro/600.css';
 import '@fontsource/be-vietnam-pro/700.css';
-import '@fontsource/be-vietnam-pro/800.css';
-import '@fontsource/outfit/500.css';
-import '@fontsource/outfit/600.css';
-import '@fontsource/outfit/700.css';
 
 export const viewport: Viewport = {
   // Màu brand — thanh trạng thái/trình duyệt trên mobile nhuộm theo app.
-  themeColor: '#8C1D18',
+  themeColor: '#1F4D3A',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -61,7 +60,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/og.png',
+        url: '/og.jpg',
         width: 1200,
         height: 630,
         alt: SITE_TITLE,
@@ -72,7 +71,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ['/og.png'],
+    images: ['/og.jpg'],
   },
   appleWebApp: {
     capable: true,
@@ -115,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
         {children}
+        <RegisterSW />
       </body>
     </html>
   );

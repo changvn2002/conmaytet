@@ -419,7 +419,11 @@ describe('W3-3 share text — mọi nhánh', () => {
   function checkClean(text: string) {
     for (const b of BAN) expect(text).not.toContain(b);
     expect(text).toContain('conmaytet.vercel.app');
-    expect(text).toContain('không phải dự đoán');
+    // 2026-10-23 (redesign-v2): dòng miễn trừ trong share text đổi thành hai
+    // câu theo COPY-DIET #15 — câu hai viết hoa đầu câu («Không phải dự đoán
+    // cho bất kỳ ai.») nên kiểm trên bản lowercase; ý đồ kiểm chứng không
+    // đổi: mọi nhánh share text đều phải chứa lời phủ định dự đoán.
+    expect(text.toLowerCase()).toContain('không phải dự đoán');
   }
 
   it('đủ bố + mẹ, ở xa, visits = 2: số trong text khớp số tính được, đơn vị "lần"', () => {
