@@ -7,7 +7,7 @@ Repo: https://github.com/changvn2002/conmaytet
 <p align="center">
   <img src="docs/screenshots/conmaytet-desktop.png" alt="Còn Mấy Cái Tết Nữa? — kết quả: còn 13 cái Tết với bố và 20 cái Tết với mẹ" width="900">
 </p>
-<p align="center"><em>Một người sinh năm 1990, bố sinh 1960, mẹ sinh 1963, mỗi năm về nhà 2 lần: app tính ra còn khoảng <strong>13 cái Tết với bố</strong> (26 lần gặp) và <strong>20 cái Tết với mẹ</strong> (39 lần gặp) — mỗi con số đứng trần trên một sân khấu riêng, không thẻ, không khung. Ảnh chụp thật từ bản production đang chạy.</em></p>
+<p align="center"><em>Một người sinh năm 1990, bố sinh 1960, mẹ sinh 1963, mỗi năm về nhà 2 lần: app tính ra còn khoảng <strong>13 cái Tết với bố</strong> (26 lần gặp) và <strong>20 cái Tết với mẹ</strong> (39 lần gặp) — mỗi con số nằm trên một thẻ trắng riêng trên nền trung tính sáng: thẻ của bố có minh hoạ ngôi nhà khối đặc và avatar initials «B» tông xanh nhạt, thẻ của mẹ có bánh chưng khối đặc và avatar «M» tông kem. Ảnh chụp thật từ bản production đang chạy.</em></p>
 
 Đi làm xa, mỗi năm về nhà được một hai lần — vậy **còn bao nhiêu cái Tết với bố
 mẹ** nữa? **Còn Mấy Cái Tết Nữa?** giúp bạn nhìn thấy con số đó: nhập năm sinh
@@ -25,63 +25,72 @@ ngay trong trình duyệt của bạn.
 ## 🖼️ Ảnh chụp từ bản live
 
 Tất cả ảnh dưới đây được chụp trực tiếp từ bản production
-[https://conmaytet.vercel.app](https://conmaytet.vercel.app) khi app đang ở
-trạng thái **đã nhập xong một bộ dữ liệu đầy đủ và hiển thị kết quả** — đúng
-những gì người dùng nhìn thấy sau khi nhập. Giao diện là một luồng 4 cảnh nối
-tiếp nhau (Scene Flow): Lời mời → Sân khấu số → Câu chuyện tuần đời → Gửi đi.
+[https://conmaytet.vercel.app](https://conmaytet.vercel.app) với **cùng một
+bộ dữ liệu đầy đủ**: ảnh đầu tiên là form đã nhập xong, các ảnh còn lại là
+những gì người dùng nhìn thấy sau khi bấm nút "Xem còn mấy cái Tết" để hiện
+kết quả. Giao diện là một luồng 4 cảnh nối tiếp nhau (Scene Flow): Lời mời →
+Kết quả → Câu chuyện tuần đời → Gửi đi.
 Bộ dữ liệu trong ảnh: bạn sinh 20/05/1990, giới tính Nữ, bố sinh 1960, mẹ
 sinh 1963, về thăm nhà 2 lần/năm.
 
-### Cảnh 2 — Sân khấu số: giá trị cốt lõi của app
+### Cảnh 2 — Hai thẻ kết quả: giá trị cốt lõi của app
 
-![Desktop 1440×900 — Cảnh 2: hai sân khấu số lớn của bố và mẹ đứng cạnh nhau](docs/screenshots/conmaytet-desktop.png)
+![Desktop 1440×900 — Cảnh 2: hai thẻ kết quả của bố và mẹ cạnh nhau trên nền trung tính sáng](docs/screenshots/conmaytet-desktop.png)
 
-_Trên desktop, hai sân khấu số đứng cạnh nhau, con số đứng trần giữa nền xanh
-đậm — không thẻ, không viền: **với bố (66 tuổi): 13 cái Tết nữa, khoảng 26
-lần gặp**; **với mẹ (63 tuổi): 20 cái Tết nữa, khoảng 39 lần gặp**. Dưới mỗi
-con số là một câu riêng cho từng người, dòng lưu ý đây là ước tính thống kê và
-nguồn bảng sống WHO Việt Nam 2019._
+_Trên desktop, hai thẻ trắng đứng cạnh nhau trên nền trung tính sáng, mỗi
+thẻ một con số lớn: **với bố (66 tuổi): 13 cái Tết nữa, khoảng 26 lần gặp**;
+**với mẹ (63 tuổi): 20 cái Tết nữa, khoảng 39 lần gặp**. Mỗi thẻ có avatar
+initials và minh hoạ khối đặc riêng — ngôi nhà cho bố, bánh chưng cho mẹ —
+thanh "Đã sống" và một câu riêng cho từng người. Ngay dưới hai thẻ là dòng
+lưu ý đây là ước tính thống kê và nguồn bảng sống WHO Việt Nam 2019._
 
 | Mobile (390×844) | Social / link-preview (1280×640) |
 | --- | --- |
-| ![Mobile — sân khấu số của bố chiếm trọn màn hình điện thoại](docs/screenshots/conmaytet-mobile.png) | ![Social — khung ngang vẫn thấy trọn hai sân khấu số](docs/screenshots/conmaytet-social.png) |
-| _Trên điện thoại, mỗi sân khấu chiếm trọn một màn hình: trong ảnh là sân khấu của bố — số 13 thật lớn, đọc rõ cùng câu riêng và dòng ước tính thống kê; cuộn xuống là sân khấu của mẹ._ | _Khung 1280×640 dùng khi gửi link app qua Zalo/Facebook — vẫn thấy trọn cả hai sân khấu số và đủ phần giải thích dưới mỗi con số._ |
+| ![Mobile — thẻ kết quả của bố chiếm gần trọn màn hình điện thoại](docs/screenshots/conmaytet-mobile.png) | ![Social — khung ngang vẫn thấy trọn hai thẻ kết quả](docs/screenshots/conmaytet-social.png) |
+| _Trên điện thoại, các thẻ xếp dọc: trong ảnh, thẻ của bố chiếm gần trọn màn hình — số 13 thật lớn, đọc rõ cùng số lần gặp, thanh "Đã sống" và câu riêng; đầu thẻ của mẹ hiện ngay phía dưới, cuộn xuống là thấy trọn._ | _Khung 1280×640 dùng khi gửi link app qua Zalo/Facebook — vẫn thấy trọn cả hai thẻ kết quả và đủ phần giải thích dưới mỗi con số._ |
 
 ### Theo từng cảnh
 
 **Cảnh 1 — Lời mời: nhập ngày sinh của bạn, năm sinh của bố mẹ và nhịp về
-thăm.** Kết quả tự cập nhật ngay khi nhập, không cần bấm nút tính; nút "Xem
-còn mấy cái Tết" chỉ để cuộn xuống sân khấu số.
+thăm.** Form là thẻ trắng trên nền trung tính sáng, hero có cành đào đi chéo
+và ô ngày sinh gồm 3 đoạn riêng (ngày / tháng / năm). Nhập xong phải bấm nút
+"Xem còn mấy cái Tết" thì các cảnh kết quả mới hiện — kết quả không tự hiện
+khi đang nhập.
 
 ![Cảnh 1 — lời mời đã nhập: sinh 20/05/1990, Nữ, bố 1960, mẹ 1963, về thăm 2 lần/năm](docs/screenshots/gallery-01-form-da-nhap.png)
 
-**Cảnh 2 — Sân khấu số: đọc con số của từng người.** Mỗi người một sân khấu
-riêng trên nền xanh đậm, eyebrow kèm avatar initials — «B» cho bố, «M» cho
-mẹ: số cái Tết còn lại bằng số Baloo 2 thật lớn, số lần gặp còn lại theo
-nhịp về thăm hiện tại, câu riêng cho bố và cho mẹ, và dòng nguồn số liệu ngay
-dưới con số.
+**Cảnh 2 — Thẻ kết quả: đọc con số của từng người.** Mỗi người một thẻ trắng
+riêng trên nền trung tính sáng, avatar initials — «B» tông xanh nhạt cho bố,
+«M» tông kem cho mẹ — cùng minh hoạ khối đặc ở góc thẻ: ngôi nhà cho bố, bánh
+chưng cho mẹ. Trong thẻ là số cái Tết còn lại bằng số Baloo 2 thật lớn, số
+lần gặp còn lại theo nhịp về thăm hiện tại, thanh "Đã sống" (đã đi 84% với
+bố, 76% với mẹ), câu riêng cho từng người và hai nút "Tiếp" / "Sửa lại".
 
-![Cảnh 2 — hai sân khấu số: 13 cái Tết với bố, 20 cái Tết với mẹ](docs/screenshots/gallery-02-ket-qua-bo-me.png)
+![Cảnh 2 — clip hai thẻ kết quả (672×331): 13 cái Tết với bố, 20 cái Tết với mẹ](docs/screenshots/gallery-02-ket-qua-bo-me.png)
 
-**Cảnh 3 — Cuộc đời bạn, kể bằng tuần.** Đầu cảnh là avatar initials «B»
-cạnh nhãn «Bạn». Mỗi chấm là một tuần: chấm xanh lá đậm là những tuần đã
-sống, tuần hiện tại là chấm xanh đậm lớn hơn ở cuối phần đã sống, có nhãn
-"Bạn đang ở tuần này" ngay bên dưới, phần chấm xám nhạt là những tuần còn
-lại theo kỳ vọng thống kê. Các mốc tuổi 30 · 40 · 50 · 60 neo ngay trước
-hàng tuần tương ứng (trong ảnh: 30 tuổi · 2020, 40 tuổi · 2030, 50 tuổi ·
-2040, 60 tuổi · 2050). Người trong ảnh đã
-sống 1.900 tuần trên tổng số khoảng 4.177 tuần (45,5%); ngay dưới lưới là 4
-con số của chính bạn: 13.306 ngày đã sống, ≈ 450 lần trăng tròn đã qua, 36
-cái Tết đã trải qua và 45,5% đời người đã qua theo thống kê.
+**Cảnh 3 — Cuộc đời bạn, kể bằng tuần.** Đầu cảnh là tiêu đề kèm dòng tổng
+"1.900 / ≈4.177 tuần · 45,5%" và ngày sinh 20/05/1990. Ngay dưới là dải
+phóng to "Bạn đang ở tuần này · tuần 1.900", với chấm hôm nay khoanh vòng
+xanh và chấm vàng đánh dấu cái Tết. Mỗi chấm trong lưới là một tuần: chấm
+đặc là những tuần đã sống, tuần hiện tại là chấm khoanh vòng xanh ở cuối
+phần đã sống, phần chấm rỗng nhạt là những tuần còn lại theo kỳ vọng thống
+kê. Các mốc tuổi 30 · 40 · 50 · 60 nằm ở đầu khối thập kỷ tương ứng (trong
+ảnh: 30 tuổi · 2020, 40 tuổi · 2030, 50 tuổi · 2040, 60 tuổi · 2050).
+Người trong ảnh đã sống 1.900 tuần trên tổng số khoảng 4.177 tuần (45,5%);
+ngay dưới lưới là 4 con số của chính bạn: 13.306 ngày đã sống, ≈ 450 lần
+trăng tròn đã qua, 36 cái Tết đã trải qua và 45,5% đời người đã qua theo
+thống kê.
 
-![Cảnh 3 — lưới tuần cuộc đời: tuần đã sống, tuần này có nhãn, các mốc tuổi và tuần còn lại](docs/screenshots/gallery-03-luoi-tuan-cuoc-doi.png)
+![Cảnh 3 — lưới tuần cuộc đời (672×1533): dải "Bạn đang ở tuần này", tuần đã sống, các mốc tuổi và tuần còn lại](docs/screenshots/gallery-03-luoi-tuan-cuoc-doi.png)
 
 **Cảnh 4 — Gửi đi: xem trước thẻ kết quả thật trước khi chia sẻ.** Thẻ do
-chính app vẽ bằng canvas ngay trên trình duyệt, mang cả hai con số (13 với
-bố, 20 với mẹ), câu riêng của từng người và dòng "ước tính thống kê — không
-phải dự đoán" in ngay trên thẻ. Đầu thẻ là vòng tròn ở giữa cùng hoa outline
-hai bên và dải xanh ở chân thẻ — không có motif lì xì. Từ đây bạn copy đoạn
-text kết quả hoặc tải ảnh thẻ về máy.
+chính app vẽ bằng canvas ngay trên trình duyệt (ảnh tải về có kích thước
+1080 × 1350), mang cả hai con số (13 với bố, 20 với mẹ), câu riêng của từng
+người và dòng "Ước tính thống kê — không phải dự đoán dành cho bất kỳ cá
+nhân nào." in ngay trên thẻ. Đầu thẻ là cành đào đi chéo như ở hero — không
+phải cung đối xứng, không có motif lì xì; dưới mỗi con số là hàng vạch kèm
+chú thích "Mỗi vạch là một cái Tết còn lại". Từ đây bạn copy đoạn text kết
+quả (nút "Copy kết quả") hoặc tải ảnh thẻ về máy.
 
 ![Cảnh 4 — gửi đi: thẻ kết quả xem trước cùng nút Copy kết quả và Tải ảnh thẻ kết quả](docs/screenshots/gallery-04-tien-the-chia-se.png)
 
