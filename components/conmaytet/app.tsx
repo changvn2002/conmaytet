@@ -7,14 +7,17 @@ import { clearInput, loadInput, saveInput } from '@/lib/storage';
 import type { CalcResult, InputData, LifeGrid, ParentEstimate, Sex } from '@/lib/types';
 import { OfflineBar } from './offline-bar';
 import { ProfileAvatar } from './avatar';
+import { PeachBranch } from './branch';
 import {
   IconArrowDown,
   IconArrowUp,
+  IconCheck,
   IconChevronRight,
   IconCopy,
   IconDownload,
+  IconHome,
+  IconMeal,
   IconReset,
-  IconWeekRing,
 } from './icons';
 
 const nf = new Intl.NumberFormat('vi-VN');
@@ -127,7 +130,7 @@ function FieldNotices({
         <p
           key={e}
           role="alert"
-          className="mt-3 rounded-xl border-l-4 border-error-solid bg-subtle px-4 py-3 text-sm font-medium text-error-ink"
+          className="mt-3 rounded-xl border-l-4 border-error-solid bg-card px-4 py-3 text-sm font-medium text-error-ink"
         >
           {e}
         </p>
@@ -145,19 +148,9 @@ function FieldNotices({
 }
 
 /** Điều hướng giữa các cảnh: lối tắt có chủ đích, cuộn tự do vẫn chạy. */
-function SceneNav({
-  onNext,
-  onEdit,
-  onDeep = false,
-}: {
-  onNext: (() => void) | null;
-  onEdit: () => void;
-  /** Biến thể trên bề mặt reveal (Cảnh 2): chữ on-deep, hover reveal-alt. */
-  onDeep?: boolean;
-}) {
-  const btn = onDeep
-    ? 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-on-deep transition-colors hover:bg-reveal-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-deep'
-    : 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong';
+function SceneNav({ onNext, onEdit }: { onNext: (() => void) | null; onEdit: () => void }) {
+  const btn =
+    'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong';
   return (
     <div className="flex items-center justify-center gap-2">
       {onNext && (
@@ -430,6 +423,15 @@ export function ConMayTetTool() {
   const goScene4 = () => scrollToEl(scene4Ref.current);
   // Cảnh kế tiếp sau Cảnh 2: có lưới tuần thì tới Cảnh 3, không thì Cảnh 4.
   const afterScene2 = result.life ? goScene3 : goScene4;
+  // «Tiếp» của sân khấu BỐ phải dừng ở sân khấu MẸ trước (Panel
+  // v1.2.2 S-NEW-2: cả hai sân khấu cùng dùng afterScene2 nên nút
+  // của bố nhảy thẳng qua mẹ xuống lưới tuần — người dùng theo
+  // luồng dẫn dắt không bao giờ dừng xem được kết quả của mẹ).
+  const goMomStage = () => {
+    const el = document.getElementById('san-khau-me');
+    if (el) scrollToEl(el);
+    else afterScene2();
+  };
 
   const ariaSummary = [
     result.father ? `Còn khoảng ${nf.format(result.father.tetsLeft)} cái Tết với bố` : null,
@@ -442,257 +444,307 @@ export function ConMayTetTool() {
     <div>
       <OfflineBar />
 
-      {/* ── Cảnh 1 «Lời mời» ─────────────────────────────────────── */}
-      <section
-        ref={scene1Ref}
-        aria-label="Lời mời"
-        className="flex min-h-[calc(100dvh-60px)] flex-col justify-center py-8"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/products/brand/conmaytet-hero-ring.svg"
-          alt="Vòng năm mười hai tháng và cành hoa xuân"
-          className="mb-6 h-auto w-[min(342px,88%)] self-center"
-        />
-        <h1 className="font-display text-[25px] leading-[1.15] font-extrabold text-balance text-ink">
-          Đếm thử: còn mấy cái Tết bên bố mẹ?
-        </h1>
+      {/* ── Cảnh 1 «Lời mời» — hệ lens-04: hero sticky (cành đào trên
+          nền trung tính của thẻ) + 2 thẻ form đánh số; control 52–58px,
+          thẻ trắng bo 20 trên canvas #F6F7F6. */}
+      <section ref={scene1Ref} aria-label="Lời mời" className="py-6 lg:py-8">
+        <div className="grid items-start gap-5 lg:grid-cols-[400px_1fr]">
+          {/* Thẻ hero */}
+          <div className="rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-7 lg:sticky lg:top-5">
+            <div className="rounded-2xl bg-subtle px-3 pt-3 pb-1">
+              <div className="mx-auto w-[220px] lg:w-full">
+                <PeachBranch className="h-auto w-full" />
+              </div>
+            </div>
+            <h1 className="font-display mt-5 text-[26px] leading-[1.22] font-extrabold text-balance text-ink sm:text-[31px]">
+              Đếm thử: còn mấy cái Tết bên bố mẹ?
+            </h1>
+            <div className="mt-5 hidden flex-col gap-2.5 border-t border-line-soft pt-4 sm:flex">
+              {[
+                'Không tài khoản, không gửi dữ liệu đi.',
+                'Nguồn: bảng sống WHO Việt Nam 2019.',
+                'Đây là ước tính thống kê theo tuổi thọ trung bình.',
+              ].map((line) => (
+                <p key={line} className="flex items-start gap-2.5 text-sm font-medium text-ink-2">
+                  <span className="mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[7px] bg-seed-soft text-seed-ink">
+                    <IconCheck size={12} aria-hidden />
+                  </span>
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
 
-        <div className="mt-8">
-          <label htmlFor="birth" className="mb-1.5 block text-[15px] font-semibold text-ink">
-            Ngày sinh của bạn
-          </label>
-          <input
-            id="birth"
-            type="date"
-            autoComplete="bday"
-            value={form.birth}
-            max={now.toISOString().slice(0, 10)}
-            onChange={(e) => updateForm({ ...form, birth: e.target.value })}
-            aria-invalid={notices.errors.self.length > 0 || undefined}
-            aria-describedby={
-              notices.errors.self.length + notices.warnings.self.length > 0
-                ? 'notices-self'
-                : undefined
-            }
-            className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong focus-within:outline-2 focus-within:outline-brand-strong"
-          />
-          <p className="mt-1.5 max-w-[34rem] text-sm text-pretty text-muted">
-            Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
-          </p>
-          <FieldNotices
-            id="notices-self"
-            errors={notices.errors.self}
-            warnings={notices.warnings.self}
-          />
-        </div>
+          {/* Cột form */}
+          <div className="flex flex-col gap-5">
+            <div className="rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+              <h2 className="flex items-center gap-2.5 text-base font-extrabold text-ink">
+                <span className="font-display flex h-6 w-6 items-center justify-center rounded-lg bg-ink text-[12.5px] font-extrabold text-white">
+                  1
+                </span>
+                Về bạn
+              </h2>
 
-        <div className="mt-6">
-          <span className="mb-1.5 block text-[15px] font-semibold text-ink">Giới tính của bạn</span>
-          <div className="flex gap-2" role="radiogroup" aria-label="Giới tính của bạn">
-            {(
-              [
-                ['female', 'Nữ'],
-                ['male', 'Nam'],
-                ['unspecified', 'Không chọn'],
-              ] as [Sex, string][]
-            ).map(([value, label]) => {
-              const selected = sexTouched && form.sex === value;
-              return (
+              <div className="mt-5">
+                <label htmlFor="birth" className="mb-2 block text-[15px] font-semibold text-ink">
+                  Ngày sinh của bạn
+                </label>
+                <input
+                  id="birth"
+                  type="date"
+                  autoComplete="bday"
+                  value={form.birth}
+                  max={now.toISOString().slice(0, 10)}
+                  onChange={(e) => updateForm({ ...form, birth: e.target.value })}
+                  aria-invalid={notices.errors.self.length > 0 || undefined}
+                  aria-describedby={
+                    notices.errors.self.length + notices.warnings.self.length > 0
+                      ? 'notices-self'
+                      : undefined
+                  }
+                  className="min-h-[54px] w-full rounded-[13px] border border-line-control bg-card px-4 py-3 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong focus-within:outline-2 focus-within:outline-brand-strong"
+                />
+                <p className="mt-2 max-w-[34rem] text-sm text-pretty text-muted">
+                  Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
+                </p>
+                <FieldNotices
+                  id="notices-self"
+                  errors={notices.errors.self}
+                  warnings={notices.warnings.self}
+                />
+              </div>
+
+              <div className="mt-6">
+                <span className="mb-2 block text-[15px] font-semibold text-ink">
+                  Giới tính của bạn
+                </span>
+                <div className="flex gap-2.5" role="radiogroup" aria-label="Giới tính của bạn">
+                  {(
+                    [
+                      ['female', 'Nữ'],
+                      ['male', 'Nam'],
+                      ['unspecified', 'Không chọn'],
+                    ] as [Sex, string][]
+                  ).map(([value, label]) => {
+                    const selected = sexTouched && form.sex === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        role="radio"
+                        aria-checked={form.sex === value}
+                        onClick={() => {
+                          setSexTouched(true);
+                          updateForm({ ...form, sex: value });
+                        }}
+                        className={`flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-[13px] border px-3 py-2.5 text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong ${
+                          selected
+                            ? 'border-brand bg-seed-tint font-bold text-seed-ink'
+                            : 'border-line-control bg-card font-medium text-ink-2 hover:border-brand-strong'
+                        }`}
+                      >
+                        {selected && (
+                          <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-brand" />
+                        )}
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+              <h2 className="flex items-center gap-2.5 text-base font-extrabold text-ink">
+                <span className="font-display flex h-6 w-6 items-center justify-center rounded-lg bg-ink text-[12.5px] font-extrabold text-white">
+                  2
+                </span>
+                Về bố mẹ
+              </h2>
+
+              <div className="mt-5 grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="father-year"
+                    className="mb-2 block text-[15px] font-semibold text-ink"
+                  >
+                    Năm sinh của bố
+                  </label>
+                  <input
+                    id="father-year"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="VD: 1965"
+                    value={form.father}
+                    min={1900}
+                    max={now.getFullYear()}
+                    onChange={(e) => updateForm({ ...form, father: e.target.value })}
+                    aria-invalid={notices.errors.father.length > 0 || undefined}
+                    aria-describedby={
+                      notices.errors.father.length + notices.warnings.father.length > 0
+                        ? 'notices-father'
+                        : undefined
+                    }
+                    className="min-h-[54px] w-full rounded-[13px] border border-line-control bg-card px-4 py-3 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
+                  />
+                  <FieldNotices
+                    id="notices-father"
+                    errors={notices.errors.father}
+                    warnings={notices.warnings.father}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="mother-year"
+                    className="mb-2 block text-[15px] font-semibold text-ink"
+                  >
+                    Năm sinh của mẹ
+                  </label>
+                  <input
+                    id="mother-year"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="VD: 1968"
+                    value={form.mother}
+                    min={1900}
+                    max={now.getFullYear()}
+                    onChange={(e) => updateForm({ ...form, mother: e.target.value })}
+                    aria-invalid={notices.errors.mother.length > 0 || undefined}
+                    aria-describedby={
+                      notices.errors.mother.length + notices.warnings.mother.length > 0
+                        ? 'notices-mother'
+                        : undefined
+                    }
+                    className="min-h-[54px] w-full rounded-[13px] border border-line-control bg-card px-4 py-3 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
+                  />
+                  <FieldNotices
+                    id="notices-mother"
+                    errors={notices.errors.mother}
+                    warnings={notices.warnings.mother}
+                  />
+                </div>
+              </div>
+              <p className="mt-2 max-w-[34rem] text-sm text-muted">
+                Chỉ cần năm — sai số ±1 tuổi, app luôn ghi rõ.
+              </p>
+
+              <div className="mt-5">
                 <button
-                  key={value}
                   type="button"
-                  role="radio"
-                  aria-checked={form.sex === value}
-                  onClick={() => {
-                    setSexTouched(true);
-                    updateForm({ ...form, sex: value });
-                  }}
-                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong ${
-                    selected
-                      ? 'border-brand-strong bg-brand-tint font-semibold text-ink'
-                      : 'border-line-control bg-canvas font-medium text-ink hover:border-brand-strong'
-                  }`}
+                  role="switch"
+                  aria-checked={form.livesWith}
+                  onClick={() => updateForm({ ...form, livesWith: !form.livesWith })}
+                  className="flex min-h-11 w-full items-center gap-3.5 rounded-[14px] border border-line-soft bg-subtle px-4 py-3.5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
                 >
-                  {selected && (
-                    <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-brand" />
-                  )}
-                  {label}
+                  <span
+                    aria-hidden
+                    className={`relative h-[30px] w-[52px] shrink-0 rounded-full transition-colors ${
+                      form.livesWith ? 'bg-brand' : 'bg-future'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-[3px] left-[3px] h-6 w-6 rounded-full bg-card shadow transition-transform ${
+                        form.livesWith ? 'translate-x-[22px]' : 'translate-x-0'
+                      }`}
+                    />
+                  </span>
+                  <span>
+                    <span className="block text-[15px] font-semibold text-ink">
+                      Tôi đang sống cùng bố mẹ
+                    </span>
+                    <span className="mt-0.5 block text-sm text-muted">
+                      Sống cùng: tính theo ngày.
+                    </span>
+                  </span>
                 </button>
-              );
-            })}
-          </div>
-        </div>
+              </div>
 
-        <div className="mt-6">
-          <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
-            <div>
-              <label
-                htmlFor="father-year"
-                className="mb-1.5 block text-[15px] font-semibold text-ink"
-              >
-                Năm sinh của bố
-              </label>
-              <input
-                id="father-year"
-                type="number"
-                inputMode="numeric"
-                placeholder="VD: 1965"
-                value={form.father}
-                min={1900}
-                max={now.getFullYear()}
-                onChange={(e) => updateForm({ ...form, father: e.target.value })}
-                aria-invalid={notices.errors.father.length > 0 || undefined}
-                aria-describedby={
-                  notices.errors.father.length + notices.warnings.father.length > 0
-                    ? 'notices-father'
-                    : undefined
-                }
-                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
-              />
-              <FieldNotices
-                id="notices-father"
-                errors={notices.errors.father}
-                warnings={notices.warnings.father}
-              />
+              {!form.livesWith && (
+                <div className="mt-6">
+                  <div className="mb-1.5 flex items-baseline justify-between">
+                    <label htmlFor="visits" className="text-[15px] font-semibold text-ink">
+                      Về thăm mỗi năm?
+                    </label>
+                    <span className="font-display text-[18px] font-extrabold text-seed-ink">
+                      {form.visits} lần/năm
+                    </span>
+                  </div>
+                  <input
+                    id="visits"
+                    type="range"
+                    min={0}
+                    max={24}
+                    step={1}
+                    value={form.visits}
+                    onChange={(e) => updateForm({ ...form, visits: Number(e.target.value) })}
+                    aria-invalid={notices.errors.visits.length > 0 || undefined}
+                    aria-describedby={
+                      notices.errors.visits.length + notices.warnings.visits.length > 0
+                        ? 'notices-visits'
+                        : undefined
+                    }
+                    style={{
+                      background: `linear-gradient(to right, var(--seed) ${(form.visits / 24) * 100}%, var(--track) ${(form.visits / 24) * 100}%)`,
+                      backgroundSize: '100% 6px',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center',
+                    }}
+                    className="w-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+                  />
+                  {/* Các mốc nằm đúng tỉ lệ trên thang 0–24 (0%, 25%, 50%, 75%, 100%). */}
+                  <div className="flex justify-between text-sm text-muted">
+                    <span>0</span>
+                    <span>6</span>
+                    <span>12</span>
+                    <span>18</span>
+                    <span>24</span>
+                  </div>
+                  <FieldNotices
+                    id="notices-visits"
+                    errors={notices.errors.visits}
+                    warnings={notices.warnings.visits}
+                  />
+                </div>
+              )}
+              {form.livesWith && (
+                <FieldNotices
+                  id="notices-visits"
+                  errors={notices.errors.visits}
+                  warnings={notices.warnings.visits}
+                />
+              )}
             </div>
-            <div>
-              <label
-                htmlFor="mother-year"
-                className="mb-1.5 block text-[15px] font-semibold text-ink"
-              >
-                Năm sinh của mẹ
-              </label>
-              <input
-                id="mother-year"
-                type="number"
-                inputMode="numeric"
-                placeholder="VD: 1968"
-                value={form.mother}
-                min={1900}
-                max={now.getFullYear()}
-                onChange={(e) => updateForm({ ...form, mother: e.target.value })}
-                aria-invalid={notices.errors.mother.length > 0 || undefined}
-                aria-describedby={
-                  notices.errors.mother.length + notices.warnings.mother.length > 0
-                    ? 'notices-mother'
-                    : undefined
-                }
-                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
-              />
-              <FieldNotices
-                id="notices-mother"
-                errors={notices.errors.mother}
-                warnings={notices.warnings.mother}
-              />
-            </div>
-          </div>
-          <p className="mt-1.5 max-w-[34rem] text-sm text-muted">
-            Chỉ cần năm — sai số ±1 tuổi, app luôn ghi rõ.
-          </p>
-        </div>
 
-        <div className="mt-6">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={form.livesWith}
-            onClick={() => updateForm({ ...form, livesWith: !form.livesWith })}
-            className="flex min-h-11 w-full items-center gap-3 rounded-xl text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            <span
-              aria-hidden
-              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                form.livesWith ? 'bg-brand' : 'bg-line'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-canvas shadow transition-transform ${
-                  form.livesWith ? 'translate-x-5' : 'translate-x-0'
+            <div>
+              <button
+                type="button"
+                onClick={hasParentResult ? goScene2 : undefined}
+                aria-disabled={!hasParentResult || undefined}
+                className={`flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong ${
+                  hasParentResult
+                    ? 'bg-brand text-white shadow-[0_10px_20px_-8px_color-mix(in_srgb,var(--seed)_55%,transparent)] hover:bg-brand-strong'
+                    : 'cursor-not-allowed bg-track text-faint'
                 }`}
-              />
-            </span>
-            <span>
-              <span className="block text-[15px] font-semibold text-ink">
-                Tôi đang sống cùng bố mẹ
-              </span>
-              <span className="mt-0.5 block text-sm text-muted">Sống cùng: tính theo ngày.</span>
-            </span>
-          </button>
-        </div>
-
-        {!form.livesWith && (
-          <div className="mt-6">
-            <div className="mb-1.5 flex items-baseline justify-between">
-              <label htmlFor="visits" className="text-[15px] font-semibold text-ink">
-                Về thăm mỗi năm?
-              </label>
-              <span className="font-sans text-[18px] font-bold text-brand-strong">
-                {form.visits} lần/năm
-              </span>
+              >
+                Xem còn mấy cái Tết <IconArrowDown size={16} aria-hidden />
+              </button>
+              <p className="mt-3 text-center text-sm text-muted">
+                {hasParentResult
+                  ? 'Kết quả tự cập nhật khi bạn nhập.'
+                  : 'Nhập năm sinh của bố hoặc mẹ để xem'}
+              </p>
             </div>
-            <input
-              id="visits"
-              type="range"
-              min={0}
-              max={24}
-              step={1}
-              value={form.visits}
-              onChange={(e) => updateForm({ ...form, visits: Number(e.target.value) })}
-              aria-invalid={notices.errors.visits.length > 0 || undefined}
-              aria-describedby={
-                notices.errors.visits.length + notices.warnings.visits.length > 0
-                  ? 'notices-visits'
-                  : undefined
-              }
-              className="w-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-            />
-            {/* Các mốc nằm đúng tỉ lệ trên thang 0–24 (0%, 25%, 50%, 75%, 100%). */}
-            <div className="flex justify-between text-sm text-muted">
-              <span>0</span>
-              <span>6</span>
-              <span>12</span>
-              <span>18</span>
-              <span>24</span>
-            </div>
-            <FieldNotices
-              id="notices-visits"
-              errors={notices.errors.visits}
-              warnings={notices.warnings.visits}
-            />
           </div>
-        )}
-        {form.livesWith && (
-          <FieldNotices
-            id="notices-visits"
-            errors={notices.errors.visits}
-            warnings={notices.warnings.visits}
-          />
-        )}
-
-        <div className="mt-8">
-          <button
-            type="button"
-            onClick={hasParentResult ? goScene2 : undefined}
-            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            Xem còn mấy cái Tết <IconArrowDown size={16} aria-hidden />
-          </button>
-          <p className="mt-3 text-center text-sm text-muted">
-            {hasParentResult
-              ? 'Kết quả tự cập nhật khi bạn nhập.'
-              : 'Nhập năm sinh của bố hoặc mẹ để xem'}
-          </p>
         </div>
       </section>
 
       {/* ── Cảnh 2 «Sân khấu số» ─────────────────────────────────── */}
       {hasParentResult && (
-        <section ref={scene2Ref} aria-label="Sân khấu số" className="scene-reveal scroll-mt-2">
+        <section ref={scene2Ref} aria-label="Sân khấu số" className="scroll-mt-2 py-2 lg:py-4">
           <div aria-live="polite" className="sr-only">
             {ariaSummary ? `${ariaSummary}.` : ''}
           </div>
-          <div className="lg:grid lg:grid-cols-2">
+          <div className="grid gap-5 lg:grid-cols-2">
             {result.father && (
               <ParentStage
                 kind="father"
@@ -700,13 +752,14 @@ export function ConMayTetTool() {
                 est={result.father}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
-                onNext={afterScene2}
+                onNext={result.mother ? goMomStage : afterScene2}
                 onEdit={goScene1}
               />
             )}
             {result.mother && (
               <ParentStage
                 kind="mother"
+                stageId="san-khau-me"
                 birthYear={effectiveInput.motherBirthYear}
                 est={result.mother}
                 livesWith={effectiveInput.livesWithParents}
@@ -716,49 +769,72 @@ export function ConMayTetTool() {
               />
             )}
           </div>
-          {/* V121 (panel v1.2.0, T-2 của ghế 4): điều hướng đi tiếp KHÔNG
-              còn đặt sau cả hai sân khấu — mỗi sân khấu tự mang SceneNav
-              của nó ở chân viewport (xem ParentStage), để màn reveal của
-              từng người luôn có hành động đi tiếp trong tầm mắt. */}
+          {/* Điều hướng đi tiếp nằm ở chân TỪNG thẻ kết quả (xem
+              ParentStage) — giữ nguyên cách sửa của v1.2.1. */}
         </section>
       )}
 
-      {/* ── Cảnh 3 «Câu chuyện tuần đời» ─────────────────────────── */}
+      {/* ── Cảnh 3 «Câu chuyện tuần đời» — hệ lens-04 + SỬA BẮT BUỘC
+          của panel: lưới bắt đầu ngay trong khung hình đầu (thẻ đầu
+          gọn + thẻ lưới ngay dưới, 3 thẻ thống kê phụ chuyển XUỐNG
+          DƯỚI lưới), nhóm thập kỷ có khoảng nghỉ + chip mốc. */}
       {result.life && (
-        <section ref={scene3Ref} aria-label="Câu chuyện tuần đời" className="scroll-mt-2 py-10">
-          {/* Đầu Cảnh 3: mini-vòng 64px suy từ hình học hero-ring
-              (vòng + 12 vạch, bỏ hoa) thay cho calendar-spot của V2. */}
-          <div className="mb-4 flex justify-center">
-            <MiniRing />
+        <section
+          ref={scene3Ref}
+          aria-label="Câu chuyện tuần đời"
+          className="scroll-mt-2 py-6 lg:py-8"
+        >
+          <div className="rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+            <div className="flex flex-wrap items-center gap-4">
+              <ProfileAvatar
+                role="self"
+                birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
+                name="Bạn"
+                size={58}
+              />
+              <div className="min-w-0">
+                <h2 className="font-display text-[24px] leading-tight font-extrabold text-balance text-ink sm:text-[26px]">
+                  Cuộc đời bạn, kể bằng tuần
+                </h2>
+                <p className="mt-0.5 text-sm text-muted sm:text-base">
+                  Mỗi chấm là một tuần đời bạn.
+                </p>
+              </div>
+              <div className="sm:ml-auto sm:text-right">
+                <p className="font-display text-[28px] leading-none font-extrabold text-ink">
+                  {nf.format(result.life.weeksLived)}{' '}
+                  <span className="text-[19px] text-seed-ink">
+                    / ≈{nf.format(result.life.totalWeeks)} tuần
+                  </span>
+                </p>
+                <p className="mt-1.5 text-[13px] font-medium text-muted">
+                  {fmt1(result.life.percentLived)}% đời người đã qua (thống kê)
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-5 h-[11px] rounded-full bg-track">
+              <div
+                className="absolute inset-y-0 left-0 rounded-full bg-lived-strong"
+                style={{ width: `${result.life.percentLived}%` }}
+              />
+              <span
+                aria-hidden
+                className="absolute top-1/2 h-[17px] w-[17px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3.5px] border-card bg-brand shadow-[0_0_0_1.5px_var(--seed)]"
+                style={{ left: `${result.life.percentLived}%` }}
+              />
+            </div>
+            <div className="mt-2.5 flex justify-between text-[12.5px] font-medium text-muted">
+              <span>Ngày sinh · {effectiveInput.myBirthDate.split('-').reverse().join('/')}</span>
+              <span>Phần đời phía trước</span>
+            </div>
           </div>
-          {/* V121 (panel v1.2.0, ghế 5 vòng 2): avatar + tên là một hàng
-              RIÊNG phía trên tiêu đề — trước đây H2 nằm cùng hàng flex với
-              cụm avatar nên bị đẩy lệch +79px khỏi lề trái của lưới ở cả
-              3 viewport (x=95/95/463 so với lề lưới 16/16/384). H2 nay là
-              khối riêng, thẳng lề trái của lưới (cùng lề container), và
-              text-balance chống từ mồ côi ở dòng cuối khi xuống dòng. */}
-          <div className="flex items-center gap-2">
-            <ProfileAvatar
-              role="self"
-              birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
-              name="Bạn"
-              size={32}
-            />
-            {/* Tên chữ BVP cạnh avatar ở MỌI call-site (C-11.10) — đồng
-                nhất với nhãn «Với BỐ/MẸ» ở sân khấu Cảnh 2. */}
-            <span className="text-sm font-semibold text-ink">Bạn</span>
-          </div>
-          <h2 className="mt-3 font-display text-[25px] leading-tight font-extrabold text-balance text-ink">
-            Cuộc đời bạn, kể bằng tuần
-          </h2>
-          <p className="mt-1 max-w-[34rem] text-base text-muted">Mỗi chấm là một tuần đời bạn.</p>
 
           <LifeStory
             life={result.life}
             birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
           />
 
-          <div className="mt-8">
+          <div className="mt-6">
             <SceneNav onNext={goScene4} onEdit={goScene1} />
           </div>
         </section>
@@ -798,7 +874,7 @@ export function ConMayTetTool() {
               hẹp hơn ~3,5px làm thanh tự lật 2 dòng → 1 dòng ở ~7,05s). */}
           <div
             ref={deletedBarRef}
-            className="mx-auto flex max-w-[34rem] flex-nowrap items-center gap-x-2 rounded-xl border border-line bg-canvas p-4 shadow-[var(--shadow-lift)]"
+            className="mx-auto flex max-w-[34rem] flex-nowrap items-center gap-x-2 rounded-[20px] border border-line bg-card p-4 shadow-[var(--shadow-lift)]"
           >
             <p role="status" className="min-w-0 text-sm font-medium text-ink">
               Đã xoá.{' '}
@@ -823,10 +899,12 @@ export function ConMayTetTool() {
   );
 }
 
-/* ── Sân khấu số của một người (Cảnh 2) ──────────────────────────────
- * Con số đứng trần giữa giấy, không thẻ, không viền, không bóng.
- * Reveal chỉ chạy 1 lần khi sân khấu đầu tiên vào viewport sau khi có
- * dữ liệu; sửa input sau đó chỉ cross-fade con số tại chỗ. */
+/* ── Thẻ kết quả của một người (Cảnh 2) — hệ lens-04 ────────────────
+ * Thẻ trắng bo 22 trên canvas trung tính; con số là trung tâm tuyệt
+ * đối (Baloo 2 800 mực đen, lớn nhất thẻ); avatar DiceBear initials
+ * thật 78px KHÔNG huy hiệu; thanh tiến trình đời người THẲNG dưới
+ * số; câu cảm xúc trong khối trích dẫn viền trái seed. Reveal chỉ
+ * chạy 1 lần khi thẻ vào viewport; sửa input sau đó chỉ cross-fade. */
 function ParentStage({
   kind,
   birthYear,
@@ -835,6 +913,7 @@ function ParentStage({
   onOpenCalc,
   onNext,
   onEdit,
+  stageId,
 }: {
   kind: 'father' | 'mother';
   birthYear: number | null;
@@ -844,6 +923,8 @@ function ParentStage({
   /** Hành động đi tiếp ĐÃ CÓ của Cảnh 2 (qua lưới tuần / qua gửi đi). */
   onNext: () => void;
   onEdit: () => void;
+  /** Id neo để nút «Tiếp» của sân khấu trước cuộn tới đúng sân khấu này. */
+  stageId?: string;
 }) {
   const stageRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -865,168 +946,138 @@ function ParentStage({
   }, [revealed]);
 
   const isFather = kind === 'father';
-  const person = isFather ? 'BỐ' : 'MẸ';
+  const person = isFather ? 'Bố' : 'Mẹ';
   const hope = isFather
     ? 'Đủ để trân trọng từng lần về nhà với bố.'
     : 'Đủ để ngồi lâu hơn bên mâm cơm với mẹ.';
+  const percent = Math.min(
+    100,
+    Math.max(0, Math.round((est.currentAge / (est.currentAge + est.remainingYears)) * 100)),
+  );
 
   return (
     <section
       ref={stageRef}
+      id={stageId}
       aria-label={`Kết quả với ${isFather ? 'bố' : 'mẹ'}`}
-      className="relative flex min-h-dvh flex-col items-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
+      className="scroll-mt-2 rounded-[22px] border border-line bg-card p-6 shadow-[var(--shadow-card)] sm:p-7"
     >
-      {/* Hai cung phần tư vòng năm ở 2 góc đối của tờ (VISUAL-LAYER §2
-          Cảnh 2): nét 3, stroke brand-30, r=128, tĩnh, pointer-events
-          none — khối nội dung ở trung tâm, không giao với cung. */}
-      <svg
-        aria-hidden
-        className="pointer-events-none absolute top-0 left-0 h-20 w-20 text-brand-30 sm:h-32 sm:w-32"
-        viewBox="0 0 128 128"
-        fill="none"
-      >
-        <circle cx="0" cy="0" r="128" stroke="currentColor" strokeWidth="3" />
-      </svg>
-      <svg
-        aria-hidden
-        className="pointer-events-none absolute right-0 bottom-0 h-20 w-20 text-brand-30 sm:h-32 sm:w-32"
-        viewBox="0 0 128 128"
-        fill="none"
-      >
-        <circle cx="128" cy="128" r="128" stroke="currentColor" strokeWidth="3" />
-      </svg>
-
-      {/* V121 (T-2 ghế 4): khối nội dung chiếm phần flex-1 và canh giữa
-          trong phần đó; SceneNav bám chân sân khấu — màn reveal trước
-          đây chỉ có ~55,6% chiều cao là nội dung (đo @390×844), phần
-          còn lại là khoảng trống vô chủ và hành động đi tiếp nằm ngoài
-          viewport của sân khấu. */}
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="flex items-center justify-center gap-2.5">
-          <ProfileAvatar
-            role={kind}
-            birthYear={birthYear}
-            name={isFather ? 'Bố' : 'Mẹ'}
-            size={32}
-          />
-          <p className="text-[13px] font-semibold tracking-[0.08em] text-on-deep-muted uppercase">
-            Với {person} · {est.currentAge} tuổi
-          </p>
+      <div className="flex items-center gap-4">
+        <ProfileAvatar role={kind} birthYear={birthYear} name={person} size={78} />
+        <div>
+          <h3 className="text-[19px] font-extrabold text-ink">{person}</h3>
+          {birthYear != null && (
+            <p className="mt-0.5 text-sm font-medium text-muted">Sinh năm {birthYear}</p>
+          )}
         </div>
+        <span className="ml-auto rounded-full border border-line bg-subtle px-3 py-1.5 text-xs font-bold text-ink-2">
+          {est.currentAge} tuổi
+        </span>
+      </div>
 
-        {/* Khung ngoài giữ reveal sân khấu (chạy 1 lần); con số bên trong
-          dùng key theo giá trị để mỗi lần sửa input chỉ cross-fade. */}
+      {/* Khung ngoài giữ reveal (chạy 1 lần); con số bên trong dùng key
+          theo giá trị để mỗi lần sửa input chỉ cross-fade tại chỗ. */}
+      <div className="mt-5 flex items-baseline gap-3">
         <div className={revealed ? 'animate-stage-in' : 'opacity-0'}>
           <p
             key={est.tetsLeft}
-            className="animate-num-in font-display font-extrabold text-on-deep"
-            style={{ fontSize: 'clamp(120px, 38vw, 168px)', lineHeight: 0.95 }}
+            className="animate-num-in font-display leading-[0.95] font-extrabold text-ink"
+            style={{ fontSize: 'var(--hero-size)' }}
           >
             {nf.format(est.tetsLeft)}
           </p>
         </div>
-        <p className="mt-1 font-sans text-[24px] font-bold text-on-deep">cái Tết nữa</p>
-        <div aria-hidden className="mt-3 h-[3px] w-12 rounded bg-gold" />
-
-        {/* R1-F4 (Panel #02): trên desktop, dự trữ sẵn chiều cao 2 dòng
-          cho câu hy vọng (lg:min-h-12 = 48px) để vị trí con số không
-          phụ thuộc số dòng của câu — chân số hai sân khấu thẳng hàng
-          (trước đây lệch ±12px: bố 1 dòng 24px vs mẹ 2 dòng 48px,
-          canh giữa chia đôi chênh lệch). Mobile giữ nguyên. */}
-        <p
-          className={`mt-5 max-w-[34rem] text-base font-semibold text-on-deep lg:min-h-12 ${
-            revealed ? 'animate-hope-in' : 'opacity-0'
-          }`}
-        >
-          {hope}
+        <p className="text-[17px] leading-snug font-bold text-ink-2">
+          cái Tết nữa
+          <span className="block text-sm font-medium text-muted">(ước tính)</span>
         </p>
+      </div>
 
-        <p className="mt-3 max-w-[34rem] text-base text-on-deep-muted">
-          {livesWith
-            ? `và khoảng ${nf.format(est.meetingsLeft)} ngày còn bên nhau theo nhịp sống cùng hiện tại.`
-            : `và khoảng ${nf.format(est.meetingsLeft)} lần gặp nữa theo nhịp về thăm hiện tại.`}
-        </p>
+      <p className="mt-3 flex items-start gap-2.5 text-[15px] leading-relaxed text-ink-2">
+        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-seed-soft text-seed-ink">
+          {isFather ? <IconHome size={14} aria-hidden /> : <IconMeal size={14} aria-hidden />}
+        </span>
+        <span>
+          {livesWith ? (
+            <>
+              và khoảng <strong className="text-ink">{nf.format(est.meetingsLeft)} ngày</strong> còn
+              bên nhau theo nhịp sống cùng hiện tại.
+            </>
+          ) : (
+            <>
+              và khoảng{' '}
+              <strong className="text-ink">{nf.format(est.meetingsLeft)} lần gặp nữa</strong> theo
+              nhịp về thăm hiện tại.
+            </>
+          )}
+        </span>
+      </p>
 
-        <p className="mt-5 max-w-[34rem] text-sm leading-relaxed text-on-deep-muted">
-          Đây là <strong className="text-on-deep">ước tính thống kê</strong> theo tuổi thọ trung
-          bình. Nó{' '}
-          <strong className="text-on-deep">
+      {/* Thanh tiến trình đời người THẲNG: đã sống xám đậm / chưa sống
+          xám nhạt / điểm hiện tại chấm seed viền trắng. */}
+      <div className="mt-5 rounded-[14px] border border-line-soft bg-subtle px-4 py-3.5">
+        <div className="mb-2.5 flex items-baseline justify-between text-xs font-semibold text-muted">
+          <span>Đã sống</span>
+          <span className="text-ink-2">đã đi {percent}%</span>
+        </div>
+        <div className="relative h-[9px] rounded-full bg-track">
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-lived-strong"
+            style={{ width: `${percent}%` }}
+          />
+          <span
+            aria-hidden
+            className="absolute top-1/2 h-[17px] w-[17px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3.5px] border-card bg-brand shadow-[0_0_0_1.5px_var(--seed)]"
+            style={{ left: `${percent}%` }}
+          />
+        </div>
+        <p className="mt-2.5 text-right text-xs font-medium text-muted">Phần còn lại phía trước</p>
+      </div>
+
+      <blockquote
+        className={`mt-4 rounded-r-xl border-l-[3.5px] border-brand bg-subtle px-4 py-3 text-[15.5px] leading-relaxed font-semibold text-ink ${
+          revealed ? 'animate-hope-in' : 'opacity-0'
+        }`}
+      >
+        «{hope}»
+      </blockquote>
+
+      <div className="mt-4 border-t border-line-soft pt-3">
+        <p className="text-sm leading-relaxed text-muted">
+          Đây là <strong className="text-ink">ước tính thống kê</strong> theo tuổi thọ trung bình.
+          Nó{' '}
+          <strong className="text-ink">
             không phải dự đoán cho riêng {isFather ? 'bố' : 'mẹ'}
           </strong>
           .
         </p>
-        <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1 text-sm text-on-deep-muted">
+        <p className="mt-2 flex flex-wrap items-center gap-x-1 text-sm text-muted">
           Nguồn: bảng sống WHO Việt Nam 2019.
           <button
             type="button"
             onClick={onOpenCalc}
-            className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-on-deep focus-visible:outline-2 focus-visible:outline-on-deep"
+            className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
           >
             Cách tính <IconChevronRight size={14} aria-hidden />
           </button>
         </p>
       </div>
 
-      <div className="pt-10">
-        <SceneNav onNext={onNext} onEdit={onEdit} onDeep />
+      <div className="pt-4">
+        <SceneNav onNext={onNext} onEdit={onEdit} />
       </div>
     </section>
   );
 }
 
-/* ── Mini-vòng 64px ở đầu Cảnh 3 ─────────────────────────────────────
- * Suy ĐÚNG TỈ LỆ từ hero-ring.svg của hồ sơ: vành r=128 trong hệ 256,
- * 12 vạch hướng tâm đều 30° hướng vào trong, dài 14/128 bán kính;
- * vạch tháng 1 (góc −60°) dài 22/128 + gold — phân biệt bằng độ dài
- * trước, màu sau. Bỏ hoa. Tâm vòng trống, không đường chia cung,
- * không vòng đệm (VETO-V4-2). */
-function MiniRing() {
-  const cx = 128;
-  const cy = 128;
-  const r = 110;
-  const ticks = Array.from({ length: 12 }, (_, i) => {
-    const angle = ((-90 + i * 30) * Math.PI) / 180;
-    const isJanuary = i === 1;
-    const len = (r * (isJanuary ? 22 : 14)) / 128;
-    return {
-      x1: cx + Math.cos(angle) * r,
-      y1: cy + Math.sin(angle) * r,
-      x2: cx + Math.cos(angle) * (r - len),
-      y2: cy + Math.sin(angle) * (r - len),
-      isJanuary,
-    };
-  });
-  return (
-    <svg
-      width={64}
-      height={64}
-      viewBox="0 0 256 256"
-      fill="none"
-      stroke="currentColor"
-      className="text-ink"
-      aria-hidden
-      focusable={false}
-    >
-      <circle cx={cx} cy={cy} r={r} strokeWidth={6} />
-      {ticks.map((t, i) => (
-        <line
-          key={i}
-          x1={t.x1.toFixed(2)}
-          y1={t.y1.toFixed(2)}
-          x2={t.x2.toFixed(2)}
-          y2={t.y2.toFixed(2)}
-          stroke={t.isJanuary ? 'var(--gold-30)' : 'currentColor'}
-          strokeWidth={t.isJanuary ? 7 : 6}
-          strokeLinecap="round"
-        />
-      ))}
-    </svg>
-  );
-}
-
-/* ── Lưới tuần kể chuyện (Cảnh 3) ────────────────────────────────────
- * Vẽ theo hàng năm (mỗi hàng 52 chấm) để mốc tuổi neo được vào đúng
- * hàng và nhãn «tuần này» trỏ được vào đúng hàng chứa chấm hiện tại. */
+/* ── Lưới tuần kể chuyện (Cảnh 3) — hệ lens-04 ──────────────────────
+ * Lưới nhóm theo THẬP KỶ: nhãn lề trái (Tuổi + năm), khoảng nghỉ +
+ * kẻ mảnh giữa các thập kỷ, chip mốc gold pha nhạt ở thập kỷ bắt đầu
+ * 30/40/50/60 tuổi. Chấm ≤7px: đã sống xám trung tính, chưa sống xám
+ * rất nhạt; «tuần này» = chấm seed lớn nhân gold + pill nhãn ngay
+ * dưới hàng chứa nó. Legend trên đầu lưới; thẻ thống kê phụ nằm
+ * DƯỚI lưới (sửa bắt buộc của panel — lưới phải lộ diện trong khung
+ * hình đầu). */
 const LifeStory = memo(function LifeStory({
   life,
   birthYear,
@@ -1036,103 +1087,132 @@ const LifeStory = memo(function LifeStory({
 }) {
   const rows = Math.ceil(life.totalWeeks / 52);
   const currentRow = Math.floor(life.weeksLived / 52);
-  const milestones = [30, 40, 50, 60];
+  const decadeCount = Math.ceil(rows / 10);
+  const milestoneAges = [30, 40, 50, 60];
 
-  const rowEls: React.ReactNode[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (const m of milestones) {
-      if (m !== r) continue;
-      rowEls.push(
-        <div
-          key={`milestone-${m}`}
-          aria-hidden
-          className={`flex items-center gap-2 py-0.5 ${
-            m === 40 || m === 60 ? 'max-[359px]:hidden' : ''
-          }`}
+  const dot = (i: number) => {
+    if (i >= life.totalWeeks) return null;
+    if (i === life.weeksLived) {
+      // Chấm «tuần này»: seed lớn, nhân gold, tĩnh tuyệt đối.
+      return (
+        <span
+          key={i}
+          className="relative z-10 flex aspect-square w-full items-center justify-center justify-self-center"
         >
-          <span className="flex-1 border-t border-dashed border-line" />
-          <span className="text-[13px] font-semibold text-muted">
-            {m} tuổi · {birthYear + m}
+          <span className="flex h-[13px] w-[13px] shrink-0 items-center justify-center rounded-full bg-brand ring-2 ring-card">
+            <span className="h-[5px] w-[5px] rounded-full bg-gold" />
           </span>
-        </div>,
+        </span>
       );
     }
-    rowEls.push(
-      <div
-        key={`row-${r}`}
-        className="grid gap-[3px]"
-        style={{ gridTemplateColumns: 'repeat(52, minmax(0, 1fr))' }}
-      >
-        {Array.from({ length: 52 }, (_, c) => {
-          const i = r * 52 + c;
-          if (i >= life.totalWeeks) return <span key={c} className="aspect-square w-full" />;
-          // Chấm «tuần này» (M6 của hồ sơ V4): bg-brand-strong + vòng
-          // brand-strong TĨNH — nhịp pulse cũ đã bị giết đích danh ở hồ
-          // sơ; nhãn chữ ghim bên dưới là kênh nhận diện phụ (D4-CM-5).
-          const cls =
-            i < life.weeksLived
-              ? 'bg-brand'
-              : i === life.weeksLived
-                ? 'bg-brand-strong ring-2 ring-brand-strong'
-                : 'bg-line';
-          return <span key={c} className={`aspect-square w-full rounded-full ${cls}`} />;
-        })}
-      </div>,
+    return (
+      <span
+        key={i}
+        className={`aspect-square w-full max-w-[7px] justify-self-center rounded-full ${
+          i < life.weeksLived ? 'bg-lived' : 'bg-future'
+        }`}
+      />
     );
-    if (r === currentRow) {
-      rowEls.push(
-        <div key="current-label" className="flex items-center gap-1.5 py-1" aria-hidden>
-          <IconWeekRing size={14} className="shrink-0 text-brand-strong" />
-          <span className="text-sm font-semibold text-brand-strong">Bạn đang ở tuần này</span>
-        </div>,
-      );
-    }
-  }
+  };
 
   return (
-    <div className="mt-5">
-      <div
-        className="flex flex-col gap-[3px]"
-        role="img"
-        aria-label={`Lưới tuần cuộc đời: đã sống ${nf.format(life.weeksLived)} trên tổng số khoảng ${nf.format(life.totalWeeks)} tuần`}
-      >
-        {rowEls}
+    <div>
+      <div className="mt-5 rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px] font-medium text-ink-2">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-lived" /> Đã sống
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="flex h-[13px] w-[13px] items-center justify-center rounded-full bg-brand">
+              <span className="h-[5px] w-[5px] rounded-full bg-gold" />
+            </span>
+            <strong className="text-seed-ink">Tuần này</strong>
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-future" /> Còn lại (ước tính)
+          </span>
+        </div>
+
+        <div
+          role="img"
+          aria-label={`Lưới tuần cuộc đời: đã sống ${nf.format(life.weeksLived)} trên tổng số khoảng ${nf.format(life.totalWeeks)} tuần`}
+        >
+          {Array.from({ length: decadeCount }, (_, d) => {
+            const startAge = d * 10;
+            const milestone = milestoneAges.includes(startAge) ? startAge : null;
+            const decadeRows = Array.from(
+              { length: Math.min(10, rows - d * 10) },
+              (_, k) => d * 10 + k,
+            );
+            return (
+              <div
+                key={d}
+                className={`grid gap-3 py-4 md:grid-cols-[118px_1fr] md:gap-5 ${
+                  d > 0 ? 'border-t border-line-soft' : ''
+                }`}
+              >
+                <div>
+                  <p className="text-[13.5px] font-bold text-ink">
+                    Tuổi {startAge}–{startAge + 9}
+                  </p>
+                  <p className="mt-0.5 text-xs font-medium text-muted">
+                    {birthYear + startAge} – {birthYear + startAge + 9}
+                  </p>
+                  {milestone != null && (
+                    <span className="mt-2 inline-flex rounded-full border border-gold bg-gold-tint px-2.5 py-1 text-xs font-bold text-gold-ink">
+                      {milestone} tuổi · {birthYear + milestone}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-[5px]">
+                  {decadeRows.map((r) => (
+                    <div key={r}>
+                      <div
+                        className="grid gap-[3px]"
+                        style={{ gridTemplateColumns: 'repeat(52, minmax(0, 1fr))' }}
+                      >
+                        {Array.from({ length: 52 }, (_, c) => dot(r * 52 + c))}
+                      </div>
+                      {r === currentRow && (
+                        <div className="pt-2">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-xs font-bold text-white shadow-[0_8px_16px_-6px_color-mix(in_srgb,var(--seed)_50%,transparent)]">
+                            Bạn đang ở tuần này · tuần {nf.format(life.weeksLived)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-muted">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand" /> Đã sống
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand-strong ring-2 ring-brand-strong" />{' '}
-          Tuần này
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-line" /> Còn lại (ước tính)
-        </span>
-      </div>
-
-      {/* R1-F3 (Panel #02): auto-rows-fr khoá hai hàng mobile cao
-          bằng nhau (trước đây 75,5/95px, Δ19,5px vì nhãn hàng 2
-          xuống dòng mà hàng không khoá chiều cao). Desktop 1 hàng
-          không đổi. */}
-      <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
-          <p className="font-sans text-[20px] font-bold text-ink">{nf.format(life.daysLived)}</p>
+      {/* Thẻ thống kê phụ — DƯỚI lưới theo sửa bắt buộc của panel. */}
+      <div className="mt-5 grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="rounded-2xl border border-line bg-card px-3 py-4 text-center">
+          <p className="font-display text-[21px] font-extrabold text-ink">
+            {nf.format(life.daysLived)}
+          </p>
           <p className="mt-0.5 text-[13px] text-muted">ngày đã sống</p>
         </div>
-        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
-          <p className="font-sans text-[20px] font-bold text-ink">≈ {nf.format(life.fullMoons)}</p>
+        <div className="rounded-2xl border border-line bg-card px-3 py-4 text-center">
+          <p className="font-display text-[21px] font-extrabold text-ink">
+            ≈ {nf.format(life.fullMoons)}
+          </p>
           <p className="mt-0.5 text-[13px] text-muted">lần trăng tròn đã qua</p>
         </div>
-        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
-          <p className="font-sans text-[20px] font-bold text-ink">
+        <div className="rounded-2xl border border-line bg-card px-3 py-4 text-center">
+          <p className="font-display text-[21px] font-extrabold text-ink">
             {nf.format(life.tetsExperienced)}
           </p>
           <p className="mt-0.5 text-[13px] text-muted">cái Tết bạn đã trải qua</p>
         </div>
-        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
-          <p className="font-sans text-[20px] font-bold text-ink">{fmt1(life.percentLived)}%</p>
+        <div className="rounded-2xl border border-line bg-card px-3 py-4 text-center">
+          <p className="font-display text-[21px] font-extrabold text-ink">
+            {fmt1(life.percentLived)}%
+          </p>
           <p className="mt-0.5 text-[13px] text-muted">đời người đã qua (thống kê)</p>
         </div>
       </div>
@@ -1258,126 +1338,131 @@ function ShareScene({
         : null;
 
   return (
-    <section
-      ref={ref}
-      aria-label="Gửi đi"
-      className="flex min-h-[calc(100dvh-60px)] scroll-mt-2 flex-col justify-center py-10"
-    >
-      <h2 className="font-display text-[25px] leading-tight font-extrabold text-ink">
-        Gửi cho người thân
-      </h2>
-
-      {cardUrl && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
-          src={cardUrl}
-          alt="Thẻ kết quả Còn Mấy Cái Tết Nữa?"
-          className="mx-auto mt-5 w-full max-w-[320px] rounded-2xl border border-line"
-        />
-      )}
-
-      <div className="sticky bottom-3 z-10 mt-6 bg-canvas py-2">
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <button
-            type="button"
-            onClick={onCopy}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            <IconCopy size={16} aria-hidden /> {copied ? 'Đã sao chép!' : 'Copy kết quả'}
-          </button>
-          <button
-            type="button"
-            onClick={onDownload}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full border border-brand-strong bg-canvas px-5 py-3 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            <IconDownload size={16} aria-hidden /> Tải ảnh thẻ kết quả
-          </button>
+    <section ref={ref} aria-label="Gửi đi" className="scroll-mt-2 py-6 lg:py-8">
+      <div className="grid items-start gap-5 lg:grid-cols-[460px_1fr]">
+        {/* Xem trước thẻ kết quả (canvas 1080×1350 thu nhỏ). */}
+        <div>
+          {cardUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={cardUrl}
+              alt="Thẻ kết quả Còn Mấy Cái Tết Nữa?"
+              className="mx-auto w-full max-w-[460px] rounded-[24px] border border-line bg-card shadow-[var(--shadow-card-lg)]"
+            />
+          )}
+          <p className="mt-3 text-center text-[12.5px] text-muted">
+            Xem trước thẻ kết quả — ảnh tải về có kích thước 1080 × 1350.
+          </p>
         </div>
-        <span aria-live="polite" className="sr-only">
-          {copied ? 'Đã sao chép kết quả.' : ''}
-        </span>
+
+        {/* Thẻ hành động sticky. */}
+        <div className="rounded-[20px] border border-line bg-card p-6 shadow-[var(--shadow-card)] lg:sticky lg:top-5">
+          <h2 className="font-display text-[25px] leading-tight font-extrabold text-ink">
+            Gửi cho người thân
+          </h2>
+
+          <div className="mt-6 flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={onCopy}
+              className="flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[14px] bg-brand px-5 py-3 text-base font-bold text-white transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+            >
+              <IconCopy size={16} aria-hidden /> {copied ? 'Đã sao chép!' : 'Copy kết quả'}
+            </button>
+            <button
+              type="button"
+              onClick={onDownload}
+              className="flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[14px] border border-line-control bg-card px-5 py-3 text-base font-bold text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+            >
+              <IconDownload size={16} aria-hidden /> Tải ảnh thẻ kết quả
+            </button>
+            {deletePhase === 'idle' && (
+              <button
+                type="button"
+                ref={resetButtonRef}
+                onClick={onRequestReset}
+                className="flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[14px] border border-line bg-card px-5 py-3 text-base font-semibold text-ink-2 transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+              >
+                <IconReset size={15} aria-hidden /> Làm lại từ đầu
+              </button>
+            )}
+          </div>
+          <span aria-live="polite" className="sr-only">
+            {copied ? 'Đã sao chép kết quả.' : ''}
+          </span>
+
+          <div className="mt-5 flex items-start gap-3 rounded-[13px] border border-line-soft bg-subtle px-4 py-3.5">
+            <span className="mt-0.5 flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-lg bg-seed-soft text-seed-ink">
+              <IconCheck size={13} aria-hidden />
+            </span>
+            <p className="text-sm leading-relaxed text-ink-2">
+              Không tài khoản, không gửi dữ liệu đi.
+            </p>
+          </div>
+
+          {missing && (
+            <p className="mt-4 flex flex-wrap items-center gap-1 text-sm text-muted">
+              Muốn đếm thêm cho {missing.label}?
+              <button
+                type="button"
+                onClick={onEdit}
+                className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 font-semibold text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+              >
+                <IconArrowUp size={14} aria-hidden /> Sửa lại
+              </button>
+            </p>
+          )}
+        </div>
       </div>
 
-      <div className="mt-4">
-        {deletePhase === 'idle' && (
-          <button
-            type="button"
-            ref={resetButtonRef}
-            onClick={onRequestReset}
-            className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-canvas px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            <IconReset size={15} aria-hidden /> Làm lại từ đầu
-          </button>
-        )}
-
-        {deletePhase === 'confirming' && (
-          /* V121 (SERIOUS-2 của panel v1.2.0): xác nhận xoá là MODAL
-             phủ toàn màn — trước đây là khối tại chỗ trong luồng trang
-             nên người dùng cuộn/chạm đi nơi khác được trong lúc xác
-             nhận treo (và sửa form được sau lưng khối xác nhận). Nay:
-             nền bị khoá cuộn (effect ở component cha) + bị backdrop
-             che kín + focus bị trap trong dialog (V122, S-NEW-1 —
-             effect ngay trên ShareScene) — chạm vào backdrop = nhánh AN TOÀN «Giữ lại»
-             (không bao giờ xoá, dữ liệu nguyên vẹn, focus về nút
-             «Làm lại từ đầu»); chạm vào panel không xuyên xuống
-             backdrop. Ngữ nghĩa giữ nguyên: «Xoá» mới xoá thật, sau
-             xoá vẫn là cửa sổ hoàn tác 8 giây ở component cha. */
-          <div
-            ref={dialogRef}
-            className="fixed inset-0 z-40 flex items-end justify-center p-4 sm:items-center"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="reset-confirm-title"
-          >
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-neutral-100/60"
-              onClick={onCancelReset}
-            />
-            <div className="relative w-full max-w-[34rem] rounded-2xl border border-line bg-canvas p-5 shadow-[var(--shadow-lift)]">
-              <p id="reset-confirm-title" className="text-sm font-semibold text-ink">
-                Xoá hết dữ liệu đã nhập?
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={onConfirmReset}
-                  className="flex min-h-11 items-center rounded-xl bg-error-solid px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-                >
-                  Xoá
-                </button>
-                <button
-                  type="button"
-                  ref={keepButtonRef}
-                  onClick={onCancelReset}
-                  className="flex min-h-11 items-center rounded-xl border border-line px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-                >
-                  Giữ lại
-                </button>
-              </div>
+      {deletePhase === 'confirming' && (
+        /* V121 (SERIOUS-2 của panel v1.2.0): xác nhận xoá là MODAL
+           phủ toàn màn — trước đây là khối tại chỗ trong luồng trang
+           nên người dùng cuộn/chạm đi nơi khác được trong lúc xác
+           nhận treo (và sửa form được sau lưng khối xác nhận). Nay:
+           nền bị khoá cuộn (effect ở component cha) + bị backdrop
+           che kín + focus bị trap trong dialog (V122, S-NEW-1 —
+           effect ngay trên ShareScene) — chạm vào backdrop = nhánh AN TOÀN «Giữ lại»
+           (không bao giờ xoá, dữ liệu nguyên vẹn, focus về nút
+           «Làm lại từ đầu»); chạm vào panel không xuyên xuống
+           backdrop. Ngữ nghĩa giữ nguyên: «Xoá» mới xoá thật, sau
+           xoá vẫn là cửa sổ hoàn tác 8 giây ở component cha. */
+        <div
+          ref={dialogRef}
+          className="fixed inset-0 z-40 flex items-end justify-center p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reset-confirm-title"
+        >
+          <div aria-hidden className="absolute inset-0 bg-neutral-100/60" onClick={onCancelReset} />
+          <div className="relative w-full max-w-[34rem] rounded-[20px] border border-line bg-card p-5 shadow-[var(--shadow-lift)]">
+            <p id="reset-confirm-title" className="text-sm font-semibold text-ink">
+              Xoá hết dữ liệu đã nhập?
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onConfirmReset}
+                className="flex min-h-11 items-center rounded-xl bg-error-solid px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+              >
+                Xoá
+              </button>
+              <button
+                type="button"
+                ref={keepButtonRef}
+                onClick={onCancelReset}
+                className="flex min-h-11 items-center rounded-xl border border-line px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+              >
+                Giữ lại
+              </button>
             </div>
           </div>
-        )}
-
-        {/* Pha 'deleted' không render ở đây: ShareScene bị unmount
-            ngay khi xoá (cổng hasAnyResult) — thanh «Đã xoá — Hoàn
-            tác» sống ở component cha (TC-1). */}
-      </div>
-
-      <p className="mt-4 text-sm text-muted">Không tài khoản, không gửi dữ liệu đi.</p>
-
-      {missing && (
-        <p className="mt-3 flex flex-wrap items-center gap-1 text-sm text-muted">
-          Muốn đếm thêm cho {missing.label}?
-          <button
-            type="button"
-            onClick={onEdit}
-            className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 font-semibold text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
-          >
-            <IconArrowUp size={14} aria-hidden /> Sửa lại
-          </button>
-        </p>
+        </div>
       )}
+
+      {/* Pha 'deleted' không render ở đây: ShareScene bị unmount
+          ngay khi xoá (cổng hasAnyResult) — thanh «Đã xoá — Hoàn
+          tác» sống ở component cha (TC-1). */}
     </section>
   );
 }

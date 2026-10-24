@@ -12,24 +12,41 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
-## [1.2.2] — 2026-10-24 — Focus trap cho dialog + kiểm chéo năm sinh
+## [1.2.3] — 2026-10-24 — Sửa nóng S-NEW-2: nút «Tiếp» của sân khấu bố bỏ qua sân khấu mẹ
 
 ### Fixed
 
-- **Dialog xác nhận xoá đã nhốt được focus** (S-NEW-1 của vòng
-  chấm lại v1.2.1, tái lập 24/24 Tab thoát ra nền + Enter kích
-  hoạt được `<details>` nền khi dialog mở): thêm trap
-  Tab/Shift+Tab vòng trong dialog; focus lỡ ở nền thì Tab kéo
-  về trong. Sau sửa: Tab ×24 → 0 thoát, nền không kích hoạt
-  được bằng bàn phím; Esc/backdrop/hoàn tác giữ nguyên byte-
-  equal (verifier độc lập xác nhận toàn bộ trước phát hành).
-- **Kiểm chéo năm sinh bố/mẹ**: năm sinh bố/mẹ bằng hoặc sau
-  năm sinh của người dùng là lỗi cứng tại chỗ («Năm sinh của
-  bố/mẹ phải nhỏ hơn năm sinh của bạn…»), không còn sinh kết
-  quả vô nghĩa kiểu bố sinh 2025 → «1 tuổi · 70 cái Tết». Ghi
-  chú: 3 test W3 cũ khoá hành vi cảnh-báo-mềm (W3-F6) đã được
-  viết lại theo yêu cầu mới này — thay đổi hành vi có chủ đích,
-  ghi trong review record v1.2.2.
+- **Panel chấm lại v1.2.2, S-NEW-2 (SERIOUS, 2 ghế tái hiện độc
+  lập bằng 2 phương pháp gồm click chuột thật):** cả hai sân
+  khấu bố/mẹ cùng dùng một đích cuộn `afterScene2`, nên «Tiếp»
+  của bố nhảy thẳng xuống lưới tuần (scrollY 2733 thay vì ≈1889)
+  — người dùng theo luồng dẫn dắt không bao giờ dừng xem được
+  kết quả của mẹ. Nay: «Tiếp» của bố cuộn tới đúng sân khấu mẹ
+  (`#san-khau-me`) khi có kết quả của mẹ, ngược lại giữ đích cũ;
+  «Tiếp» của mẹ giữ nguyên đích sau Cảnh 2. Chuỗi đúng: bố → mẹ
+  → lưới tuần → Gửi đi.
+
+### Notes
+
+- Panel v1.2.2 đồng thời xác nhận MỌI mục chức năng được giao
+  đã đóng thật (modal + focus trap, focus-visible, kiểm chéo
+  năm sinh, H2 lưới tuần, kiểm thường lệ) — rule 12 chỉ fail vì
+  S-NEW-2 này. §6 FAIL (3/5 ghế AI-made, tell trùng khớp lý do
+  người dùng bác diện mạo V4) — không vá trên diện mạo cũ; chờ
+  chương trình redesign, chấm lại trên diện mạo mới.
+
+## [1.2.2] — 2026-10-24 — Focus trap trong dialog (S-NEW-1) + kiểm chéo năm sinh bố/mẹ
+
+### Fixed
+
+- Dialog xác nhận: focus trap đầy đủ (Tab/Shift+Tab không thoát,
+  `<details>` phía sau không tới được bằng bàn phím khi dialog
+  mở) — S-NEW-1 từ panel chấm lại v1.2.1.
+- Kiểm chéo năm sinh tại chỗ: năm sinh của bố/mẹ không nhỏ hơn
+  năm sinh của bạn thì chặn ngay tại form kèm `aria-invalid` +
+  cảnh báo đúng văn bản, không sinh thẻ kết quả sai.
+- (Mục này được parent bổ sung hồi tố vào CHANGELOG khi phát
+  hành v1.2.3 — commit gốc 22dc015 chưa ghi.)
 
 ## [1.2.1] — 2026-10-24 — Sửa 2 SERIOUS thật của Panel v1.2.0 + đóng 2 cáo buộc không tái lập
 

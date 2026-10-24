@@ -113,10 +113,7 @@ export interface Validation {
  * Validate input theo quy tắc của app:
  * - Ngày sinh của bạn: không ở tương lai, tuổi ≤ 110.
  * - Năm sinh bố/mẹ: 1900 → năm hiện tại, tuổi ≤ 110.
- * - Kiểm chéo (V122): năm sinh bố/mẹ phải NHỎ HƠN năm sinh của người
- *   dùng — bằng/sau là lỗi cứng, không tính kết quả cho người đó.
- * - Bố/mẹ lớn hơn con dưới 15 tuổi (nhưng vẫn lớn hơn) → cảnh báo
- *   mềm (vẫn tính).
+ * - Bố/mẹ lớn hơn con dưới 15 tuổi → cảnh báo mềm (vẫn tính).
  * - Số lần về thăm phải là số hữu hạn (khi không sống cùng bố mẹ).
  */
 export function validateInput(input: InputData, now: Date): Validation {
@@ -151,25 +148,18 @@ export function validateInput(input: InputData, now: Date): Validation {
     if (myAge != null) {
       const myBirthYear = Number(input.myBirthDate.slice(0, 4));
       const gap = myBirthYear - year;
-      if (gap <= 0) {
-        // V122 (MINOR mới của ghế 5, panel v1.2.1): kiểm chéo — năm
-        // sinh bố/mẹ phải NHỎ HƠN năm sinh của người dùng. Bằng năm
-        // hoặc sau năm sinh của con là dữ liệu vô lý: trước đây chỉ
-        // là cảnh báo mềm vẫn tính (thiết kế W3-F6) nên bố sinh 2025
-        // với con sinh 1990 cho kết quả bịa «1 tuổi · 70 cái Tết
-        // nữa». Nay là lỗi CỨNG: tầng component null-hoá phần có lỗi
-        // nên không sinh kết quả cho người đó, thông báo hiện ngay
-        // tại trường của người đó.
-        errors.push(
-          `Năm sinh của ${label} phải nhỏ hơn năm sinh của bạn (${myBirthYear}) — hãy kiểm tra lại năm sinh.`,
-        );
-        return;
-      }
       if (gap < 15) {
-        // Tới đây gap ≥ 1 nên diễn đạt "lớn hơn" luôn đúng dấu —
-        // không còn ca số âm của finding W3-F6 (đã thành lỗi cứng).
+        // Diễn đạt theo đúng dấu của hiệu số: phụ huynh có thể bằng tuổi
+        // hoặc NHỎ hơn con (năm sinh nhập nhầm) — không in "lớn hơn bạn
+        // -4 tuổi" (finding W3-F6).
+        const relation =
+          gap > 0
+            ? `chỉ lớn hơn bạn ${gap} tuổi`
+            : gap === 0
+              ? 'bằng tuổi bạn'
+              : `còn nhỏ hơn bạn ${-gap} tuổi`;
         warnings.push(
-          `${label} chỉ lớn hơn bạn ${gap} tuổi — nếu đúng là vậy thì cứ tiếp tục, còn không hãy kiểm tra lại năm sinh.`,
+          `${label} ${relation} — nếu đúng là vậy thì cứ tiếp tục, còn không hãy kiểm tra lại năm sinh.`,
         );
       }
     }
