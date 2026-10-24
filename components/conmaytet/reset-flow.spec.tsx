@@ -211,6 +211,58 @@ describe('Gói kèm Panel #01 — TC-3 + aria ô lỗi', () => {
   });
 });
 
+describe('V122 — focus trap của dialog xác nhận xoá (S-NEW-1, ghế 2 panel v1.2.1)', () => {
+  // S-NEW-1: dialog v1.2.1 có aria-modal + khoá cuộn nhưng Tab thoát
+  // ra nền ngay từ phím đầu tiên và Enter kích hoạt được <details>
+  // nền. jsdom không tự di chuyển focus theo Tab nên bộ test này đo
+  // đúng phần trap phải làm: chặn ở hai biên + kéo focus đã lỡ ra
+  // nền về trong dialog. Chuỗi Tab THẬT ≥20 vòng đo bằng Playwright
+  // ở e2e/dialog-trap.spec.ts và harness trong hồ sơ bằng chứng.
+  function openDialog() {
+    seedAndRender();
+    fireEvent.click(screen.getByRole('button', { name: 'Làm lại từ đầu' }));
+    return {
+      del: screen.getByRole('button', { name: 'Xoá' }),
+      keep: screen.getByRole('button', { name: 'Giữ lại' }),
+      dialog: document.querySelector('[role="dialog"]')!,
+    };
+  }
+  const tab = (shift = false) => fireEvent.keyDown(document, { key: 'Tab', shiftKey: shift });
+
+  it('Tab ở nút cuối («Giữ lại») vòng về «Xoá»; Shift+Tab ở «Xoá» vòng về «Giữ lại»', () => {
+    const { del, keep } = openDialog();
+    expect(document.activeElement).toBe(keep); // focus mở giữ nguyên như v1.2.1
+    tab();
+    expect(document.activeElement).toBe(del);
+    tab(true);
+    expect(document.activeElement).toBe(keep);
+  });
+
+  it('20 vòng ở hai biên: focus không rời dialog', () => {
+    const { del, keep, dialog } = openDialog();
+    for (let i = 0; i < 20; i++) {
+      keep.focus();
+      tab();
+      expect(document.activeElement).toBe(del);
+      del.focus();
+      tab(true);
+      expect(document.activeElement).toBe(keep);
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    }
+  });
+
+  it('focus lỡ nằm ở nền: Tab kéo về phần tử đầu, Shift+Tab về phần tử cuối của dialog', () => {
+    const { del, keep } = openDialog();
+    fatherInput().focus();
+    expect(document.activeElement).toBe(fatherInput());
+    tab();
+    expect(document.activeElement).toBe(del);
+    fatherInput().focus();
+    tab(true);
+    expect(document.activeElement).toBe(keep);
+  });
+});
+
 describe('TC-2 — cây heading của tầng disclosure', () => {
   it('Các tiêu đề disclosure là H2 nằm trong summary; FAQ là H3 bên dưới H2', () => {
     const { container } = render(<DisclosureSections />);

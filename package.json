@@ -47,5 +47,5 @@
     "tokens:verify": "node scripts/verify-tokens.mjs",
     "typecheck": "tsc --noEmit"
   },
-  "version": "1.2.3"
+  "version": "1.2.2"
 }
