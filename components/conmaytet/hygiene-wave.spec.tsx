@@ -35,7 +35,16 @@ function seedAndRender() {
   return render(<ConMayTetTool />);
 }
 
-const birthInput = () => document.getElementById('birth') as HTMLInputElement;
+// F1 vòng 2: birthInput = đoạn ngày #birth-day (đích focus của các
+// luồng hoàn tác/hết hạn, thay ô #birth cũ); birthValue() hợp ISO.
+const birthInput = () => document.getElementById('birth-day') as HTMLInputElement;
+function birthValue(): string {
+  const d = (document.getElementById('birth-day') as HTMLInputElement).value;
+  const m = (document.getElementById('birth-month') as HTMLInputElement).value;
+  const y = (document.getElementById('birth-year') as HTMLInputElement).value;
+  if (!d || !m || !y) return '';
+  return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+}
 const fatherInput = () => document.getElementById('father-year') as HTMLInputElement;
 const motherInput = () => document.getElementById('mother-year') as HTMLInputElement;
 
@@ -123,16 +132,18 @@ describe('OBS-A — focus khi cửa sổ hoàn tác hết hạn (Panel #02 §8.1
 
     expect(fatherInput().value).toBe('1965');
     expect(motherInput().value).toBe('1968');
-    expect(birthInput().value).toBe('1995-06-15');
+    expect(birthValue()).toBe('1995-06-15');
     expect(stageSummary()).toBe(summaryBefore);
     expect(document.activeElement).toBe(birthInput());
   });
 });
 
 describe('DATA-01/05 in-app + A11Y-09 (bonus)', () => {
-  it('Ô ngày sinh có autoComplete="bday"', () => {
+  it('3 đoạn ngày sinh có autoComplete bday-day/bday-month/bday-year (thay "bday" của ô date cũ)', () => {
     seedAndRender();
-    expect(birthInput().getAttribute('autocomplete')).toBe('bday');
+    expect(birthInput().getAttribute('autocomplete')).toBe('bday-day');
+    expect(document.getElementById('birth-month')?.getAttribute('autocomplete')).toBe('bday-month');
+    expect(document.getElementById('birth-year')?.getAttribute('autocomplete')).toBe('bday-year');
   });
 
   it('Disclosure «Quyền riêng tư & dữ liệu của bạn» đúng sự thật dữ liệu dùng chung', () => {

@@ -1,44 +1,30 @@
 #!/usr/bin/env node
 /**
- * tokens:verify — conmaytet REDESIGN-V4 (V4-IMPL-STATE §6, LK4-06 + LK4-51)
+ * tokens:verify — conmaytet hệ lens-04 (chương trình conmaytet-redesign)
  *
  * Usage: node scripts/verify-tokens.mjs   (npm: pnpm tokens:verify)
  *
- * Nguồn sự thật: design/tokens.conmaytet-v4.json — bản sao nguyên vẹn của
- * hồ sơ redesign-v4/conmaytet/assets/tokens.json (kiểm khớp sâu ở nhóm 2).
- *
- * Cơ chế sinh-lại app/tokens.css (nhóm 3) — TRUNG THỰC: app/tokens.css là
- * bản chép của file sinh trong hồ sơ, mang comment diễn giải + thứ tự biên
- * tập mà một bộ sinh thuần JSON không tái tạo được từng byte. Vì vậy phép
- * "sinh lại" ở đây sinh lại PHẦN THÂN TOKEN: từ JSON dựng bản đồ khai báo
- * kỳ vọng (--var → giá trị, theo từng scope :root / .scene-reveal, gồm cả
- * các alias có giấy tờ khai ngay trong script này: --line, --line-control,
- * --reveal-bg, --reveal-bg-alt, --gold-on-deep, font/ease/dur từ các khối
- * type/motion của JSON), trích cùng bản đồ đó từ file đã chép (sau khi
- * strip comment), rồi đòi hai bản đồ BẰNG NHAU tuyệt đối — thừa biến,
- * thiếu biến hay lệch một byte giá trị đều FAIL. Header của file chép chỉ
- * khác bản hồ sơ ở dòng trỏ nguồn sự thật về repo; không giá trị nào khác.
+ * Nguồn sự thật: design/tokens.conmaytet-v4.json (nay chứa hệ lens-04
+ * «SẢN PHẨM ẤM ÁP / FINTECH-GRADE» theo final/IMPLEMENTATION-SPEC).
  *
  * Các nhóm kiểm (node thuần, không dependency):
- *  1. Seed/gold Δbyte = 0: anchor.seed = #198038, anchor.gold = #F1C21B,
- *     brand-60/gold-30 (loại A) khớp anchor; manifest trong JSON khớp.
- *  2. Cấu trúc: bản sao repo == hồ sơ (deep-equal); mọi token có
- *     value/provenance/type; type ∈ {A, B, N}.
- *  3. Sinh-lại phần thân app/tokens.css từ JSON -> diff rỗng.
- *  4. Hex mồ côi: mọi #RRGGBB trong 5 sink SAU KHI strip comment phải
- *     ∈ giá trị tokens.json ∪ {#000000, #FFFFFF cực trị đã khai}.
- *     5 sink: CSS (app/globals.css, app/tokens.css) · SVG (public/**\/*.svg,
- *     strip <!-- --> — LK4-51) · script bake (lib/share-card.ts,
- *     scripts/generate-brand-pngs.mjs) · manifest/layout (app/manifest.ts,
- *     app/layout.tsx) · TS (components/**, lib/** — trừ *.spec.*).
- *     Strip: CSS /* *\/, XML <!-- -->, TS string-aware (URL trong chuỗi
- *     không bị cắt) — có fixture tự kiểm tích hợp bên dưới.
+ *  1. Seed/gold Δbyte = 0: anchor.seed = #198038, anchor.gold = #F1C21B
+ *     (loại A), manifest trong JSON: theme #198038, background #F6F7F6.
+ *  2. Cấu trúc: mọi token có value/provenance/type; type ∈ {A, S}
+ *     (A = seed/gold literal giữ nguyên văn; S = giá trị spec/mock).
+ *  3. Sinh-lại phần thân app/tokens.css từ JSON -> diff rỗng (bản đồ
+ *     --var của :root khớp tuyệt đối, gồm font/motion suy từ JSON).
+ *  4. Hex mồ côi: mọi #RRGGBB trong các sink SAU KHI strip comment
+ *     phải ∈ giá trị tokens.json ∪ {#000000, #FFFFFF cực trị đã khai}.
  *  5. Cấm literal rgb(/rgba(/hsl(/oklch( trong mọi sink (sau strip).
  *  6. Kỷ luật hex ở code: components/ + lib/ KHÔNG chứa hex literal —
- *     NGOẠI TRỪ file bake canvas lib/share-card.ts (được chứa hex nhưng
- *     mọi hex ở đó vẫn phải ∈ bảng token qua nhóm 4/7).
- *  7. BANNED: hex V2 + dead-V3 xuất hiện ngoài comment = FAIL riêng.
- *  (+ nhóm 2 kiêm kiểm token loại C = 0 — hồ sơ conmaytet khoá 0 token C.)
+ *     NGOẠI TRỪ file bake canvas lib/share-card.ts (mọi hex ở đó vẫn
+ *     phải ∈ bảng token qua nhóm 4/7).
+ *  7. BANNED: hex V2 + V3-dead + bề mặt reveal V4 (#071908, #022D0D)
+ *     xuất hiện ngoài comment = FAIL riêng.
+ *  8. Luật Neutral-First của hệ mới: KHÔNG còn scope .scene-reveal ở
+ *     bất kỳ sink nào; KHÔNG còn tham chiếu asset vòng năm đã chết
+ *     (conmaytet-hero-ring).
  *
  * Exit code: 0 = PASS, 1 = FAIL (bất kỳ nhóm nào).
  */
@@ -48,14 +34,6 @@ import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoTokensPath = path.join(repoRoot, 'design', 'tokens.conmaytet-v4.json');
-const dossierTokensPath = path.resolve(
-  repoRoot,
-  '..',
-  'redesign-v4',
-  'conmaytet',
-  'assets',
-  'tokens.json',
-);
 const generatedCssPath = path.join(repoRoot, 'app', 'tokens.css');
 
 const failures = {
@@ -66,11 +44,12 @@ const failures = {
   bannedFuncs: [],
   codeHex: [],
   bannedHex: [],
+  neutral: [],
 };
 const notes = [];
 
-// ---------- BANNED (nhóm 7) — V4-IMPL-STATE §6 ----------
-// V2 (pine/gold/giấy ấm) + V3 dead (NEO-0):
+// ---------- BANNED (nhóm 7) ----------
+// V2 (pine/gold/giấy ấm) + V3 dead (NEO-0) + bề mặt reveal V4 đã chết:
 const BANNED = new Set(
   [
     '#1F4D3A',
@@ -94,11 +73,13 @@ const BANNED = new Set(
     '#F1F7F1',
     '#633B00',
     '#DDEDDE',
+    '#071908',
+    '#022D0D',
   ].map((h) => h.toUpperCase()),
 );
 const DECLARED_EXTREMES = new Set(['#000000', '#FFFFFF']);
 
-// ---------- comment stripping (LK4-51) ----------
+// ---------- comment stripping ----------
 function blankPreservingNewlines(s) {
   return s.replace(/[^\n]/g, ' ');
 }
@@ -108,10 +89,8 @@ function stripCssComments(text) {
 function stripXmlComments(text) {
   return text.replace(/<!--[\s\S]*?-->/g, (m) => blankPreservingNewlines(m));
 }
-// String-aware TS/TSX stripper (tiền lệ chiatien/dichbome): // và /* */
-// chỉ được nhận diện trong ngữ cảnh code, không bao giờ trong '...',
-// "..." hay `...` — URL như 'https://schema.org' không bị cắt. Template
-// ${ ... } quay lại ngữ cảnh code.
+// String-aware TS/TSX stripper: // và /* */ chỉ nhận diện trong ngữ
+// cảnh code, không bao giờ trong '...', "..." hay `...`.
 function stripTsComments(text) {
   let out = '';
   let i = 0;
@@ -204,10 +183,8 @@ function stripForFile(file, text) {
 }
 
 // ---------- fixture tự kiểm cho tầng strip ----------
-// Hex CẤM nằm trong comment (CSS/XML/TS) -> KHÔNG được tính; hex lậu
-// thật ngoài comment -> PHẢI bị bắt; URL trong chuỗi TS không bị cắt.
 function fixtureSelfTest() {
-  const dead = '#1F4D3A'; // hex V2 đã cấm — chỉ dùng làm mồi fixture
+  const dead = '#1F4D3A';
   const css = stripCssComments(`/* ${dead} */ :root{}`);
   if (css.includes(dead)) failures.structure.push('fixture: hex cấm sống sót qua strip CSS /* */');
   const xml = stripXmlComments(`<svg><!-- ${dead} --></svg>`);
@@ -223,9 +200,7 @@ function fixtureSelfTest() {
   const live = stripTsComments(`const c = '#123456';`);
   if (!live.includes('#123456'))
     failures.structure.push('fixture: hex lậu trong chuỗi bị strip mất (phải bị bắt)');
-  notes.push(
-    'fixture strip-comment self-test executed (hex cấm trong comment bị bỏ qua ở CSS/XML/TS, hex lậu thật bị bắt, URL trong chuỗi được giữ)',
-  );
+  notes.push('fixture strip-comment self-test executed');
 }
 fixtureSelfTest();
 
@@ -235,95 +210,48 @@ if (!existsSync(repoTokensPath)) {
   process.exit(1);
 }
 const repoTokens = JSON.parse(readFileSync(repoTokensPath, 'utf8'));
-const dossierTokens = existsSync(dossierTokensPath)
-  ? JSON.parse(readFileSync(dossierTokensPath, 'utf8'))
-  : null;
-if (!dossierTokens)
-  notes.push('không thấy tokens.json của hồ sơ — nhóm 2 chỉ kiểm cấu trúc nội bộ');
-
 const tokens = repoTokens.tokens ?? {};
 const valid = new Set(Object.values(tokens).map((t) => String(t.value).toUpperCase()));
 
 // ---------- nhóm 1: seed/gold Δbyte = 0 ----------
 const EXPECTED_SEED = '#198038';
 const EXPECTED_GOLD = '#F1C21B';
+const EXPECTED_BG = '#F6F7F6';
 if (repoTokens.anchor?.seed !== EXPECTED_SEED)
   failures.seed.push(`anchor.seed = ${repoTokens.anchor?.seed} != ${EXPECTED_SEED}`);
 if (repoTokens.anchor?.gold !== EXPECTED_GOLD)
   failures.seed.push(`anchor.gold = ${repoTokens.anchor?.gold} != ${EXPECTED_GOLD}`);
-if (tokens['brand-60']?.value !== repoTokens.anchor?.seed)
-  failures.seed.push(
-    `brand-60 value ${tokens['brand-60']?.value} != anchor.seed ${repoTokens.anchor?.seed}`,
-  );
-if (tokens['gold-30']?.value !== repoTokens.anchor?.gold)
-  failures.seed.push(
-    `gold-30 value ${tokens['gold-30']?.value} != anchor.gold ${repoTokens.anchor?.gold}`,
-  );
-if (tokens['brand-60']?.type !== 'A') failures.seed.push('brand-60 không phải loại A');
-if (tokens['gold-30']?.type !== 'A') failures.seed.push('gold-30 không phải loại A');
+if (tokens['seed']?.value !== EXPECTED_SEED)
+  failures.seed.push(`token seed = ${tokens['seed']?.value} != ${EXPECTED_SEED}`);
+if (tokens['gold']?.value !== EXPECTED_GOLD)
+  failures.seed.push(`token gold = ${tokens['gold']?.value} != ${EXPECTED_GOLD}`);
+if (tokens['seed']?.type !== 'A') failures.seed.push('token seed không phải loại A');
+if (tokens['gold']?.type !== 'A') failures.seed.push('token gold không phải loại A');
+if (tokens['canvas']?.value !== EXPECTED_BG)
+  failures.seed.push(`token canvas = ${tokens['canvas']?.value} != ${EXPECTED_BG}`);
 if (repoTokens.manifest?.theme_color !== EXPECTED_SEED)
   failures.seed.push(
-    `manifest.theme_color trong JSON = ${repoTokens.manifest?.theme_color} != ${EXPECTED_SEED}`,
+    `manifest.theme_color = ${repoTokens.manifest?.theme_color} != ${EXPECTED_SEED}`,
   );
-if (repoTokens.manifest?.background_color !== '#FFFFFF')
+if (repoTokens.manifest?.background_color !== EXPECTED_BG)
   failures.seed.push(
-    `manifest.background_color trong JSON = ${repoTokens.manifest?.background_color} != #FFFFFF`,
+    `manifest.background_color = ${repoTokens.manifest?.background_color} != ${EXPECTED_BG}`,
   );
 
-// ---------- nhóm 2: cấu trúc + khớp hồ sơ + token C = 0 ----------
+// ---------- nhóm 2: cấu trúc ----------
 for (const [name, t] of Object.entries(tokens)) {
   if (!t.value || !t.provenance || !t.type)
     failures.structure.push(`token ${name}: thiếu value/provenance/type`);
-  if (!/^[A-Z]$/.test(String(t.type ?? '')))
-    failures.structure.push(`token ${name}: type lạ '${t.type}'`);
-  if (t.type === 'C')
-    failures.structure.push(`token ${name}: token loại C — hồ sơ khoá 0 token C (LK4-03)`);
-}
-if (dossierTokens) {
-  const a = JSON.stringify(repoTokens);
-  const b = JSON.stringify(dossierTokens);
-  if (a !== b) {
-    failures.structure.push('bản sao repo KHÔNG khớp sâu (deep-equal) với tokens.json của hồ sơ');
-    const dt = dossierTokens.tokens ?? {};
-    for (const name of new Set([...Object.keys(tokens), ...Object.keys(dt)])) {
-      if (JSON.stringify(tokens[name]) !== JSON.stringify(dt[name]))
-        failures.structure.push(`token ${name}: repo != hồ sơ`);
-    }
-    for (const k of new Set([...Object.keys(repoTokens), ...Object.keys(dossierTokens)])) {
-      if (k !== 'tokens' && JSON.stringify(repoTokens[k]) !== JSON.stringify(dossierTokens[k]))
-        failures.structure.push(`khoá top-level '${k}': repo != hồ sơ`);
-    }
-  } else {
-    notes.push(
-      'design/tokens.conmaytet-v4.json deep-equal với tokens.json của hồ sơ (bản sao nguyên vẹn)',
-    );
-  }
-}
-const deadValues = new Set(
-  Object.values(repoTokens.deadValuesV3 ?? {}).filter(
-    (v) => typeof v === 'string' && v.startsWith('#'),
-  ),
-);
-for (const [name, t] of Object.entries(tokens)) {
-  if (deadValues.has(String(t.value).toUpperCase()))
-    failures.structure.push(
-      `token ${name}: value ${t.value} trùng giá trị V3 đã chết (deadValuesV3)`,
-    );
+  if (!['A', 'S'].includes(String(t.type ?? '')))
+    failures.structure.push(`token ${name}: type lạ '${t.type}' (hệ mới chỉ có A/S)`);
+  if (!/^#[0-9A-F]{6}$/i.test(String(t.value ?? '')))
+    failures.structure.push(`token ${name}: value không phải hex 6 số '${t.value}'`);
 }
 
 // ---------- nhóm 3: sinh-lại phần thân app/tokens.css ----------
-// Bản đồ khai báo kỳ vọng dựng TỪ JSON (xem ghi chú trung thực ở header).
 function expectedDecls() {
   const root = new Map();
-  const reveal = new Map();
-  for (const [name, t] of Object.entries(tokens)) {
-    if (name === 'on-deep' || name === 'on-deep-muted') reveal.set(`--${name}`, t.value);
-    else root.set(`--${name}`, t.value);
-  }
-  // Alias có giấy tờ trong tokens.css (bằng bậc thang công bố, không hex mới):
-  root.set('--line', tokens['neutral-30'].value); // = Gray 30
-  root.set('--line-control', tokens['neutral-70'].value); // = Gray 70
-  // Type + motion từ khối type/motion của JSON:
+  for (const [name, t] of Object.entries(tokens)) root.set(`--${name}`, t.value);
   root.set('--font-display', `"${repoTokens.type.display}", "${repoTokens.type.body}", sans-serif`);
   root.set('--font-body', `"${repoTokens.type.body}", sans-serif`);
   root.set('--hero-size', repoTokens.type.heroSize);
@@ -340,11 +268,7 @@ function expectedDecls() {
       failures.cssDiff.push(`motion.durationsMs của JSON thiếu ${ms}ms (cho ${k})`);
     root.set(k, `${ms}ms`);
   }
-  // Scope .scene-reveal (art-class): biến phụ suy từ token theo hồ sơ:
-  reveal.set('--reveal-bg', tokens['brand-100'].value);
-  reveal.set('--reveal-bg-alt', tokens['brand-90'].value);
-  reveal.set('--gold-on-deep', tokens['gold-30'].value);
-  return { root, reveal };
+  return root;
 }
 function extractDecls(cssText, selector) {
   const clean = stripCssComments(cssText);
@@ -367,15 +291,12 @@ function extractDecls(cssText, selector) {
   if (end === -1) return null;
   const body = clean.slice(open + 1, end);
   const vars = new Map();
-  const props = new Map();
   for (const decl of body.split(';')) {
-    const m = decl.trim().match(/^(--[\w-]+|[a-z-]+)\s*:\s*([\s\S]+)$/);
+    const m = decl.trim().match(/^(--[\w-]+)\s*:\s*([\s\S]+)$/);
     if (!m) continue;
-    const value = m[2].trim().replace(/\s+/g, ' ');
-    if (m[1].startsWith('--')) vars.set(m[1], value);
-    else props.set(m[1], value);
+    vars.set(m[1], m[2].trim().replace(/\s+/g, ' '));
   }
-  return { vars, props };
+  return vars;
 }
 if (!existsSync(generatedCssPath)) {
   failures.cssDiff.push('app/tokens.css missing');
@@ -383,38 +304,21 @@ if (!existsSync(generatedCssPath)) {
   const shippedCss = readFileSync(generatedCssPath, 'utf8');
   const expected = expectedDecls();
   const actualRoot = extractDecls(shippedCss, ':root');
-  const actualReveal = extractDecls(shippedCss, '.scene-reveal');
-  const compareScope = (label, exp, act) => {
-    if (!act) {
-      failures.cssDiff.push(`app/tokens.css: không tìm thấy block ${label}`);
-      return;
+  if (!actualRoot) {
+    failures.cssDiff.push('app/tokens.css: không tìm thấy block :root');
+  } else {
+    for (const [k, v] of expected) {
+      if (!actualRoot.has(k)) failures.cssDiff.push(`:root: thiếu khai báo ${k} (kỳ vọng ${v})`);
+      else if (actualRoot.get(k).toUpperCase() !== String(v).toUpperCase())
+        failures.cssDiff.push(`:root: ${k} = ${actualRoot.get(k)} != kỳ vọng ${v}`);
     }
-    for (const [k, v] of exp) {
-      if (!act.vars.has(k)) failures.cssDiff.push(`${label}: thiếu khai báo ${k} (kỳ vọng ${v})`);
-      else if (act.vars.get(k).toUpperCase() !== String(v).toUpperCase())
-        failures.cssDiff.push(`${label}: ${k} = ${act.vars.get(k)} != kỳ vọng ${v}`);
+    for (const k of actualRoot.keys()) {
+      if (!expected.has(k))
+        failures.cssDiff.push(`:root: khai báo thừa ngoài JSON ${k}: ${actualRoot.get(k)}`);
     }
-    for (const k of act.vars.keys()) {
-      if (!exp.has(k))
-        failures.cssDiff.push(`${label}: khai báo thừa ngoài JSON ${k}: ${act.vars.get(k)}`);
-    }
-  };
-  compareScope(':root', expected.root, actualRoot);
-  compareScope('.scene-reveal', expected.reveal, actualReveal);
-  if (actualReveal) {
-    if (actualReveal.props.get('background') !== 'var(--reveal-bg)')
-      failures.cssDiff.push(
-        `.scene-reveal: background = ${actualReveal.props.get('background')} != var(--reveal-bg)`,
-      );
-    if (actualReveal.props.get('color') !== 'var(--on-deep)')
-      failures.cssDiff.push(
-        `.scene-reveal: color = ${actualReveal.props.get('color')} != var(--on-deep)`,
-      );
   }
   if (failures.cssDiff.length === 0)
-    notes.push(
-      'tokens.css regeneration (phần thân token): diff rỗng — bản đồ khai báo :root + .scene-reveal khớp phép sinh từ JSON',
-    );
+    notes.push('tokens.css regeneration (phần thân token): diff rỗng — bản đồ :root khớp JSON');
 }
 
 // ---------- sinks ----------
@@ -449,7 +353,7 @@ const sinkFiles = [
 ].filter((f, idx, a) => a.indexOf(f) === idx && existsSync(f));
 const noHexCodeFiles = new Set([...componentFiles, ...libFiles.filter((f) => f !== bakeFile)]);
 
-// ---------- nhóm 4, 5, 6, 7: quét sink ----------
+// ---------- nhóm 4, 5, 6, 7, 8: quét sink ----------
 const hexRe = /#[0-9A-Fa-f]{6}(?![0-9A-Fa-f])/g;
 const funcRe = /\b(?:oklch|hsla?|rgba?)\s*\(/g;
 let scannedHexTotal = 0;
@@ -457,6 +361,10 @@ for (const file of sinkFiles) {
   const raw = readFileSync(file, 'utf8');
   const stripped = stripForFile(file, raw);
   const rel = path.relative(repoRoot, file) || file;
+  if (stripped.includes('scene-reveal'))
+    failures.neutral.push(`${rel}: còn scope/class .scene-reveal của hệ V4 đã chết`);
+  if (stripped.includes('conmaytet-hero-ring'))
+    failures.neutral.push(`${rel}: còn tham chiếu asset vòng năm đã chết (conmaytet-hero-ring)`);
   stripped.split('\n').forEach((line, idx) => {
     for (const m of line.matchAll(hexRe)) {
       scannedHexTotal += 1;
@@ -477,7 +385,7 @@ for (const file of sinkFiles) {
 
 // ---------- report ----------
 console.log(
-  `tokens:verify — valid hex set: ${valid.size} token values from design/tokens.conmaytet-v4.json`,
+  `tokens:verify — valid hex set: ${valid.size} token values from design/tokens.conmaytet-v4.json (hệ lens-04)`,
 );
 console.log(
   `tokens:verify — sinks scanned: ${sinkFiles.length} files, ${scannedHexTotal} hex literals after comment-strip`,
@@ -485,12 +393,13 @@ console.log(
 for (const n of notes) console.log(`  NOTE ${n}`);
 const groups = [
   ['1 seed/gold Δbyte=0 + manifest JSON', failures.seed],
-  ['2 structure + copy vs dossier + token C = 0', failures.structure],
+  ['2 structure (value/provenance/type, A/S)', failures.structure],
   ['3 tokens.css regeneration (token body) diff', failures.cssDiff],
   ['4 orphan hex in sinks', failures.orphans],
   ['5 banned colour functions (rgb/rgba/hsl/oklch)', failures.bannedFuncs],
   ['6 components/lib hex discipline (except bake lib/share-card.ts)', failures.codeHex],
-  ['7 banned hex (V2 + V3 dead)', failures.bannedHex],
+  ['7 banned hex (V2 + V3 dead + V4 reveal surfaces)', failures.bannedHex],
+  ['8 neutral-first: no .scene-reveal / no dead ring asset refs', failures.neutral],
 ];
 let failed = false;
 for (const [label, list] of groups) {

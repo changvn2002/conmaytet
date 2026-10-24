@@ -1,15 +1,16 @@
 import { ConMayTetTool } from '@/components/conmaytet/app';
-import { DisclosureSections } from '@/components/conmaytet/disclosure';
 import { FAQ_ITEMS } from '@/lib/content';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 /**
- * Trang chủ — khung server mỏng: AppBar 1 dòng, công cụ Scene Flow
- * (client), tầng disclosure (Cách tính + Hỏi đáp) và footer 2 dòng.
- * H1 duy nhất của trang nằm trong Cảnh 1 của công cụ («Đếm thử: còn
- * mấy cái Tết bên bố mẹ?»), header không còn tagline (diệt tell trùng
- * tên) và không sticky. FAQ hiển thị và JSON-LD FAQPage cùng lấy từ
- * lib/content.ts nên không bao giờ lệch nhau.
+ * Trang chủ — khung server mỏng: topbar 1 dòng (mark + wordmark),
+ * công cụ Scene Flow (client) và footer 2 dòng. Tầng disclosure
+ * (Cách tính + Hỏi đáp + Quyền riêng tư) do chính công cụ render ở
+ * cuối luồng của nó (vòng 4, H5: khi có kết quả, Cách tính + Hỏi
+ * đáp chuyển vào cột phải của cảnh Chia sẻ). H1 duy nhất của trang
+ * nằm trong thẻ hero của Cảnh 1 («Đếm thử: còn mấy cái Tết bên bố
+ * mẹ?»); header không sticky. FAQ hiển thị và JSON-LD FAQPage cùng
+ * lấy từ lib/content.ts nên không bao giờ lệch nhau.
  */
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -23,26 +24,33 @@ const faqJsonLd = {
 
 export default function Page() {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-[45rem] flex-col px-4 sm:px-6">
+    <div className="mx-auto flex min-h-dvh w-full max-w-[72rem] flex-col px-4 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
       />
 
       <header className="flex items-center gap-3 border-b border-line py-3">
-        {/* Lockup V4: mark «Một Vòng Năm» + wordmark Baloo 2 800 outline
-            đã nằm trong chính file SVG — header không còn chữ HTML. */}
+        {/* Topbar hệ lens-04: tile mark seed + glyph cành trắng (asset
+            SVG) + wordmark chữ HTML Baloo 2 800; bên phải là dòng riêng
+            tư rút gọn (ẩn trên mobile hẹp). */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/products/brand/conmaytet-lockup.svg"
-          alt="Còn Mấy Cái Tết Nữa?"
-          className="h-9 w-auto"
+          src="/products/brand/conmaytet-mark.svg"
+          alt=""
+          aria-hidden
+          className="h-9 w-9 rounded-[10px]"
         />
+        <p className="font-display text-[16.5px] leading-tight font-extrabold text-ink">
+          Còn Mấy Cái Tết Nữa?
+        </p>
+        <p className="ml-auto hidden text-[12.5px] font-medium text-muted sm:block">
+          Không tài khoản, không gửi dữ liệu đi.
+        </p>
       </header>
 
       <main className="flex-1">
         <ConMayTetTool />
-        <DisclosureSections />
       </main>
 
       <footer className="border-t border-line py-6 text-sm text-muted">

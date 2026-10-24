@@ -1,69 +1,83 @@
-# BRAND — Còn Mấy Cái Tết Nữa? (REDESIGN-V4)
+# BRAND — Còn Mấy Cái Tết Nữa? (hệ lens-04)
 
-> Tài liệu này thay thế bản brand của REDESIGN-V2. Hệ V2 (xanh thông +
-> vàng lì xì + giấy ấm, motif bao lì xì/cành thông) đã chết toàn bộ
-> theo NEO-0; các giá trị đó nằm trong danh sách cấm của
-> `pnpm tokens:verify`. Nguồn sự thật màu: `design/tokens.conmaytet-v4.json`.
+> Tài liệu này thay thế bản brand REDESIGN-V4. Mark «Một Vòng Năm»,
+> hero-ring và bề mặt reveal Green 100 của V4 đã chết toàn bộ theo
+> phán quyết của chương trình conmaytet-redesign (user bác V4 +
+> chấm mù 2 vòng chọn lens-04). Nguồn sự thật màu:
+> `design/tokens.conmaytet-v4.json` (nay chứa hệ lens-04).
 
 ## Nhận diện
 
-- **Mark «Một Vòng Năm»:** xoắn vòng năm không khép, nét 6.5đv, khe
-  hiệu dụng 8.59đv, cap-mốc tròn liền khối ở đầu nét ngoài. Hình học
-  kế thừa nguyên vẹn từ V3 — V4 chỉ đổi màu về Carbon literal và siết
-  luật biến thể. Bộ asset chính thức ở `public/products/brand/`:
-  - `conmaytet-mark.svg` — biến thể thường trú: Green 60 `#198038`, 0 gold. Dùng ≥24px (favicon, header qua lockup).
-  - `conmaytet-mark-micro.svg` — bản micro cho ≤20px: Green 60, 0 gold.
-  - `conmaytet-mono.svg` — mono đen cho bề mặt đơn sắc.
-  - `conmaytet-lockup.svg` — mark + wordmark Baloo 2 800 **outline thật** (không `<text>`), mực Gray 100 `#161616`. Đây là thứ header của app hiển thị (cao 36px).
-  - `conmaytet-app-icon.svg` — tile cài đặt: nền Green 100, mark Green 10 + cap gold (biến thể trên-reveal duy nhất được mang gold ở vai mark).
-  - `conmaytet-hero-ring.svg` — hero «Vòng Năm» của Cảnh 1 (xem dưới).
-- **OG:** `/og.png` (1200×630) — cùng ngôn ngữ vòng năm, 0 số kết quả cá nhân.
+- **Mark mới:** tile bo góc nền seed `#198038` + glyph cành đào trắng
+  rút gọn (thân cong + 2–3 hoa vẽ bằng path cánh thật, nhị gold) —
+  đọc được ở 16px nhờ biến thể micro (glyph to, nét dày hơn, 0 gold).
+  Bộ asset chính thức ở `public/products/brand/`:
+  - `conmaytet-mark.svg` — mark thường trú (favicon SVG, header qua
+    ảnh + wordmark chữ HTML).
+  - `conmaytet-mark-micro.svg` — bản micro cho ≤20px (entry favicon
+    16px sinh từ tổ hợp này).
+  - `conmaytet-mono.svg` — mono mực `#16191D` cho bề mặt đơn sắc.
+  - `conmaytet-lockup.svg` — mark + wordmark Baloo 2 800 dạng `<text>`
+    (chỉ dùng ở bề mặt web có font; pipeline PNG không dùng lockup).
+  - `conmaytet-app-icon.svg` — tile cài đặt full-bleed seed, glyph
+    trong vùng sống 80% (an toàn maskable).
+  - `conmaytet-branch.svg` — cành đào nguyên cành (artwork nguồn của
+    hero + OG); bản React ở `components/conmaytet/branch.tsx`.
+- **OG:** `/og.png` (1200×630) — nền canvas `#F6F7F6` + app-icon +
+  cành đào, 0 số kết quả cá nhân, 0 chữ hệ thống.
+- PNG/ICO sinh bằng `scripts/generate-brand-pngs.mjs` (chỉ raster
+  hoá/trích nhóm hình, không vẽ lại).
 
-## Màu thương hiệu (IBM Carbon)
+## Cành đào (minh hoạ duy nhất)
 
-- **Seed:** Green 60 `#198038` (giá trị LITERAL của Carbon, Δbyte = 0) — CTA, mark thường trú, trạng thái đã sống/đã chọn.
-- **Gold:** Yellow 30 `#F1C21B` (LITERAL) — **luật gold**: cấm trên sáng ở mọi vai mang nghĩa (chữ/icon/focus/đồ hoạ thiết yếu — chỉ 1.68:1 trên trắng). Gold chỉ ở: cap-mốc của mark trên-reveal · vạch tĩnh chân số ở reveal · vạch tháng 1 (dài hơn, kênh hình phụ) và tâm hoa trong art · nền warning với chữ Gray 100.
-- **Canvas:** trắng `#FFFFFF` + thang Gray 10–100 của Carbon (Neutral-First: bề mặt thường trú là trung tính, màu chỉ là accent).
-- **Reveal:** Green 100 `#071908` — bề mặt art-class duy nhất, đúng một scope ở Cảnh 2.
-- **Mực:** Gray 100 `#161616`. **Không gradient** ở bất cứ đâu.
+Vẽ bằng **path cánh thật**: cánh có khía V ở đầu, hai vai không đối
+xứng tuyệt đối, 2 lớp cánh (ngoài `#F6B8C6`, trong `#FBD9E0`), nhị
+gold `#F1C21B`, thân nâu `#8A5A36` thon dần theo đoạn, đủ nụ + hoa
+hé + hoa nở + lá seed. **Cấm** vẽ hoa bằng 5 vòng tròn đều nhau kiểu
+sticker (lỗi của mock vòng 1, panel đã chê). Cành luôn đứng trên nền
+TRUNG TÍNH (trắng/xám cực nhạt của thẻ) — không panel hồng riêng;
+hồng chỉ ở cánh hoa. Xuất hiện: hero form (lớn), header thẻ chia sẻ
+(biến tấu cắt cúp/lật hướng), mark (glyph rút gọn). Reveal + lưới
+tuần: không minh hoạ.
 
-## Hero «Vòng Năm»
+## Màu thương hiệu
 
-Vành r=128 với 12 vạch tháng đều 30°; vạch tháng 1 dương lịch dài
-22px (các vạch khác 14px) + gold — đọc ra bằng **độ dài trước, màu
-sau** (bản grayscale vẫn đọc được tháng được đánh dấu). Cành hoa
-outline mực «không miền»: cánh là vòng outline không fill (cấm fill
-vàng = mai/Nam, cấm fill hồng/đỏ = đào/Bắc), tâm hoa chấm gold nhỏ.
-Tâm vòng để **trống**. Alt chính thức: «Vòng năm mười hai tháng và
-cành hoa xuân». Cấm gọi vạch đánh dấu là «Tháng Giêng» (đó là tháng 1
-âm lịch).
+- **Seed:** `#198038` (Carbon Green 60, giữ nguyên văn) — CTA, trạng
+  thái chọn, điểm hiện tại, link, dải đáy thẻ chia sẻ, tile mark.
+  Không bao giờ là nền phủ diện rộng.
+- **Gold:** `#F1C21B` (Carbon Yellow 30, giữ nguyên văn) — chỉ micro:
+  nhân chấm «tuần này», nhụy hoa, nền chip mốc pha nhạt (`#FFF7D6`
+  + chữ `#7A5B00`). **Cấm huy hiệu tick vàng trên avatar** (đọc như
+  tick mạng xã hội — phán quyết panel).
+- **Canvas:** `#F6F7F6`; thẻ `#FFFFFF`; viền `#E6E8E6`; mực
+  `#16191D`; chữ phụ `#5A636E`; đã sống `#79828D` / nhấn `#59616B`;
+  chưa sống `#DEE1DE`. Không gradient ở bất cứ đâu.
 
 ## Avatar
 
 DiceBear `initials` 9.4.3 (client-side, không HTTP API): đĩa tròn
-chữ Baloo 2 800, glyph theo luật X1 (chữ đầu của tên gọi, NFC), 4 cặp
-nền/chữ khoá của Carbon (Green 10/Green 90 · Green 10/Gray 100 ·
-Gray 10/Gray 100 · Gray 20/Gray 100), **gold không vào avatar**, tên
-chữ Be Vietnam Pro luôn đi kèm. Mọi style có mặt đều bị cấm.
+chữ Baloo 2 800, glyph theo luật X1, 4 cặp nền/chữ của hệ lens-04
+(bố xanh nhạt `#DCEFE2`/`#146C2E` · mẹ vàng nhạt `#FDEEC9`/`#7A5B00`
+· seed-soft · neutral), chọn cặp bằng FNV-1a trên seed chuẩn như
+V4; **không badge vàng**; tên chữ Be Vietnam Pro luôn đi kèm. Mọi
+style có mặt đều bị cấm.
 
 ## Font
 
-Baloo 2 **800** (H1 các cảnh, số hero, initials avatar, wordmark
-outline trong lockup) + Be Vietnam Pro 400/500/600/700 (mọi chữ còn
-lại). Không tồn tại Baloo 700 trong app từ V4.
+Baloo 2 **800** (wordmark, tiêu đề, số cảm xúc, initials avatar) +
+Be Vietnam Pro 400/500/600/700 (mọi chữ còn lại).
 
 ## Cấm (cấp brand)
 
-Lì xì / đèn lồng / câu đối / con giáp / cành thông làm motif · hoa
-fill màu miền · đĩa mặt trời · đường đất · sao/quẻ/tarot/nến/hào
-quang và mọi motif bói toán · mesh-gradient/aurora · raster AI-gen
-cho banner/hero/logo · chữ/số giả trong art. Motif văn hoá được phép
-duy nhất: tờ lịch / vòng thời gian.
+Motif vòng/vành/đồng hồ ở mọi dạng · lì xì / đèn lồng / câu đối /
+con giáp / cành thông làm motif · hoa fill sticker 5 vòng tròn ·
+đĩa mặt trời · sao/quẻ/tarot/nến/hào quang và mọi motif bói toán ·
+mesh-gradient/aurora · raster AI-gen cho banner/hero/logo · chữ/số
+giả trong art · nền bão hoà ở bất kỳ màn nào.
 
 ## Quy tắc artwork
 
 Bộ SVG ở `public/products/brand/` là nguồn sự thật duy nhất — giữ
-nguyên tỉ lệ gốc, không cắt, không đặt lại màu ngoài các biến thể đã
-liệt kê. Mọi hex trong asset phải thuộc tokens.json (kiểm bằng
-`pnpm tokens:verify`, có strip comment XML trước khi quét). PNG/OG
-sinh từ bộ asset V4 — không sinh artwork từ script của hệ cũ.
+nguyên hình học, không đặt lại màu ngoài các biến thể đã liệt kê.
+Mọi hex trong asset phải thuộc tokens.json (kiểm bằng
+`pnpm tokens:verify`).

@@ -3,13 +3,16 @@
 import type { CSSProperties } from 'react';
 
 /**
- * Bộ icon «Vòng Năm» của REDESIGN-V4 (TYPE-AND-ICON §3) — thay toàn bộ
- * bộ icon stock trước đây trong components/. Luật cấu trúc: lưới 24 ·
- * nét 2,0 · cap tròn · một nét cong không khép cùng họ với mark, đầu
- * nét mở ở góc 45° phải-trên · icon có khung (lịch, nhà) mang một cung
- * vòng-năm nhỏ ở góc phải-trên · màu qua `currentColor` — gold KHÔNG
- * BAO GIỜ là màu icon. Cấm mọi motif bói toán (sao / quẻ / con giáp /
- * lì xì / đèn lồng…): motif văn hoá duy nhất là tờ lịch / vòng thời gian.
+ * Bộ icon tự vẽ của conmaytet (hệ lens-04) — lưới 24 · nét 2,0 · cap
+ * tròn · màu qua `currentColor` — gold KHÔNG BAO GIỜ là màu icon
+ * (ngoại lệ duy nhất: chi tiết gold-tint mảnh trên hai khối đặc
+ * seed của IconBanhChung và IconHome — xem chú thích ở đó).
+ * Motif vòng năm của V4 ĐÃ CHẾT (chương trình conmaytet-redesign):
+ * không cung tròn trang trí, không vạch chia kiểu mặt đồng hồ ở bất
+ * kỳ icon nào. Cấm mọi motif bói toán (sao / quẻ / con giáp / lì xì /
+ * đèn lồng…): motif văn hoá duy nhất là tờ lịch, ngôi nhà, bánh
+ * chưng (motif của mẹ từ vòng 5 — icon bát cơm cũ đã bỏ, xem
+ * IconBanhChung).
  *
  * API như tiền lệ chiatien: props {size, className, aria-hidden mặc
  * định true, style}. Icon là trang trí; nơi gọi chịu trách nhiệm nhãn
@@ -47,21 +50,36 @@ export function IconCalendar(props: CmIconProps) {
     <svg {...base(props)}>
       <rect x="4" y="6" width="16" height="14" rx="2" />
       <path d="M4 10.5h16M8 4v4" />
-      {/* Cung vòng-năm nhỏ ở góc phải-trên của khung, đầu mở 45°. */}
-      <path d="M15.6 3.4a2.9 2.9 0 0 1 2.5 2.5" />
       <path d="M8 14.5h3M8 17h5" />
     </svg>
   );
 }
 
+/**
+ * NGÔI NHÀ — motif của Bố (R8: đồng bộ ngôn ngữ với
+ * IconBanhChung). Các vòng ≤7 nhà là nét OUTLINE mảnh trong
+ * khi bánh chưng của Mẹ là KHỐI ĐẶC — panel chê lặp lại ở
+ * mọi vòng («hai bộ icon chắp vào nhau», SERIOUS ở ghế 2/3/4
+ * vòng 7). Nay nhà vẽ theo ĐÚNG ngữ pháp của bánh chưng:
+ * MỘT khối đặc liền var(--seed) trong cùng khung 4→20 của
+ * lưới 24, chi tiết gold-tint mảnh vẽ ĐÈ LÊN mặt khối (cửa
+ * vòm + đường mái hiên 0,8 như dây lạt của bánh), không nét
+ * currentColor. Cặp motif nay là «khối đặc seed + chi tiết
+ * gold-tint» ở cả hai thẻ — phân biệt nằm ở hình (nhà/bánh),
+ * không nằm ở ngôn ngữ vẽ. Cùng IconBanhChung, đây là hai
+ * icon duy nhất của bộ mang màu riêng thay vì currentColor.
+ */
 export function IconHome(props: CmIconProps) {
   return (
     <svg {...base(props)}>
-      <path d="M4 11 12 4l8 7" />
-      <path d="M6 9.5V20h12V9.5" />
-      <path d="M10 20v-5h4v5" />
-      {/* Cung vòng-năm nhỏ ở góc phải-trên của khung nhà. */}
-      <path d="M16.8 5.6a2.6 2.6 0 0 1 1.9 2.1" />
+      {/* Thân nhà: MỘT khối đặc liền — mái tam giác + tường
+          trong cùng một path fill, khung 4→20 như khối bánh. */}
+      <path d="M12 4 L20 11 V20 H4 V11 Z" fill="var(--seed)" stroke="none" />
+      {/* Đường mái hiên gold-tint mảnh đè lên mặt khối, đầu
+          chạm đúng mép tường (linecap butt như dây bánh). */}
+      <path d="M4.8 11.6h14.4" stroke="var(--gold-tint)" strokeWidth={0.8} strokeLinecap="butt" />
+      {/* Cửa vòm gold-tint ở tâm mặt tiền. */}
+      <path d="M10.2 20 v-4.6 a1.8 1.8 0 0 1 3.6 0 V20 Z" fill="var(--gold-tint)" stroke="none" />
     </svg>
   );
 }
@@ -89,8 +107,7 @@ export function IconEdit(props: CmIconProps) {
 export function IconInfo(props: CmIconProps) {
   return (
     <svg {...base(props)}>
-      {/* Vòng không khép: khe hở ở góc 45° phải-trên như đầu nét của mark. */}
-      <path d="M18.4 5.6A9 9 0 1 0 21 12" />
+      <circle cx="12" cy="12" r="9" />
       <path d="M12 11v5M12 7.8v.01" />
     </svg>
   );
@@ -120,7 +137,7 @@ export function IconChart(props: CmIconProps) {
     <svg {...base(props)}>
       <path d="M4 4v15.5h16" />
       <path d="M8.5 16v-4.5M12.5 16V8.5M16.5 16v-6.5" />
-      {/* Nét cong mở đầu 45° phải-trên nối các cột — cùng họ mark. */}
+      {/* Nét xu hướng nối các cột. */}
       <path d="M8.5 9.8 12.5 6l3 2.2 3.2-3" />
     </svg>
   );
@@ -147,7 +164,7 @@ export function IconDownload(props: CmIconProps) {
   );
 }
 
-/** «Làm lại từ đầu» — vòng mở quay lại điểm đầu, đầu nét ở 45° phải-trên. */
+/** «Làm lại từ đầu» — mũi tên vòng quay lại điểm đầu. */
 export function IconReset(props: CmIconProps) {
   return (
     <svg {...base(props)}>
@@ -212,23 +229,69 @@ export function IconArrowUp(props: CmIconProps) {
   );
 }
 
-/**
- * Glyph «tuần này» (thay MapPin theo M6/D4-CM-5): vòng năm TĨNH thu nhỏ —
- * vòng tròn + vạch tháng 1 dài hơn ở hướng phải-trên, không pulse, không
- * chuyển động. Kênh nhận diện chính vẫn là nhãn chữ đi kèm ở nơi gọi.
- */
-export function IconWeekRing(props: CmIconProps) {
+/* ── Ikon phân biệt dòng «lần gặp» ở Cảnh 2 (spec lens-04) ─────── */
+
+export function IconCheck(props: CmIconProps) {
   return (
     <svg {...base(props)}>
-      <circle cx="12" cy="12" r="7.5" />
-      <path d="M12 4.5v2.6M17.3 6.7l-1.8 1.8M19.5 12H17M12 19.5v-2.6M4.5 12H7" />
+      <path d="M5 12.5 10 17.5 19 7" />
     </svg>
   );
 }
 
-/* ── Spot cho tầng disclosure (ink-only, VISUAL-LAYER §3) ──────────
- * Chỉ 2 motif được phép ở tầng đọc: vạch tháng đơn và hoa đơn outline.
- * Cả hai vẽ bằng currentColor (nơi gọi đặt màu mực), không gold. */
+export function IconShield(props: CmIconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3.5 5 6v5.5c0 4.6 3 7.4 7 9 4-1.6 7-4.4 7-9V6l-7-2.5z" />
+      <path d="M9 11.8 11.2 14 15.2 9.8" />
+    </svg>
+  );
+}
+
+/**
+ * BÁNH CHƯNG — motif của Mẹ (J3 vòng 5 · K2 vòng 6 · L1 vòng 7).
+ * Bản vòng 6 (khối đặc + chữ thập kem 1,5 + nút r=1,6 + vệt cong
+ * ở góc trên-trái) vẫn bị panel vòng 6 đọc thành 4 Ô RỜI /
+ * cửa sổ / waffle (4/5 ghế): chữ thập THÒ RA NGOÀI chu vi khối
+ * (đầu dây ở 4,5/19,5 trong khi khối ở 4/20) và vệt cong đọc
+ * như bóng gloss trên một ô kính, nút thắt lớn làm các góc
+ * trong quanh tâm trông bo tròn như 4 ô tách nhau.
+ * Bản vòng 7 theo đúng lệnh L1 — vẽ theo CẤU TRÚC GÓI THẬT:
+ * MỘT khối vuông đặc liền var(--seed), bo góc CHỈ ở chu vi
+ * ngoài (rx nhỏ 2,2; bên trong khối không tồn tại góc nào để
+ * bo), dây lạt MẢNH rõ rệt (0,8 — mỏng gần một nửa so với 1,5)
+ * vẽ ĐÈ LÊN mặt gói và KẾT THÚC ĐÚNG mép khối (4→20, không
+ * thò ra ngoài), nút thắt nhỏ như hạt (r=1,0) ở tâm, BỎ HẲN
+ * vệt cong gloss. Ở cả 82px lẫn 14px đều đọc một mạch: «một
+ * gói liền bị dây mảnh siết». Đây là icon duy nhất của bộ mang
+ * màu riêng (đặc + kem) thay vì nét currentColor — ngoại lệ có
+ * chủ đích, ghi rõ tại đây.
+ */
+export function IconBanhChung(props: CmIconProps) {
+  return (
+    <svg {...base(props)}>
+      {/* Thân bánh: MỘT khối vuông đặc liền, bo góc chỉ ở chu vi ngoài. */}
+      <rect x="4" y="4" width="16" height="16" rx="2.2" fill="var(--seed)" stroke="none" />
+      {/* Dây lạt MẢNH đè lên mặt gói: 1 dọc + 1 ngang, đầu dây
+          chạm đúng mép khối, không thò ra ngoài chu vi (linecap
+          butt — cap tròn của bộ icon sẽ thò đầu dây ra ngoài
+          mép gói ~nửa bề rộng nét). */}
+      <path d="M12 4v16M4 12h16" stroke="var(--gold-tint)" strokeWidth={0.8} strokeLinecap="butt" />
+      {/* Nút thắt nhỏ hình hạt ở tâm. */}
+      <circle cx="12" cy="12" r="1" fill="var(--gold-tint)" stroke="none" />
+    </svg>
+  );
+}
+
+/** Tên cũ của motif mẹ — giữ alias để không vỡ import ngoài ý muốn;
+ *  hình vẽ nay là bánh chưng (xem IconBanhChung). */
+export const IconMeal = IconBanhChung;
+
+/* ── Spot cho tầng disclosure (ink-only) ──────────────────────────
+ * Chỉ 2 motif: cành đào thu nhỏ và hoa đào path cánh thật (cùng họ
+ * hình với components/conmaytet/branch.tsx), vẽ bằng currentColor. */
+
+const SPOT_PETAL = 'M0 0 C-7.5 -2.5 -10 -9.5 -3.4 -15.2 L0 -13.4 L3 -15.4 C9.5 -10 7 -2.8 0 0 Z';
 
 export function SpotMonthTick({ className }: { className?: string }) {
   return (
@@ -244,9 +307,18 @@ export function SpotMonthTick({ className }: { className?: string }) {
       aria-hidden
       focusable={false}
     >
-      {/* Một cung của vòng năm + vạch tháng đơn dài ở đỉnh. */}
-      <path d="M8 52a52 52 0 0 1 104 0" />
-      <path d="M60 8v18M28 20l6 12M92 20l-6 12" strokeWidth={2.5} />
+      {/* Cành đào thu nhỏ: thân cong + 2 hoa cánh thật. */}
+      <path d="M8 50 C36 44 58 34 82 20 C94 13 104 9 114 7" />
+      <g transform="translate(96 12) scale(0.55)" fill="currentColor" stroke="none">
+        {[0, 72, 144, 216, 288].map((a) => (
+          <path key={a} d={SPOT_PETAL} transform={`rotate(${a})`} />
+        ))}
+      </g>
+      <g transform="translate(52 32) scale(0.42)" fill="currentColor" stroke="none">
+        {[0, 72, 144, 216, 288].map((a) => (
+          <path key={a} d={SPOT_PETAL} transform={`rotate(${a})`} />
+        ))}
+      </g>
     </svg>
   );
 }
@@ -264,13 +336,13 @@ export function SpotFlower({ className }: { className?: string }) {
       aria-hidden
       focusable={false}
     >
-      {/* Hoa đơn: 5 vòng outline quanh tâm, tâm là chấm mực nhỏ. */}
-      <circle cx="60" cy="19" r="10" />
-      <circle cx="70.5" cy="26.6" r="10" />
-      <circle cx="66.5" cy="39" r="10" />
-      <circle cx="53.5" cy="39" r="10" />
-      <circle cx="49.5" cy="26.6" r="10" />
-      <circle cx="60" cy="30" r="3" fill="currentColor" stroke="none" />
+      {/* Hoa đào đơn: 5 cánh path thật quanh tâm, tâm là chấm nhỏ. */}
+      <g transform="translate(60 32) scale(1.05)" fill="none">
+        {[0, 72, 144, 216, 288].map((a) => (
+          <path key={a} d={SPOT_PETAL} transform={`rotate(${a})`} />
+        ))}
+      </g>
+      <circle cx="60" cy="32" r="3" fill="currentColor" stroke="none" />
     </svg>
   );
 }

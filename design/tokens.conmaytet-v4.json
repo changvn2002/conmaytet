@@ -1,1 +1,411 @@
-{"$description":"conmaytet «Còn Mấy Cái Tết Nữa?» — REDESIGN-V4 design tokens. NGUỒN SỰ THẬT DUY NHẤT; tokens.css là file sinh. Neo: IBM Carbon. 100% token có provenance: loại A = giá trị LITERAL đã công bố của IBM · loại B = bậc trong thang CÔNG BỐ của Carbon · loại N = neutral trong thang Gray CÔNG BỐ. KHÔNG token loại C, KHÔNG hex mồ côi. Nguồn thang: IBM Design Language https://www.ibm.com/design/language/color/ (lens-02 §1.9 trích byte; lens-12 xếp hạng nguồn cấp S — khớp byte toàn thang). Tương phản: đo WCAG 2.x, kiểm chứng chéo lens-02/lens-11 + writer đo lại độc lập 2026-10-24 (khớp 2 chữ số thập phân ở mọi cặp chồng lấp).","anchor":{"gold":"#F1C21B","goldName":"Carbon Yellow 30","seed":"#198038","seedName":"Carbon Green 60","sourceGrade":"S (lens-12)","sourceUrl":"https://www.ibm.com/design/language/color/","system":"IBM Carbon Design System"},"app":"conmaytet","contrastVerified":{"note":"WCAG 2.x — lens-02 §3 + lens-11 §1 đo độc lập, writer đo lại 2026-10-24: khớp 2 chữ số thập phân ở mọi cặp chồng lấp.","pairs":{"brand-60_on_gray-10":4.56,"brand-60_on_gray-20":3.8,"brand-60_on_white":5.02,"brand-70_on_gray-10":7.02,"brand-70_on_white":7.72,"dicebear_gray-100_on_gray-10":16.45,"dicebear_gray-100_on_gray-20":13.71,"dicebear_gray-100_on_green-10":16.41,"dicebear_green-90_on_green-10":13.77,"error-60_on_gray-10":4.55,"error-60_on_white":5.0,"gold-30_on_gray-100":10.75,"gold-30_on_green-100":10.83,"gold-30_on_green-90":9.01,"gold-30_on_white":1.68,"gray-100_on_gold-30":10.75,"green-10_on_green-100":16.54,"green-10_on_green-90":13.77,"info-60_on_white":5.0,"ink_on_white":18.1,"muted-70_on_gray-10":7.1,"muted-70_on_white":7.81,"placeholder-60_on_gray-10":4.57,"placeholder-60_on_white":5.02,"success-ink_on_success-bg":7.0,"white_on_brand-60":5.02,"white_on_gray-100":18.1,"white_on_green-100":18.24,"white_on_green-90":15.18},"thinPairsRequiringRenderRecheck":["brand-60_on_gray-10 (+0,06)","placeholder-60_on_gray-10 (+0,07)","error-60_on_gray-10 (+0,05)"]},"deadValuesV3":{"note":"Giá trị của V3 CHẾT theo NEO-0 (ΔE seed↔gốc = 11,54 — lens-02 §4.2). Liệt kê để CI/quét sink nhận diện, CẤM dùng làm giá trị ở mọi sink.","onDeepMutedDerived":"#DDEDDE","paper":"#F1F7F1","reveal":"#112414","seed":"#3E6744"},"manifest":{"background_color":"#FFFFFF","theme_color":"#198038"},"motion":{"durationsMs":[0,120,160,300,620],"easeCeremony":"cubic-bezier(0.7, 0, 0.15, 1)","easeUi":"cubic-bezier(0.3, 0, 0, 1)"},"name":"Còn Mấy Cái Tết Nữa?","tokens":{"brand-10":{"provenance":"Carbon Green 10 — thang Green công bố của IBM Carbon","roles":["tint","avatar-bg","on-deep-muted (trong .scene-reveal)"],"type":"B","value":"#DEFBE6"},"brand-100":{"provenance":"Carbon Green 100 — thang Green công bố","roles":["reveal CHÍNH (art-class, scope .scene-reveal duy nhất)","tile app-icon"],"type":"B","value":"#071908"},"brand-20":{"provenance":"Carbon Green 20 — thang Green công bố","roles":["đồ hoạ phụ trên sáng — cấm vai chữ"],"type":"B","value":"#A7F0BA"},"brand-30":{"provenance":"Carbon Green 30 — thang Green công bố","roles":["đồ hoạ trên nền sâu / trang trí có kênh phụ"],"type":"B","value":"#6FDC8C"},"brand-40":{"provenance":"Carbon Green 40 — thang Green công bố","roles":["đồ hoạ trên nền sâu"],"type":"B","value":"#42BE65"},"brand-50":{"provenance":"Carbon Green 50 — thang Green công bố","roles":["đồ hoạ lớn — cấm chữ thường trên trắng"],"type":"B","value":"#24A148"},"brand-60":{"provenance":"Carbon Green 60 LITERAL — giá trị seed của hệ Carbon (IBM Design Language)","roles":["SEED","CTA solid + chữ trắng 5,02","chữ/mark/focus trên trắng 5,02","mark thường trú"],"type":"A","value":"#198038"},"brand-70":{"provenance":"Carbon Green 70 — thang Green công bố","roles":["chữ brand trên subtle 7,72/7,02","focus chính thức","success-ink"],"type":"B","value":"#0E6027"},"brand-80":{"provenance":"Carbon Green 80 — thang Green công bố","roles":["bề mặt sâu phụ","chữ đậm trên sáng"],"type":"B","value":"#044317"},"brand-90":{"provenance":"Carbon Green 90 — thang Green công bố","roles":["reveal phụ (art-class)","chữ initials trên Green 10 — 13,77"],"type":"B","value":"#022D0D"},"canvas":{"provenance":"Cực trắng khai báo của Carbon — canvas thường trú theo NEUTRAL-FIRST (sửa lệnh #1)","roles":["nền thường trú chính"],"type":"N","value":"#FFFFFF"},"error-ink":{"provenance":"Carbon Gray 100 — thang Gray công bố","roles":["chữ lỗi"],"type":"N","value":"#161616"},"error-solid":{"provenance":"Carbon Red 60 — IBM Design Language (lens-02 §1.9)","roles":["dấu/icon error (5,00 trắng / 4,55 Gray 10) — luôn kèm chữ, không bao giờ màu-đơn-kênh"],"type":"B","value":"#DA1E28"},"gold-30":{"forbidden":["chữ trên sáng","icon UI trên sáng","focus trên sáng","đồ hoạ thiết yếu trên sáng — 1,68 trên trắng"],"provenance":"Carbon Yellow 30 LITERAL (alert-30) — IBM Design Language","roles":["cap-mốc trên biến thể mark trên-reveal","vạch tĩnh chân số ở reveal","vạch tháng 1 + tâm hoa trong hero (trang trí có kênh hình phụ)","nền warning (chữ Gray 100)"],"type":"A","value":"#F1C21B"},"info-ink":{"provenance":"Carbon Gray 100 — thang Gray công bố","roles":["chữ info"],"type":"N","value":"#161616"},"info-solid":{"provenance":"Carbon Blue 60 — IBM Design Language (lens-02 §1.9)","roles":["dấu info (5,00) — liều điểm, không phải accent thứ hai"],"type":"B","value":"#0F62FE"},"neutral-10":{"provenance":"Carbon Gray 10 — thang Gray công bố","roles":["bề mặt subtle","nền avatar phụ"],"type":"N","value":"#F4F4F4"},"neutral-100":{"provenance":"Carbon Gray 100 — thang Gray công bố","roles":["MỰC chính (18,10 trên trắng)","error/warning/info ink","dự phòng đen trung tính cho reveal"],"type":"N","value":"#161616"},"neutral-20":{"provenance":"Carbon Gray 20 — thang Gray công bố","roles":["nền avatar phụ","viền mạnh"],"type":"N","value":"#E0E0E0"},"neutral-30":{"provenance":"Carbon Gray 30 — thang Gray công bố","roles":["hairline trang trí — không gánh nghĩa (1,71)"],"type":"N","value":"#C6C6C6"},"neutral-40":{"provenance":"Carbon Gray 40 — thang Gray công bố","roles":["đồ hoạ phụ trang trí (2,38)"],"type":"N","value":"#A8A8A8"},"neutral-50":{"provenance":"Carbon Gray 50 — thang Gray công bố","roles":["disabled (WCAG miễn trừ)","cấm vai chữ"],"type":"N","value":"#8D8D8D"},"neutral-60":{"provenance":"Carbon Gray 60 — thang Gray công bố","roles":["placeholder trên trắng (5,02)","trên Gray 10 mỏng 4,57 → dùng Gray 70"],"type":"N","value":"#6F6F6F"},"neutral-70":{"provenance":"Carbon Gray 70 — thang Gray công bố","roles":["chữ phụ (7,81/7,10)","biên control","placeholder trên subtle"],"type":"N","value":"#525252"},"neutral-80":{"provenance":"Carbon Gray 80 — thang Gray công bố","roles":["bề mặt sâu trung tính phụ"],"type":"N","value":"#393939"},"neutral-90":{"provenance":"Carbon Gray 90 — thang Gray công bố","roles":["bề mặt sâu trung tính"],"type":"N","value":"#262626"},"on-deep":{"provenance":"Cực trắng — CHỈ trong scope .scene-reveal","roles":["chữ/số trên reveal (18,24 trên Green 100)"],"type":"N","value":"#FFFFFF"},"on-deep-muted":{"provenance":"Carbon Green 10 — CHỈ trong scope .scene-reveal","roles":["dòng nguồn WHO trên reveal (16,54 / 13,77)"],"type":"B","value":"#DEFBE6"},"success-bg":{"provenance":"Carbon Green 10 — thang công bố","roles":["nền success"],"type":"B","value":"#DEFBE6"},"success-ink":{"provenance":"Carbon Green 70 — thang công bố","roles":["chữ success trên Green 10 (7,00)"],"type":"B","value":"#0E6027"},"success-solid":{"provenance":"Carbon Green 60 ở vai success của hệ Carbon","roles":["dấu/icon success + solid"],"type":"B","value":"#198038"},"warning-bg":{"provenance":"Carbon Yellow 30 LITERAL ở vai nền cảnh báo của Carbon","roles":["nền warning — chữ Gray 100 trên đó 10,75"],"type":"A","value":"#F1C21B"},"warning-ink":{"provenance":"Carbon Gray 100 — thang Gray công bố","roles":["chữ warning — thay vai 'gold-text' của V3 (hex suy-ra đã chết theo NEO-0)"],"type":"N","value":"#161616"}},"type":{"body":"Be Vietnam Pro","display":"Baloo 2","displayWeight":800,"heroSize":"clamp(120px, 38vw, 168px)"},"version":"REDESIGN-V4"}
+{
+  "$description": "conmaytet — tokens hệ lens-04 «SẢN PHẨM ẤM ÁP / FINTECH-GRADE» (chương trình conmaytet-redesign, IMPLEMENTATION-SPEC final). NGUỒN SỰ THẬT DUY NHẤT; app/tokens.css là file sinh (kiểm bằng pnpm tokens:verify). Canvas #F6F7F6, thẻ trắng, seed #198038 + gold #F1C21B giữ nguyên văn (loại A). Loại S = giá trị của spec/mock thắng chấm mù; loại I nằm trong provenance khi là màu minh hoạ.",
+  "app": "conmaytet",
+  "version": "REDESIGN-LENS04",
+  "anchor": {
+    "seed": "#198038",
+    "seedName": "Carbon Green 60",
+    "gold": "#F1C21B",
+    "goldName": "Carbon Yellow 30",
+    "system": "lens-04 fintech-grade (nền tảng Carbon giữ cho seed/gold)"
+  },
+  "manifest": {
+    "theme_color": "#198038",
+    "background_color": "#F6F7F6"
+  },
+  "type": {
+    "display": "Baloo 2",
+    "body": "Be Vietnam Pro",
+    "displayWeight": 800,
+    "heroSize": "clamp(84px, 24vw, 104px)"
+  },
+  "motion": {
+    "easeCeremony": "cubic-bezier(0.7, 0, 0.15, 1)",
+    "easeUi": "cubic-bezier(0.3, 0, 0, 1)",
+    "durationsMs": [
+      0,
+      120,
+      160,
+      300,
+      620
+    ]
+  },
+  "tokens": {
+    "canvas": {
+      "value": "#F6F7F6",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "canvas app — xám trung tính cực nhạt"
+      ],
+      "type": "S"
+    },
+    "card": {
+      "value": "#FFFFFF",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "thẻ trắng"
+      ],
+      "type": "S"
+    },
+    "soft": {
+      "value": "#F7F8F7",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "hộp mềm trong thẻ (thanh đời người, hàng toggle)"
+      ],
+      "type": "S"
+    },
+    "ink": {
+      "value": "#16191D",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "chữ chính"
+      ],
+      "type": "S"
+    },
+    "ink-2": {
+      "value": "#3F4750",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chữ phụ đậm"
+      ],
+      "type": "S"
+    },
+    "muted": {
+      "value": "#5A636E",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/) — spec cho #6D757F và chỉ thị sẫm xuống #5A636E khi thiếu tương phản; lấy ngay bậc sẫm cho an toàn",
+      "roles": [
+        "chữ phụ (≥4,5:1 trên canvas + trắng)"
+      ],
+      "type": "S"
+    },
+    "faint": {
+      "value": "#9AA1AB",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chỉ trang trí/ikon mờ — cấm gánh nghĩa"
+      ],
+      "type": "S"
+    },
+    "line": {
+      "value": "#E6E8E6",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "viền thẻ"
+      ],
+      "type": "S"
+    },
+    "line-soft": {
+      "value": "#EEF0EE",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "kẻ mảnh trong thẻ"
+      ],
+      "type": "S"
+    },
+    "line-control": {
+      "value": "#5A636E",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/) — viền control đậm hơn khi cần tương phản (spec cho phép)",
+      "roles": [
+        "biên control mang nghĩa"
+      ],
+      "type": "S"
+    },
+    "seed": {
+      "value": "#198038",
+      "provenance": "Carbon Green 60 LITERAL — seed giữ nguyên văn theo spec",
+      "roles": [
+        "CTA chính, trạng thái chọn, điểm hiện tại, link, dải đáy thẻ chia sẻ"
+      ],
+      "type": "A"
+    },
+    "seed-dark": {
+      "value": "#0E6027",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Green 70",
+      "roles": [
+        "focus chính thức, chữ brand trên sáng"
+      ],
+      "type": "S"
+    },
+    "seed-ink": {
+      "value": "#146C2E",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chữ seed sẫm trên sáng (wordmark thẻ, nhãn chọn)"
+      ],
+      "type": "S"
+    },
+    "seed-deep": {
+      "value": "#044317",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Green 80",
+      "roles": [
+        "chữ đậm trên sáng ở chân thẻ"
+      ],
+      "type": "S"
+    },
+    "seed-tint": {
+      "value": "#EEF7F0",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "nền trạng thái chọn (seed pha cực nhạt)"
+      ],
+      "type": "S"
+    },
+    "seed-soft": {
+      "value": "#E9F5EC",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "nền ikon tin cậy / offline"
+      ],
+      "type": "S"
+    },
+    "brand-10": {
+      "value": "#DEFBE6",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Green 10",
+      "roles": [
+        "tint success, nền avatar phụ"
+      ],
+      "type": "S"
+    },
+    "gold": {
+      "value": "#F1C21B",
+      "provenance": "Carbon Yellow 30 LITERAL — giữ nguyên văn theo spec",
+      "roles": [
+        "CHỈ: nhân chấm tuần này, nhụy hoa, nền chip mốc pha nhạt"
+      ],
+      "type": "A"
+    },
+    "gold-tint": {
+      "value": "#FFF7D6",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "nền chip mốc thập kỷ"
+      ],
+      "type": "S"
+    },
+    "gold-ink": {
+      "value": "#7A5B00",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chữ trên gold-tint / chữ avatar mẹ"
+      ],
+      "type": "S"
+    },
+    "gold-soft": {
+      "value": "#FBF6E3",
+      "provenance": "VERDICT panel vòng 2 (G2b/G4b) — tint gold rất nhạt hệ #FBF6E3 cho nền trích dẫn của mẹ + panel của mẹ trên thẻ chia sẻ",
+      "roles": [
+        "nền khối trích dẫn của mẹ (reveal), panel của mẹ trên thẻ 1080×1350"
+      ],
+      "type": "S"
+    },
+    "lived": {
+      "value": "#79828D",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "đã sống — lưới tuần + thanh đời người"
+      ],
+      "type": "S"
+    },
+    "lived-strong": {
+      "value": "#59616B",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "đoạn nhấn đã sống trên thanh tiến trình"
+      ],
+      "type": "S"
+    },
+    "future": {
+      "value": "#DEE1DE",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "chưa sống — xám rất nhạt trên trắng"
+      ],
+      "type": "S"
+    },
+    "future-ring": {
+      "value": "#B9C0C8",
+      "provenance": "VERDICT panel vòng 2 (G1b) — vành chấm RỖNG của tuần chưa sống trong lưới tuần",
+      "roles": [
+        "vành chấm rỗng «còn lại» — lưới tuần (ruột trong suốt)"
+      ],
+      "type": "S"
+    },
+    "track": {
+      "value": "#E9EBEA",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "rãnh thanh tiến trình"
+      ],
+      "type": "S"
+    },
+    "dad-bg": {
+      "value": "#DCEFE2",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "nền avatar bố (tông DiceBear initials của mock)"
+      ],
+      "type": "S"
+    },
+    "dad-ink": {
+      "value": "#146C2E",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chữ avatar bố"
+      ],
+      "type": "S"
+    },
+    "mom-bg": {
+      "value": "#FDEEC9",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "nền avatar mẹ"
+      ],
+      "type": "S"
+    },
+    "mom-ink": {
+      "value": "#7A5B00",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "chữ avatar mẹ"
+      ],
+      "type": "S"
+    },
+    "petal": {
+      "value": "#F6B8C6",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "cánh hoa đào — CHỈ ở cánh hoa"
+      ],
+      "type": "S"
+    },
+    "petal-light": {
+      "value": "#FBD9E0",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "lớp cánh trong của hoa đào"
+      ],
+      "type": "S"
+    },
+    "branch": {
+      "value": "#8A5A36",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "thân cành đào"
+      ],
+      "type": "S"
+    },
+    "leaf": {
+      "value": "#2E9E4F",
+      "provenance": "lens-04 mock (hồ sơ conmaytet-redesign/lens-04/src) — giá trị trích byte từ CSS của hướng thắng chấm mù",
+      "roles": [
+        "lá phụ trên cành đào"
+      ],
+      "type": "S"
+    },
+    "neutral-10": {
+      "value": "#F4F4F4",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Gray 10",
+      "roles": [
+        "nền avatar dự phòng"
+      ],
+      "type": "S"
+    },
+    "neutral-20": {
+      "value": "#E0E0E0",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Gray 20",
+      "roles": [
+        "nền avatar dự phòng"
+      ],
+      "type": "S"
+    },
+    "neutral-60": {
+      "value": "#6F6F6F",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Gray 60",
+      "roles": [
+        "placeholder trên trắng (5,02:1)"
+      ],
+      "type": "S"
+    },
+    "neutral-100": {
+      "value": "#161616",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Gray 100",
+      "roles": [
+        "mực dự phòng, nền backdrop dialog"
+      ],
+      "type": "S"
+    },
+    "success-solid": {
+      "value": "#198038",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar)",
+      "roles": [
+        "dấu success"
+      ],
+      "type": "S"
+    },
+    "success-ink": {
+      "value": "#0E6027",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar)",
+      "roles": [
+        "chữ success"
+      ],
+      "type": "S"
+    },
+    "success-bg": {
+      "value": "#DEFBE6",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar)",
+      "roles": [
+        "nền success"
+      ],
+      "type": "S"
+    },
+    "error-solid": {
+      "value": "#DA1E28",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Red 60",
+      "roles": [
+        "nút Xoá, dấu lỗi — luôn kèm chữ"
+      ],
+      "type": "S"
+    },
+    "error-ink": {
+      "value": "#16191D",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "chữ lỗi"
+      ],
+      "type": "S"
+    },
+    "warning-bg": {
+      "value": "#F1C21B",
+      "provenance": "Carbon Yellow 30 ở vai nền cảnh báo",
+      "roles": [
+        "nền cảnh báo — chữ ink trên đó"
+      ],
+      "type": "S"
+    },
+    "warning-ink": {
+      "value": "#16191D",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "chữ cảnh báo"
+      ],
+      "type": "S"
+    },
+    "info-solid": {
+      "value": "#0F62FE",
+      "provenance": "IBM Carbon (hệ V4 giữ lại cho các vai semantic/avatar) Blue 60",
+      "roles": [
+        "dấu info — liều điểm"
+      ],
+      "type": "S"
+    },
+    "info-ink": {
+      "value": "#16191D",
+      "provenance": "IMPLEMENTATION-SPEC của chương trình conmaytet-redesign (final/)",
+      "roles": [
+        "chữ info"
+      ],
+      "type": "S"
+    }
+  }
+}

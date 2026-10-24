@@ -3,10 +3,10 @@ import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/site';
 
 /**
  * Web App Manifest — cho phép cài app lên màn hình chính và chạy standalone
- * như app thật. Icon PNG lấy từ bộ asset REDESIGN-V4, raster hoá từ logo
- * SVG chính thức (artwork không sửa, xem BRAND.md). Màu manifest theo
- * tokens.json (design/tokens.conmaytet-v4.json): theme = seed Carbon
- * Green 60, background = canvas trắng — kiểm bằng `pnpm tokens:verify`.
+ * như app thật. Icon PNG lấy từ bộ asset hệ lens-04, raster hoá từ
+ * artwork SVG chính thức (xem BRAND.md). Màu manifest theo tokens.json
+ * (design/tokens.conmaytet-v4.json): theme = seed #198038, background
+ * = canvas #F6F7F6 — kiểm bằng `pnpm tokens:verify`.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -18,8 +18,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    // Canvas trắng #FFFFFF (nền chờ khi mở app đã cài) + seed Green 60 #198038 cho theme.
-    background_color: '#FFFFFF',
+    // Canvas #F6F7F6 (nền chờ khi mở app đã cài) + seed #198038 cho theme.
+    background_color: '#F6F7F6',
     theme_color: '#198038',
     categories: ['lifestyle', 'utilities'],
     icons: [

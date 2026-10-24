@@ -47,7 +47,25 @@ function seedAndRender() {
   return render(<ConMayTetTool />);
 }
 
-const birthInput = () => document.getElementById('birth') as HTMLInputElement;
+// F1 vòng 2: ô ngày sinh là nhóm 3 đoạn #birth (DD/MM/YYYY) —
+// birthInput trỏ đoạn ĐẦU (#birth-day, đích focus sau hoàn tác/xoá
+// như #birth cũ); birthValue() hợp 3 đoạn về ISO để khẳng định giá
+// trị đầy đủ với cùng sức mạnh như .value của ô date cũ.
+const birthInput = () => document.getElementById('birth-day') as HTMLInputElement;
+const birthGroup = () => document.getElementById('birth') as HTMLElement;
+function birthValue(): string {
+  const d = (document.getElementById('birth-day') as HTMLInputElement).value;
+  const m = (document.getElementById('birth-month') as HTMLInputElement).value;
+  const y = (document.getElementById('birth-year') as HTMLInputElement).value;
+  if (!d || !m || !y) return '';
+  return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+}
+function setBirth(iso: string) {
+  const [y, m, d] = iso.split('-');
+  fireEvent.change(document.getElementById('birth-day')!, { target: { value: d } });
+  fireEvent.change(document.getElementById('birth-month')!, { target: { value: m } });
+  fireEvent.change(document.getElementById('birth-year')!, { target: { value: y } });
+}
 const fatherInput = () => document.getElementById('father-year') as HTMLInputElement;
 const motherInput = () => document.getElementById('mother-year') as HTMLInputElement;
 
@@ -134,7 +152,7 @@ describe('TC-1 — hoàn tác 8 giây sau xoá', () => {
 
     expect(fatherInput().value).toBe('1965');
     expect(motherInput().value).toBe('1968');
-    expect(birthInput().value).toBe('1995-06-15');
+    expect(birthValue()).toBe('1995-06-15');
     expect(stageSummary()).toBe(summaryBefore);
     // Sau hoàn tác focus về trường đầu tiên, không phải BODY.
     expect(document.activeElement).toBe(birthInput());
@@ -173,7 +191,7 @@ describe('Cụm C1 — focus ở các lối ra còn lại', () => {
     fireEvent.click(keep);
     advance(1);
     expect(fatherInput().value).toBe('1965');
-    expect(birthInput().value).toBe('1995-06-15');
+    expect(birthValue()).toBe('1995-06-15');
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Làm lại từ đầu' }));
   });
 
@@ -201,10 +219,14 @@ describe('Gói kèm Panel #01 — TC-3 + aria ô lỗi', () => {
 
   it('Ô lỗi mang aria-invalid + aria-describedby trỏ đúng khối thông báo', () => {
     seedAndRender();
-    fireEvent.change(birthInput(), { target: { value: '2999-01-01' } });
+    setBirth('2999-01-01');
 
     expect(birthInput().getAttribute('aria-invalid')).toBe('true');
     expect(birthInput().getAttribute('aria-describedby')).toBe('notices-self');
+    // Nhóm #birth mang cùng aria như ô date cũ (focus-within + nhãn nhóm).
+    expect(birthGroup().getAttribute('aria-invalid')).toBe('true');
+    expect(birthGroup().getAttribute('aria-describedby')).toBe('notices-self');
+    expect(birthGroup().getAttribute('role')).toBe('group');
     const notices = document.getElementById('notices-self');
     expect(notices).not.toBeNull();
     expect(notices?.querySelector('[role="alert"]')).not.toBeNull();
@@ -280,5 +302,28 @@ describe('TC-2 — cây heading của tầng disclosure', () => {
     for (const s of container.querySelectorAll('summary')) {
       expect(s.className).toContain('min-h-11');
     }
+  });
+});
+
+describe('F1/F6 vòng 2 — control ngày sinh thiết kế riêng + segmented', () => {
+  it('Không còn ô date native; 3 đoạn DD/MM/YYYY hiện đúng dữ liệu đã nạp', () => {
+    seedAndRender();
+    expect(document.querySelector('input[type="date"]')).toBeNull();
+    expect((document.getElementById('birth-day') as HTMLInputElement).value).toBe('15');
+    expect((document.getElementById('birth-month') as HTMLInputElement).value).toBe('06');
+    expect((document.getElementById('birth-year') as HTMLInputElement).value).toBe('1995');
+    expect(birthValue()).toBe('1995-06-15');
+  });
+
+  it('Segmented «Không chọn» mang whitespace-nowrap (không rớt 2 dòng)', () => {
+    seedAndRender();
+    expect(screen.getByRole('radio', { name: 'Không chọn' }).className).toContain(
+      'whitespace-nowrap',
+    );
+  });
+
+  it('Hai ô năm sinh của bố/mẹ dùng cùng một bộ class viền (nhất quán)', () => {
+    seedAndRender();
+    expect(fatherInput().className).toBe(motherInput().className);
   });
 });

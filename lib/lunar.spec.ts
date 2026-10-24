@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { countTetDays, lunarToSolar, solarToLunar, tetDate } from './lunar';
+import { countTetDays, lunarToSolar, solarToLunar, tetDate, tetWeekIndices } from './lunar';
 
 /**
  * Ground truth mùng 1 Tết Nguyên Đán — đã verify độc lập trong
@@ -55,6 +55,41 @@ describe('lunarToSolar / solarToLunar', () => {
     const s = lunarToSolar(15, 8, 2026, false); // rằm tháng 8/2026
     const back = solarToLunar(s.day, s.month, s.year);
     expect(back).toMatchObject({ day: 15, month: 8, year: 2026, leap: false });
+  });
+});
+
+describe('tetWeekIndices (sợi Tết của lưới tuần, J4 vòng 5)', () => {
+  it('sinh 01/01/2026: Tết 2026 (17/02) rơi vào tuần 6, Tết 2025 (trước sinh) bị loại', () => {
+    // 17/02/2026 − 01/01/2026 = 47 ngày → tuần floor(47/7) = 6.
+    // 29/01/2025 ở trước ngày sinh → không có chỉ số nào < 6 mang Tết 2025.
+    const weeks = tetWeekIndices(new Date(2026, 0, 1), 200);
+    expect(weeks.has(6)).toBe(true);
+    expect([...weeks].filter((w) => w < 6)).toHaveLength(0);
+  });
+
+  it('sinh 01/01/2026: Tết 2027 (06/02/2027) rơi vào tuần 57', () => {
+    // 06/02/2027 − 01/01/2026 = 401 ngày → tuần floor(401/7) = 57.
+    const weeks = tetWeekIndices(new Date(2026, 0, 1), 200);
+    expect(weeks.has(57)).toBe(true);
+  });
+
+  it('mỗi tuần Tết khớp đúng tetDate: tuần chứa ngày Tết thật, không lệch tuần kề', () => {
+    const birth = new Date(1990, 4, 20);
+    const weeks = tetWeekIndices(birth, 4177);
+    for (const year of [2026, 2027, 2030]) {
+      const days = Math.floor((tetDate(year).getTime() - birth.getTime()) / 86400000);
+      const w = Math.floor(days / 7);
+      expect(weeks.has(w)).toBe(true);
+      expect(weeks.has(w - 1)).toBe(false);
+      expect(weeks.has(w + 1)).toBe(false);
+    }
+  });
+
+  it('giới hạn theo totalWeeks và totalWeeks <= 0 cho tập rỗng', () => {
+    const birth = new Date(2026, 0, 1);
+    expect(tetWeekIndices(birth, 6).size).toBe(0); // tuần 6 nằm ngoài 0..5
+    expect(tetWeekIndices(birth, 7).has(6)).toBe(true);
+    expect(tetWeekIndices(birth, 0).size).toBe(0);
   });
 });
 

@@ -25,7 +25,7 @@
  * dọn cache cũ và precache lại shell mới ở lần ghé tiếp theo.
  */
 
-const CACHE_VERSION = 'v4-2026-10-24';
+const CACHE_VERSION = 'v5-2026-10-24';
 const SHELL_CACHE = `conmaytet-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `conmaytet-runtime-${CACHE_VERSION}`;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -40,7 +40,8 @@ const PRECACHE_URLS = [
   '/icons/apple-touch-icon.png',
   '/favicon.ico',
   '/products/brand/conmaytet-lockup.svg',
-  '/products/brand/conmaytet-hero-ring.svg',
+  '/products/brand/conmaytet-branch.svg',
+  '/products/brand/conmaytet-mark.svg',
   '/og.png',
 ];
 

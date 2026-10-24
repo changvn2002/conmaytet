@@ -18,7 +18,11 @@ export const STORAGE_KEY = 'conmaytet:input:v1';
  */
 export async function fillPanelForm(page: Page) {
   await page.goto('/');
-  await page.locator('#birth').fill(PANEL_INPUT.birth);
+  // F1 vòng 2: ngày sinh nhập qua 3 đoạn DD/MM/YYYY (hợp thành đúng
+  // PANEL_INPUT.birth dạng ISO trong storage như trước).
+  await page.locator('#birth-day').fill('15');
+  await page.locator('#birth-month').fill('06');
+  await page.locator('#birth-year').fill('1995');
   await page.getByRole('radio', { name: 'Nam', exact: true }).click();
   await page.locator('#father-year').fill(PANEL_INPUT.fatherYear);
   await page.locator('#mother-year').fill(PANEL_INPUT.motherYear);

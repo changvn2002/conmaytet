@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { initialsForName } from '@/lib/avatar-initials';
 
 /* ------------------------------------------------------------------ */
-/* Avatar DiceBear `initials` (REDESIGN-V4, TYPE-AND-ICON §4) —        */
+/* Avatar DiceBear `initials` (cơ chế V4, palette hệ lens-04) —        */
 /* @dicebear/core + @dicebear/initials ghim 9.4.3, import TỪNG          */
 /* style-package (không qua @dicebear/collection — collection không     */
 /* tree-shake được ở phép đo của app chị em), render 100% client-side,  */
@@ -22,22 +22,25 @@ import { initialsForName } from '@/lib/avatar-initials';
 /* Vì vậy cơ chế ÉP GLYPH chắc chắn ở đây (tiền lệ dichbome):           */
 /*   glyph = initialsForName(tên/nhãn) — hàm X1 thuần đã unit-test —    */
 /*   được dùng làm seed-glyph cho DiceBear kèm chars:1; còn seed        */
-/*   CHUẨN `conmaytet:v1:profile:<role>-<năm sinh>` chỉ dùng để chọn    */
-/*   cặp nền/chữ bằng FNV-1a trong 4 cặp palette đã khoá của hồ sơ.     */
+/*   CHUẨN `conmaytet:v1:profile:<role>-<năm sinh>` dùng để chọn cặp    */
+/*   nền/chữ: THEO VAI cho bố/mẹ (J2 vòng 5, xem palettePairForRole)     */
+/*   và bằng FNV-1a trong 4 cặp palette đã khoá cho người dùng.         */
 /*                                                                     */
 /* Render bằng SVG INLINE (không data-URI — tiền lệ chiatien/dichbome). */
 /* Tên chữ Be Vietnam Pro LUÔN đi kèm avatar ở mọi call-site             */
 /* (C-11.10): avatar là kênh định danh phụ, không đứng một mình.        */
 /* ------------------------------------------------------------------ */
 
-/** 4 cặp palette khoá (TYPE-AND-ICON §4, đã đo tương phản 13,71–16,45).
+/** 4 cặp palette khoá của hệ lens-04 (tông DiceBear initials của mock
+ *  thắng chấm mù: bố xanh lá nhạt, mẹ vàng nhạt + 2 cặp trung tính/seed).
  *  Giá trị hex ĐỌC TỪ CSS vars của app/tokens.css lúc chạy — component
- *  không chứa hex literal (luật sink của tokens:verify). */
+ *  không chứa hex literal (luật sink của tokens:verify). Cơ chế chọn
+ *  cặp bằng FNV-1a trên seed chuẩn giữ nguyên như V4. */
 export const AVATAR_PALETTE_PAIRS: ReadonlyArray<readonly [bgVar: string, inkVar: string]> = [
-  ['--brand-10', '--brand-90'],
-  ['--brand-10', '--neutral-100'],
-  ['--neutral-10', '--neutral-100'],
-  ['--neutral-20', '--neutral-100'],
+  ['--dad-bg', '--dad-ink'],
+  ['--mom-bg', '--mom-ink'],
+  ['--seed-soft', '--seed-ink'],
+  ['--neutral-20', '--ink'],
 ];
 
 /** FNV-1a 32-bit trên UTF-8 (hàm hash palette chuẩn của nhà). */
@@ -52,6 +55,25 @@ export function fnv1a(text: string): number {
 
 export function profileSeed(role: string, birthYear: number | null): string {
   return `conmaytet:v1:profile:${role}-${birthYear ?? 'x'}`;
+}
+
+/**
+ * Cặp palette theo VAI (J2 vòng 5): bố LUÔN là cặp xanh seed
+ * (dad-bg/dad-ink), mẹ LUÔN là cặp gold (mom-bg nền kem / mom-ink
+ * chữ nâu gold) — khớp đúng avatar bake trên thẻ canvas
+ * (lib/share-card.ts: bố B xanh, mẹ M nâu gold trên nền kem).
+ * Trước vòng 5 cả hai vai đều chọn cặp bằng FNV-1a trên seed nên
+ * cùng một người hiện hai danh tính khác nhau giữa app và thẻ.
+ * Người dùng ('self') GIỮ nguyên cơ chế băm cũ. Seed chuẩn và
+ * glyph X1 không đổi ở mọi vai.
+ */
+export function palettePairForRole(
+  role: string,
+  seed: string,
+): readonly [bgVar: string, inkVar: string] {
+  if (role === 'father') return AVATAR_PALETTE_PAIRS[0];
+  if (role === 'mother') return AVATAR_PALETTE_PAIRS[1];
+  return AVATAR_PALETTE_PAIRS[fnv1a(seed) % AVATAR_PALETTE_PAIRS.length];
 }
 
 function cssVarHex(name: string): string {
@@ -88,11 +110,13 @@ function stripMetadataAndHide(svg: string): string {
 async function buildAvatarSvg(role: string, birthYear: number | null, name: string) {
   const seed = profileSeed(role, birthYear);
   const glyph = initialsForName(name);
-  const cacheKey = `${seed}|${glyph}`;
+  // Khoá cache gồm cả cặp palette theo vai: cùng seed/glyph nhưng
+  // khác vai thì nền/chữ khác nhau (J2 vòng 5), không dùng lẫn SVG.
+  const cacheKey = `${seed}|${glyph}|${palettePairForRole(role, seed).join('/')}`;
   const cached = svgCache.get(cacheKey);
   if (cached) return cached;
   const { createAvatar, initials } = await loadDicebear();
-  const pair = AVATAR_PALETTE_PAIRS[fnv1a(seed) % AVATAR_PALETTE_PAIRS.length];
+  const pair = palettePairForRole(role, seed);
   const raw = createAvatar(initials, {
     // Seed-glyph = ĐÚNG ký tự X1 (probe ở đầu file: seed 1 ký tự cho
     // glyph nguyên vẹn; chars:1 khoá thêm một lớp nữa).
@@ -129,8 +153,10 @@ export function ProfileAvatar({
 }) {
   const seed = profileSeed(role, birthYear);
   const glyph = initialsForName(name);
-  const pair = AVATAR_PALETTE_PAIRS[fnv1a(seed) % AVATAR_PALETTE_PAIRS.length];
-  const [svg, setSvg] = useState<string | null>(() => svgCache.get(`${seed}|${glyph}`) ?? null);
+  const pair = palettePairForRole(role, seed);
+  const [svg, setSvg] = useState<string | null>(
+    () => svgCache.get(`${seed}|${glyph}|${pair.join('/')}`) ?? null,
+  );
 
   useEffect(() => {
     let cancelled = false;

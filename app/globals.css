@@ -5,67 +5,73 @@
 @source "../lib";
 @source "../app";
 
-/* Hệ token REDESIGN-V4 — nguồn sự thật: design/tokens.conmaytet-v4.json
-   (bản sao nguyên vẹn của tokens.json trong hồ sơ redesign-v4/conmaytet).
+/* Hệ token lens-04 — nguồn sự thật: design/tokens.conmaytet-v4.json
+   (hệ «SẢN PHẨM ẤM ÁP / FINTECH-GRADE», chương trình conmaytet-redesign).
    File tokens.css cạnh file này là FILE SINH từ JSON đó (kiểm bằng
-   `pnpm tokens:verify`) — không sửa tay. Mọi màu ở tầng này đều là var()
-   trỏ vào token trong tokens.css; KHÔNG hex nào của hệ V2 (thông + giấy ấm)
-   được sống sót — chúng nằm trong danh sách cấm của scripts/verify-tokens.mjs.
-   Canvas thường trú = trắng + thang Gray của IBM Carbon (NEUTRAL-FIRST);
-   seed Green 60 #198038 chỉ là accent; gold Yellow 30 chỉ ở các vai khoá
-   (reveal, hero, nền warning) — không bao giờ là chữ trên nền sáng.
-   Quy ước lớp semantic (V4-IMPL-STATE §9): canvas / subtle / ink / muted /
-   line / line-control / brand / brand-strong / brand-tint / brand-10..100 /
-   gold / success-* / error-* / warning-* / info-*. */
+   `pnpm tokens:verify`) — không sửa tay. Canvas thường trú = #F6F7F6,
+   nội dung sống trong THẺ TRẮNG bo 20–22px viền #E6E8E6 + bóng mềm hai
+   lớp; seed #198038 chỉ là accent (CTA/chọn/trạng thái/điểm hiện tại);
+   gold #F1C21B chỉ ở micro (nhân chấm tuần này, nhụy hoa, chip mốc).
+   KHÔNG còn bề mặt bão hoà / scope reveal nào trong hệ này. */
 :root {
   color-scheme: light;
-  /* Bóng đổ: color-mix trên mực neutral-100 (không literal rgb/rgba —
-     luật sink của tokens:verify). Chỉ còn --shadow-lift cho thanh nổi
-     động (hoàn tác); bề mặt tĩnh = 0 bóng theo INTERFACE-SPEC §1 nên
-     --shadow-card đã gỡ cùng các call-site của nó. */
+  /* Bóng đổ: color-mix trên mực (không literal rgb/rgba — luật sink của
+     tokens:verify). Hai lớp kiểu fintech: offset nhỏ, blur lớn, alpha thấp. */
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent),
+    0 10px 30px -12px color-mix(in srgb, var(--ink) 12%, transparent);
+  --shadow-card-lg:
+    0 2px 4px color-mix(in srgb, var(--ink) 5%, transparent),
+    0 24px 48px -20px color-mix(in srgb, var(--ink) 18%, transparent);
   --shadow-lift:
-    0 2px 4px color-mix(in srgb, var(--neutral-100) 6%, transparent),
-    0 16px 40px color-mix(in srgb, var(--neutral-100) 10%, transparent);
+    0 2px 4px color-mix(in srgb, var(--ink) 6%, transparent),
+    0 16px 40px color-mix(in srgb, var(--ink) 10%, transparent);
 }
 
 @theme inline {
   --color-canvas: var(--canvas);
-  --color-subtle: var(--neutral-10);
-  --color-ink: var(--neutral-100);
-  --color-muted: var(--neutral-70);
+  --color-card: var(--card);
+  --color-subtle: var(--soft);
+  --color-soft: var(--soft);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
   --color-line-control: var(--line-control);
-  --color-brand: var(--brand-60);
-  --color-brand-strong: var(--brand-70);
-  --color-brand-tint: var(--brand-10);
+  --color-brand: var(--seed);
+  --color-brand-strong: var(--seed-ink);
+  --color-brand-tint: var(--seed-soft);
   --color-brand-10: var(--brand-10);
-  --color-brand-20: var(--brand-20);
-  --color-brand-30: var(--brand-30);
-  --color-brand-40: var(--brand-40);
-  --color-brand-50: var(--brand-50);
-  --color-brand-60: var(--brand-60);
-  --color-brand-70: var(--brand-70);
-  --color-brand-80: var(--brand-80);
-  --color-brand-90: var(--brand-90);
-  --color-brand-100: var(--brand-100);
+  --color-brand-70: var(--seed-dark);
+  --color-seed: var(--seed);
+  --color-seed-dark: var(--seed-dark);
+  --color-seed-ink: var(--seed-ink);
+  --color-seed-deep: var(--seed-deep);
+  --color-seed-tint: var(--seed-tint);
+  --color-seed-soft: var(--seed-soft);
+  --color-gold: var(--gold);
+  --color-gold-tint: var(--gold-tint);
+  --color-gold-ink: var(--gold-ink);
+  --color-gold-soft: var(--gold-soft);
+  --color-lived: var(--lived);
+  --color-lived-strong: var(--lived-strong);
+  --color-future: var(--future);
+  --color-future-ring: var(--future-ring);
+  --color-track: var(--track);
+  --color-dad-bg: var(--dad-bg);
+  --color-dad-ink: var(--dad-ink);
+  --color-mom-bg: var(--mom-bg);
+  --color-mom-ink: var(--mom-ink);
+  --color-petal: var(--petal);
+  --color-petal-light: var(--petal-light);
+  --color-branch: var(--branch);
+  --color-leaf: var(--leaf);
   --color-neutral-10: var(--neutral-10);
   --color-neutral-20: var(--neutral-20);
-  --color-neutral-30: var(--neutral-30);
-  --color-neutral-40: var(--neutral-40);
-  --color-neutral-50: var(--neutral-50);
   --color-neutral-60: var(--neutral-60);
-  --color-neutral-70: var(--neutral-70);
-  --color-neutral-80: var(--neutral-80);
-  --color-neutral-90: var(--neutral-90);
   --color-neutral-100: var(--neutral-100);
-  --color-gold: var(--gold-30);
-  /* Chỉ sống trong scope .scene-reveal (tokens.css) — utility dùng ngoài
-     scope đó sẽ không resolve được biến, đúng kỷ luật LK4-12. */
-  --color-reveal: var(--reveal-bg);
-  --color-reveal-alt: var(--reveal-bg-alt);
-  --color-on-deep: var(--on-deep);
-  --color-on-deep-muted: var(--on-deep-muted);
-  --color-gold-on-deep: var(--gold-on-deep);
   --color-success-solid: var(--success-solid);
   --color-success-ink: var(--success-ink);
   --color-success-bg: var(--success-bg);
@@ -86,7 +92,7 @@ html {
 html,
 body {
   background: var(--canvas);
-  color: var(--neutral-100);
+  color: var(--ink);
 }
 
 body {
@@ -104,26 +110,52 @@ body {
 
 /* ── Bề mặt trình duyệt cũng thuộc về thiết kế ─────────────────── */
 
-/* Bôi chọn văn bản: tint Green 10, chữ Green 70. */
+/* Bôi chọn văn bản: tint seed cực nhạt, chữ seed sẫm. */
 ::selection {
-  background: var(--brand-10);
-  color: var(--brand-70);
+  background: var(--seed-soft);
+  color: var(--seed-ink);
 }
 
-/* Vòng focus bàn phím: Green 70 trên sáng (7,72 trắng / 7,02 Gray 10 —
-   COLOR-SYSTEM §3.3), nhìn rõ trên mọi thành phần tương tác. */
+/* Vòng focus bàn phím (F6 vòng 2): ĐÚNG MỘT lớp 2px seed + offset
+   sạch 2px cho toàn app — không bóng, không lớp thứ hai. Mọi thành
+   phần tương tác dựa vào luật toàn cục này, không tự khai thêm
+   outline/bóng focus riêng (khai trùng từng gây vòng đôi trên ảnh). */
 :focus-visible {
-  outline: 2px solid var(--brand-70);
+  outline: 2px solid var(--seed);
   outline-offset: 2px;
+}
+
+/* Nhóm ngày sinh 3 đoạn (#birth): vòng focus nằm trên NHÓM qua
+   :focus-within (giữ bất biến #birth của v1.2.1) — vẫn đúng 1 lớp
+   2px seed; từng ô đoạn bên trong không tự vẽ vòng riêng. */
+#birth:focus-within {
+  outline: 2px solid var(--seed);
+  outline-offset: 2px;
+}
+#birth input:focus-visible {
+  outline: none;
+}
+
+/* Giấu spinner mặc định của ô số (F1 vòng 2): hai ô năm sinh của
+   bố/mẹ phải cùng một ngôn ngữ phẳng — không mũi tên lên/xuống của
+   trình duyệt, viền của hai ô nhất quán tuyệt đối. */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Con trỏ soạn thảo trong ô nhập theo màu thương hiệu. */
 input {
-  caret-color: var(--brand-60);
+  caret-color: var(--seed);
 }
 
-/* Placeholder ô nhập: Gray 60 trên trắng = 5,02:1 (COLOR-SYSTEM §3.4);
-   trên bề mặt subtle phải dùng Gray 70 — component tự chọn qua class. */
+/* Placeholder ô nhập: neutral-60 trên trắng = 5,02:1. */
 ::placeholder {
   color: var(--neutral-60);
   opacity: 1;
@@ -131,7 +163,7 @@ input {
 
 /* Mũi tên mở/đóng của FAQ theo màu thương hiệu. */
 summary::marker {
-  color: var(--brand-60);
+  color: var(--seed);
 }
 
 /* ── Slider số lần về thăm: track mảnh, núm 26px, vùng chạm dọc 44px ── */
@@ -139,7 +171,7 @@ input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   /* Chiều cao 44px chỉ nới vùng bắt chạm quanh track 6px ở giữa —
-     hình nhìn thấy (track + núm) không đổi (QA LOW-4). */
+     hình nhìn thấy (track + núm) không đổi. */
   height: 44px;
   background: transparent;
   cursor: pointer;
@@ -147,7 +179,14 @@ input[type='range'] {
 input[type='range']::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 9999px;
-  background: var(--line);
+  /* Trong suốt: đoạn đã qua / chưa qua vẽ bằng gradient nền trên
+     chính input (app.tsx đặt background theo giá trị hiện tại). */
+  background: transparent;
+}
+input[type='range']::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--seed);
 }
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -156,27 +195,30 @@ input[type='range']::-webkit-slider-thumb {
   width: 26px;
   height: 26px;
   border-radius: 9999px;
-  background: var(--brand-60);
-  border: 3px solid var(--canvas);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--neutral-100) 30%, transparent);
+  background: var(--card);
+  border: 3px solid var(--seed);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--ink) 30%, transparent);
 }
 input[type='range']::-moz-range-track {
   height: 6px;
   border-radius: 9999px;
-  background: var(--line);
+  background: var(--track);
 }
 input[type='range']::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  /* Cùng hình hài với thumb WebKit ở trên (F6 vòng 2): tròn trắng
+     26px, viền seed 3px, bóng nhẹ một lớp — không còn dấu mặc định
+     ở bất kỳ engine nào. */
+  width: 26px;
+  height: 26px;
+  box-sizing: border-box;
   border-radius: 9999px;
-  background: var(--brand-60);
-  border: 3px solid var(--canvas);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--neutral-100) 30%, transparent);
+  background: var(--card);
+  border: 3px solid var(--seed);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--ink) 30%, transparent);
 }
 
 /* ── Chuyển động: chỉ phục vụ khoảnh khắc con số lên sân khấu ────
-   Easing LUÔN qua biến token (--ease-ceremony / --ease-ui từ tokens.css);
-   cấm easing viết tay trong file này (V-M0). */
+   Easing LUÔN qua biến token (--ease-ceremony / --ease-ui từ tokens.css). */
 
 /* Reveal con số ở Cảnh 2: hiện như được lật mở (scale + fade), không
    đếm tăng — số không bao giờ gợi đồng hồ đếm ngược. */
@@ -222,8 +264,7 @@ input[type='range']::-moz-range-thumb {
   animation: num-in 160ms var(--ease-ui) both;
 }
 
-/* Chấm «tuần này» trong lưới tuần: TĨNH tuyệt đối (M6 hồ sơ V4 —
-   week-pulse đã bị giết đích danh; không animation nào cho mốc này). */
+/* Chấm «tuần này» trong lưới tuần: TĨNH tuyệt đối (không animation). */
 
 @media (prefers-reduced-motion: reduce) {
   html {

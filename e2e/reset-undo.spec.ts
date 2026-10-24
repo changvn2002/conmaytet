@@ -26,7 +26,7 @@ async function waitUntilElapsed(startedAt: number, targetMs: number) {
 }
 
 test.describe('CQ-08 (2) — xoá + hoàn tác trong cửa sổ 8 giây + nhánh hết hạn (OBS-A)', () => {
-  test('hoàn tác ở ~7,4s khôi phục localStorage byte-equal; hết hạn >8,5s thanh biến mất và focus về #birth', async ({
+  test('hoàn tác ở ~7,4s khôi phục localStorage byte-equal; hết hạn >8,5s thanh biến mất và focus về #birth-day', async ({
     page,
   }) => {
     await fillPanelForm(page);
@@ -49,7 +49,10 @@ test.describe('CQ-08 (2) — xoá + hoàn tác trong cửa sổ 8 giây + nhánh
     const after = await readStoredInput(page);
     // Byte-equal: chuỗi JSON trong localStorage trước xoá === sau hoàn tác.
     expect(after).toBe(before);
-    await expect(page.locator('#birth')).toHaveValue(PANEL_INPUT.birth);
+    // F1 vòng 2: giá trị ngày sinh khẳng định qua 3 đoạn DD/MM/YYYY.
+    await expect(page.locator('#birth-day')).toHaveValue('15');
+    await expect(page.locator('#birth-month')).toHaveValue('06');
+    await expect(page.locator('#birth-year')).toHaveValue('1995');
     await expect(page.locator('#father-year')).toHaveValue(PANEL_INPUT.fatherYear);
     await expect(page.locator('#mother-year')).toHaveValue(PANEL_INPUT.motherYear);
 
@@ -64,9 +67,10 @@ test.describe('CQ-08 (2) — xoá + hoàn tác trong cửa sổ 8 giây + nhánh
 
     await waitUntilElapsed(startedAt2, 8_600);
     await expect(bar2).toHaveCount(0);
-    // OBS-A (Panel #02 §8.1): focus đang trong thanh khi hết hạn → #birth.
+    // OBS-A (Panel #02 §8.1): focus đang trong thanh khi hết hạn →
+    // trường ngày sinh đầu tiên (#birth-day của nhóm #birth, F1 vòng 2).
     await expect
       .poll(async () => page.evaluate(() => document.activeElement?.id ?? ''))
-      .toBe('birth');
+      .toBe('birth-day');
   });
 });

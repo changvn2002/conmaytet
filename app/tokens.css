@@ -1,78 +1,64 @@
-/* conmaytet «Còn Mấy Cái Tết Nữa?» — REDESIGN-V4 tokens (file SINH — KHÔNG sửa tay).
-   Nguồn sự thật trong repo: design/tokens.conmaytet-v4.json (bản sao nguyên vẹn của
-   tokens.json trong hồ sơ redesign-v4/conmaytet/assets). Kiểm bằng `pnpm tokens:verify`:
-   phần thân token của file này phải khớp phép sinh lại từ JSON đó (diff rỗng).
-   Neo: IBM Carbon Design System. Mọi hex hoặc là giá trị LITERAL đã công bố của IBM (loại A),
-   hoặc bậc trong thang CÔNG BỐ của Carbon (loại B), hoặc neutral trong thang Gray CÔNG BỐ (loại N).
-   KHÔNG token loại C. KHÔNG hex mồ côi. Nguồn: IBM Design Language — https://www.ibm.com/design/language/color/
-   (xếp hạng nguồn cấp S theo lens-12: khớp byte toàn thang). Mọi giá trị V3 đã chết theo NEO-0 được liệt kê
-   ở tokens.json → deadValuesV3 (sổ đăng ký để quét sink) — cấm quay lại làm giá trị ở mọi sink; file này cố ý không in lại chúng. */
+/* conmaytet «Còn Mấy Cái Tết Nữa?» — tokens hệ lens-04 (file SINH — KHÔNG sửa tay).
+   Nguồn sự thật: design/tokens.conmaytet-v4.json (hệ «SẢN PHẨM ẤM ÁP / FINTECH-GRADE»
+   của chương trình conmaytet-redesign, IMPLEMENTATION-SPEC final). Kiểm bằng
+   `pnpm tokens:verify`: bản đồ khai báo :root của file này phải khớp phép sinh từ JSON.
+   Canvas #F6F7F6 · thẻ trắng · seed #198038 + gold #F1C21B giữ nguyên văn (loại A).
+   Hệ V4 (canvas trắng + reveal Green 100 art-class + mark Vòng Năm) ĐÃ CHẾT toàn bộ:
+   không còn scope .scene-reveal, không còn bề mặt bão hoà nào trong app. */
 :root {
-  /* ── Brand — Carbon Green (thang công bố 10–100) ───────────────────────── */
-  --brand-10: #DEFBE6;  /* B · Green 10  · tint/avatar-bg (cặp chữ xem DiceBear, TYPE-AND-ICON §4) */
-  --brand-20: #A7F0BA;  /* B · Green 20  · đồ hoạ phụ trên sáng — cấm vai chữ (chưa đo = không gánh nghĩa) */
-  --brand-30: #6FDC8C;  /* B · Green 30  · đồ hoạ phụ — chỉ trên nền sâu hoặc trang trí có kênh phụ */
-  --brand-40: #42BE65;  /* B · Green 40  · đồ hoạ trên nền sâu */
-  --brand-50: #24A148;  /* B · Green 50  · đồ hoạ lớn/mark phụ — cấm chữ thường trên trắng (dưới 4,50 theo thang Carbon) */
-  --brand-60: #198038;  /* A · Green 60 — SEED LITERAL. CTA solid + chữ trắng (5,02) · chữ/mark/focus trên trắng (5,02) · trên Gray 10 mỏng (4,56) → vai chữ-trên-subtle dời Green 70 */
-  --brand-70: #0E6027;  /* B · Green 70  · chữ brand trên subtle (7,72 trắng / 7,02 Gray 10) · focus chính thức */
-  --brand-80: #044317;  /* B · Green 80  · bề mặt sâu phụ, chữ đậm trên sáng */
-  --brand-90: #022D0D;  /* B · Green 90  · bề mặt reveal phụ (art-class) · chữ initials trên Green 10 (13,77) */
-  --brand-100: #071908; /* B · Green 100 · bề mặt reveal CHÍNH (art-class) · tile app-icon */
+  --canvas: #F6F7F6;
+  --card: #FFFFFF;
+  --soft: #F7F8F7;
+  --ink: #16191D;
+  --ink-2: #3F4750;
+  --muted: #5A636E;
+  --faint: #9AA1AB;
+  --line: #E6E8E6;
+  --line-soft: #EEF0EE;
+  --line-control: #5A636E;
+  --seed: #198038;
+  --seed-dark: #0E6027;
+  --seed-ink: #146C2E;
+  --seed-deep: #044317;
+  --seed-tint: #EEF7F0;
+  --seed-soft: #E9F5EC;
+  --brand-10: #DEFBE6;
+  --gold: #F1C21B;
+  --gold-tint: #FFF7D6;
+  --gold-ink: #7A5B00;
+  --gold-soft: #FBF6E3;
+  --lived: #79828D;
+  --lived-strong: #59616B;
+  --future: #DEE1DE;
+  --future-ring: #B9C0C8;
+  --track: #E9EBEA;
+  --dad-bg: #DCEFE2;
+  --dad-ink: #146C2E;
+  --mom-bg: #FDEEC9;
+  --mom-ink: #7A5B00;
+  --petal: #F6B8C6;
+  --petal-light: #FBD9E0;
+  --branch: #8A5A36;
+  --leaf: #2E9E4F;
+  --neutral-10: #F4F4F4;
+  --neutral-20: #E0E0E0;
+  --neutral-60: #6F6F6F;
+  --neutral-100: #161616;
+  --success-solid: #198038;
+  --success-ink: #0E6027;
+  --success-bg: #DEFBE6;
+  --error-solid: #DA1E28;
+  --error-ink: #16191D;
+  --warning-bg: #F1C21B;
+  --warning-ink: #16191D;
+  --info-solid: #0F62FE;
+  --info-ink: #16191D;
 
-  /* ── Gold — Carbon Yellow 30 LITERAL ───────────────────────────────────── */
-  --gold-30: #F1C21B;   /* A · Yellow 30 — CẤM trên sáng ở vai chữ/icon/focus/thiết yếu (1,68 trên trắng).
-                            CHỈ: (i) trên nền sâu — 9,01 trên Green 90 · 10,83 trên Green 100 · 10,75 trên Gray 100;
-                            (ii) trang trí có kênh hình phụ (vạch tháng 1 dài hơn trong hero — V-11.3);
-                            (iii) nền warning với chữ Gray 100 (10,75). Liều ở reveal ≤1% (F-9), = 0 ở cảnh khác ngoài mark-on-deep + hero Cảnh 1. */
-
-  /* ── Neutral — Carbon Gray (thang công bố 10–100) — CANVAS CHÍNH ────────── */
-  --canvas: #FFFFFF;        /* N · cực trắng khai báo của Carbon — nền thường trú CHÍNH (neutral-first) */
-  --neutral-10: #F4F4F4;    /* N · Gray 10  · bề mặt subtle / nền avatar phụ */
-  --neutral-20: #E0E0E0;    /* N · Gray 20  · nền avatar phụ · viền mạnh — cấm chữ Green 60 trên nền này (3,80) */
-  --neutral-30: #C6C6C6;    /* N · Gray 30  · hairline trang trí (1,71 — không gánh nghĩa, không làm biên control) */
-  --neutral-40: #A8A8A8;    /* N · Gray 40  · đồ hoạ phụ (2,38 — trang trí thuần) */
-  --neutral-50: #8D8D8D;    /* N · Gray 50  · disabled (WCAG miễn trừ) · biên phụ 3,32 non-text — cấm vai chữ */
-  --neutral-60: #6F6F6F;    /* N · Gray 60  · placeholder trên trắng (5,02) / trên Gray 10 mỏng (4,57 → trên subtle dùng Gray 70) */
-  --neutral-70: #525252;    /* N · Gray 70  · chữ phụ (7,81 trắng / 7,10 Gray 10) · biên control (7,81 non-text) */
-  --neutral-80: #393939;    /* N · Gray 80  · bề mặt sâu trung tính phụ */
-  --neutral-90: #262626;    /* N · Gray 90  · bề mặt sâu trung tính */
-  --neutral-100: #161616;   /* N · Gray 100 · MỰC chính (18,10 trên trắng) · dự phòng đen trung tính cho reveal nếu art-class bị bác */
-  --line: #C6C6C6;          /* = Gray 30 — hairline trang trí */
-  --line-control: #525252;  /* = Gray 70 — biên control mang nghĩa (non-text ✓ thừa) */
-
-  /* ── Semantic — bậc CÔNG BỐ của Carbon, dùng theo vai gốc của hệ ────────── */
-  --success-solid: #198038; /* B · Green 60 ở vai success của Carbon (5,02 + chữ trắng) */
-  --success-ink: #0E6027;   /* B · Green 70 (7,00 trên Green 10) */
-  --success-bg: #DEFBE6;    /* B · Green 10 */
-  --error-solid: #DA1E28;   /* B · Red 60 (5,00 trên trắng · 4,55 trên Gray 10 — trên subtle ưu tiên chữ Gray 100 + solid làm dấu) */
-  --error-ink: #161616;     /* N · Gray 100 đi cùng error-solid — lỗi không bao giờ chỉ có màu (kênh chữ + hình luôn kèm) */
-  --warning-bg: #F1C21B;    /* A · Yellow 30 làm NỀN cảnh báo theo đúng ngữ pháp Carbon (chữ Gray 100 trên đó = 10,75) */
-  --warning-ink: #161616;   /* N · Gray 100 — KHÔNG tồn tại "chữ gold trên sáng" trong hệ này */
-  --info-solid: #0F62FE;    /* B · Blue 60 (5,00) — chỉ vai info thật, liều điểm; không phải accent thứ hai */
-  --info-ink: #161616;      /* N · Gray 100 */
-
-  /* ── Type + motion (giữ nguyên khoá V3 — neutral-first không đụng tầng này) ── */
-  --font-display: "Baloo 2", "Be Vietnam Pro", sans-serif; /* trần 800, có tnum — chỉ H1 + số hero + initials avatar */
+  --font-display: "Baloo 2", "Be Vietnam Pro", sans-serif;
   --font-body: "Be Vietnam Pro", sans-serif;
-  --hero-size: clamp(120px, 38vw, 168px);
+  --hero-size: clamp(84px, 24vw, 104px);
   --ease-ceremony: cubic-bezier(0.7, 0, 0.15, 1);
   --ease-ui: cubic-bezier(0.3, 0, 0, 1);
   --dur-press: 120ms; --dur-reveal-number: 620ms; --dur-input-fix: 160ms; --dur-accompany: 300ms;
-
-  /* Manifest (khai để mọi sink dùng chung một chỗ): theme = seed thường trú, background = canvas */
-  /* theme_color: #198038 · background_color: #FFFFFF */
-}
-
-/* Scope cảnh công bố — bề mặt ART-CLASS (không tính neutral), đúng 1 scope trong toàn app.
-   Điều kiện kỹ thuật giữ nguyên từ V3 (LK-45): (i) token on-deep CHỈ sống trong scope này;
-   (ii) body/nền toàn cục không bao giờ nhận hex reveal; (iii) theme_color = seed, không phải reveal. */
-.scene-reveal {
-  --reveal-bg: #071908;       /* B · Green 100 CÔNG BỐ (thay hex tự chế của V3 — đã chết theo NEO-0) */
-  --reveal-bg-alt: #022D0D;   /* B · Green 90 — bề mặt deep phụ (OG/vùng phụ) */
-  --on-deep: #FFFFFF;         /* 18,24 trên Green 100 · 15,18 trên Green 90 */
-  --on-deep-muted: #DEFBE6;   /* B · Green 10 — 16,54 trên Green 100 · 13,77 trên Green 90 */
-  --gold-on-deep: #F1C21B;    /* A · Yellow 30 — 10,83 trên Green 100 · 9,01 trên Green 90 */
-  background: var(--reveal-bg);
-  color: var(--on-deep);
+  /* Manifest: theme_color #198038 · background_color #F6F7F6 (trong JSON). */
 }

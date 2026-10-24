@@ -12,6 +12,23 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
+## [1.3.0] — 2026-10-25 — Thiết kế lại toàn diện «Fintech ấm áp» (lệnh user 2026-10-24: bản cũ bị bác «quá xấu»)
+
+### Changed
+
+- **Diện mạo mới toàn bộ** theo hướng lens-04 «Fintech ấm áp» (bỏ phiếu thiết kế mù: thắng bản live 6–0 ở mọi cảnh): canvas trung tính sáng, thẻ trắng, Carbon Green 60 `#198038` giữ byte-identical nhưng chỉ còn vai accent, cành đào vẽ tay làm motif nhận diện duy nhất. Bãi bỏ hẳn ba dấu hiệu bị user + panel bác: mảng xanh đặc 100vh (đo đúng 844px), vòng tròn đọc thành mặt đồng hồ, hai thẻ kết quả «một khuôn đúc» thị giác.
+- **Ô nhập ngày sinh** thay input date native bằng trường 3 đoạn ngày/tháng/năm tự vẽ (chấm bởi panel: bản native bị chê ở nhiều vòng).
+- **Lưới tuần** thêm dải phóng to «Bạn đang ở tuần này» (điểm hôm nay khoanh vòng + chấm Tết vàng) và khối thập kỷ; sửa gốc rễ lỗi «hàng chấm lẻ» (chấm 7px lệch tâm trong hàng 17px — đếm DOM sau sửa đúng 52 ô/hàng).
+- **Cặp minh hoạ kết quả** đồng bộ một ngôn ngữ khối đặc: nhà (bố) vẽ lại cùng ngữ pháp với bánh chưng (mẹ) — khối xanh đặc + chi tiết kem; phân biệt vai giữ bằng hình + tông thẻ + câu trích riêng. Thẻ bố/mẹ giữ cấu trúc song song có chủ ý (parent phân xử R-B: so sánh hai người thì song song là trung thực).
+- **Thẻ chia sẻ 1080×1350**: cành đào vẽ lại theo bố cục CHÉO như cành ở màn hình chính, bông nằm trên thân/đầu cành con — xoá hẳn bố cục cung võng đối xứng + bông treo điểm trũng bị 5/5 ghế panel và parent đọc thành «vòng cổ/mặt dây chuyền» (vòng phụ R-A: hết hẳn 5/5, đạt chuyên nghiệp + ấm áp 5/5). Thêm dòng tuyên bố gộp một dòng «Ước tính thống kê — không phải dự đoán dành cho bất kỳ cá nhân nào.» và chú thích vạch «Mỗi vạch là một cái Tết còn lại» (parent duyệt).
+- **Chỉ số «Cái Tết»** ở lưới tuần trình bày dạng vạch đếm được (nhóm 5) thay dải kiểu mã vạch.
+
+### Fixed / kept
+
+- Mọi cổng phụ giữ nguyên hoặc tốt hơn: vitest 212/212 (tăng từ 193, không xoá/làm yếu test nào), e2e 8/8, tokens:verify 8/8, tràn 0 ở 390 + 1440. Chuỗi điều hướng v1.2.3 (Tiếp bố → sân khấu mẹ → lưới) và các sửa v1.2.1/v1.2.2 nguyên vẹn trong bộ test.
+- Service worker cache `v5-2026-10-24`.
+- Hồ sơ đầy đủ: docs/reviews/v1.3.0-review-record.md + hồ sơ đợt ở thư mục làm việc redesign (panel 8 vòng, biên bản thô từng ghế).
+
 ## [1.2.3] — 2026-10-24 — Sửa nóng S-NEW-2: nút «Tiếp» của sân khấu bố bỏ qua sân khấu mẹ
 
 ### Fixed
@@ -35,24 +52,18 @@ phiên bản theo [SemVer](https://semver.org/).
   người dùng bác diện mạo V4) — không vá trên diện mạo cũ; chờ
   chương trình redesign, chấm lại trên diện mạo mới.
 
-## [1.2.2] — 2026-10-24 — Focus trap cho dialog + kiểm chéo năm sinh
+## [1.2.2] — 2026-10-24 — Focus trap trong dialog (S-NEW-1) + kiểm chéo năm sinh bố/mẹ
 
 ### Fixed
 
-- **Dialog xác nhận xoá đã nhốt được focus** (S-NEW-1 của vòng
-  chấm lại v1.2.1, tái lập 24/24 Tab thoát ra nền + Enter kích
-  hoạt được `<details>` nền khi dialog mở): thêm trap
-  Tab/Shift+Tab vòng trong dialog; focus lỡ ở nền thì Tab kéo
-  về trong. Sau sửa: Tab ×24 → 0 thoát, nền không kích hoạt
-  được bằng bàn phím; Esc/backdrop/hoàn tác giữ nguyên byte-
-  equal (verifier độc lập xác nhận toàn bộ trước phát hành).
-- **Kiểm chéo năm sinh bố/mẹ**: năm sinh bố/mẹ bằng hoặc sau
-  năm sinh của người dùng là lỗi cứng tại chỗ («Năm sinh của
-  bố/mẹ phải nhỏ hơn năm sinh của bạn…»), không còn sinh kết
-  quả vô nghĩa kiểu bố sinh 2025 → «1 tuổi · 70 cái Tết». Ghi
-  chú: 3 test W3 cũ khoá hành vi cảnh-báo-mềm (W3-F6) đã được
-  viết lại theo yêu cầu mới này — thay đổi hành vi có chủ đích,
-  ghi trong review record v1.2.2.
+- Dialog xác nhận: focus trap đầy đủ (Tab/Shift+Tab không thoát,
+  `<details>` phía sau không tới được bằng bàn phím khi dialog
+  mở) — S-NEW-1 từ panel chấm lại v1.2.1.
+- Kiểm chéo năm sinh tại chỗ: năm sinh của bố/mẹ không nhỏ hơn
+  năm sinh của bạn thì chặn ngay tại form kèm `aria-invalid` +
+  cảnh báo đúng văn bản, không sinh thẻ kết quả sai.
+- (Mục này được parent bổ sung hồi tố vào CHANGELOG khi phát
+  hành v1.2.3 — commit gốc 22dc015 chưa ghi.)
 
 ## [1.2.1] — 2026-10-24 — Sửa 2 SERIOUS thật của Panel v1.2.0 + đóng 2 cáo buộc không tái lập
 

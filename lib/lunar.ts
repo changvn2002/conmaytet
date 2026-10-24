@@ -242,3 +242,29 @@ export function countTetDays(fromExclusive: Date, toInclusive: Date): number {
 export function startOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Chỉ số tuần (0-based, đếm từ tuần sinh) của mọi tuần CÓ chứa một
+ * ngày mùng 1 Tết trong lưới đời người — nguồn cho «sợi Tết» của
+ * lưới tuần (J4 vòng 5). Ngày Tết lấy từ chính tetDate() của file
+ * này (thuật toán âm lịch Việt Nam, không hardcode danh sách).
+ * Tuần i bao phủ [sinh + 7i ngày, sinh + 7(i+1) ngày); Tết rơi vào
+ * tuần nào thì tuần đó mang chỉ số floor(số ngày từ sinh / 7). Tết
+ * trước ngày sinh và tuần ngoài totalWeeks bị loại.
+ */
+export function tetWeekIndices(birth: Date, totalWeeks: number): Set<number> {
+  const out = new Set<number>();
+  if (!Number.isFinite(totalWeeks) || totalWeeks <= 0) return out;
+  const birthMs = startOfDay(birth).getTime();
+  const firstYear = birth.getFullYear();
+  const lastYear = firstYear + Math.ceil(totalWeeks / 52) + 2;
+  for (let y = firstYear; y <= lastYear; y++) {
+    const days = Math.floor((startOfDay(tetDate(y)).getTime() - birthMs) / MS_PER_DAY);
+    if (days < 0) continue;
+    const week = Math.floor(days / 7);
+    if (week < totalWeeks) out.add(week);
+  }
+  return out;
+}
