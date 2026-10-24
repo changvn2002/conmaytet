@@ -156,8 +156,8 @@ function SceneNav({
   onDeep?: boolean;
 }) {
   const btn = onDeep
-    ? 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-on-deep transition-colors hover:bg-reveal-alt focus-visible:outline-on-deep'
-    : 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint';
+    ? 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-on-deep transition-colors hover:bg-reveal-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-deep'
+    : 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong';
   return (
     <div className="flex items-center justify-center gap-2">
       {onNext && (
@@ -236,6 +236,22 @@ export function ConMayTetTool() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+  }, [deletePhase]);
+
+  // V121 (SERIOUS-2 của panel v1.2.0): trong lúc modal xác nhận xoá
+  // đang mở, KHOÁ CUỘN NỀN ở cả html lẫn body (chuột + chạm) — nền
+  // không trôi, phiên xác nhận không bị thao tác cuộn/chạm ngoài ý
+  // làm mất. Trả lại đúng giá trị overflow cũ khi modal đóng.
+  useEffect(() => {
+    if (deletePhase !== 'confirming') return;
+    const bodyPrev = document.body.style.overflow;
+    const htmlPrev = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = bodyPrev;
+      document.documentElement.style.overflow = htmlPrev;
+    };
   }, [deletePhase]);
 
   // Cửa sổ hoàn tác 8 giây sau khi xoá: hết giờ thì bỏ snapshot, về idle
@@ -459,7 +475,7 @@ export function ConMayTetTool() {
                 ? 'notices-self'
                 : undefined
             }
-            className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
+            className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong focus-within:outline-2 focus-within:outline-brand-strong"
           />
           <p className="mt-1.5 max-w-[34rem] text-sm text-pretty text-muted">
             Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
@@ -492,7 +508,7 @@ export function ConMayTetTool() {
                     setSexTouched(true);
                     updateForm({ ...form, sex: value });
                   }}
-                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
+                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong ${
                     selected
                       ? 'border-brand-strong bg-brand-tint font-semibold text-ink'
                       : 'border-line-control bg-canvas font-medium text-ink hover:border-brand-strong'
@@ -532,7 +548,7 @@ export function ConMayTetTool() {
                     ? 'notices-father'
                     : undefined
                 }
-                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
+                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
               />
               <FieldNotices
                 id="notices-father"
@@ -562,7 +578,7 @@ export function ConMayTetTool() {
                     ? 'notices-mother'
                     : undefined
                 }
-                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
+                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus:outline-2 focus:outline-brand-strong focus-visible:outline-2 focus-visible:outline-brand-strong"
               />
               <FieldNotices
                 id="notices-mother"
@@ -582,7 +598,7 @@ export function ConMayTetTool() {
             role="switch"
             aria-checked={form.livesWith}
             onClick={() => updateForm({ ...form, livesWith: !form.livesWith })}
-            className="flex min-h-11 w-full items-center gap-3 text-left"
+            className="flex min-h-11 w-full items-center gap-3 rounded-xl text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             <span
               aria-hidden
@@ -629,7 +645,7 @@ export function ConMayTetTool() {
                   ? 'notices-visits'
                   : undefined
               }
-              className="w-full"
+              className="w-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
             />
             {/* Các mốc nằm đúng tỉ lệ trên thang 0–24 (0%, 25%, 50%, 75%, 100%). */}
             <div className="flex justify-between text-sm text-muted">
@@ -658,7 +674,7 @@ export function ConMayTetTool() {
           <button
             type="button"
             onClick={hasParentResult ? goScene2 : undefined}
-            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
+            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             Xem còn mấy cái Tết <IconArrowDown size={16} aria-hidden />
           </button>
@@ -684,6 +700,8 @@ export function ConMayTetTool() {
                 est={result.father}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
+                onNext={afterScene2}
+                onEdit={goScene1}
               />
             )}
             {result.mother && (
@@ -693,12 +711,15 @@ export function ConMayTetTool() {
                 est={result.mother}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
+                onNext={afterScene2}
+                onEdit={goScene1}
               />
             )}
           </div>
-          <div className="pb-10">
-            <SceneNav onNext={afterScene2} onEdit={goScene1} onDeep />
-          </div>
+          {/* V121 (panel v1.2.0, T-2 của ghế 4): điều hướng đi tiếp KHÔNG
+              còn đặt sau cả hai sân khấu — mỗi sân khấu tự mang SceneNav
+              của nó ở chân viewport (xem ParentStage), để màn reveal của
+              từng người luôn có hành động đi tiếp trong tầm mắt. */}
         </section>
       )}
 
@@ -710,22 +731,26 @@ export function ConMayTetTool() {
           <div className="mb-4 flex justify-center">
             <MiniRing />
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex shrink-0 items-center gap-2">
-              <ProfileAvatar
-                role="self"
-                birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
-                name="Bạn"
-                size={32}
-              />
-              {/* Tên chữ BVP cạnh avatar ở MỌI call-site (C-11.10) — đồng
-                  nhất với nhãn «Với BỐ/MẸ» ở sân khấu Cảnh 2. */}
-              <span className="text-sm font-semibold text-ink">Bạn</span>
-            </div>
-            <h2 className="font-display text-[25px] leading-tight font-extrabold text-ink">
-              Cuộc đời bạn, kể bằng tuần
-            </h2>
+          {/* V121 (panel v1.2.0, ghế 5 vòng 2): avatar + tên là một hàng
+              RIÊNG phía trên tiêu đề — trước đây H2 nằm cùng hàng flex với
+              cụm avatar nên bị đẩy lệch +79px khỏi lề trái của lưới ở cả
+              3 viewport (x=95/95/463 so với lề lưới 16/16/384). H2 nay là
+              khối riêng, thẳng lề trái của lưới (cùng lề container), và
+              text-balance chống từ mồ côi ở dòng cuối khi xuống dòng. */}
+          <div className="flex items-center gap-2">
+            <ProfileAvatar
+              role="self"
+              birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
+              name="Bạn"
+              size={32}
+            />
+            {/* Tên chữ BVP cạnh avatar ở MỌI call-site (C-11.10) — đồng
+                nhất với nhãn «Với BỐ/MẸ» ở sân khấu Cảnh 2. */}
+            <span className="text-sm font-semibold text-ink">Bạn</span>
           </div>
+          <h2 className="mt-3 font-display text-[25px] leading-tight font-extrabold text-balance text-ink">
+            Cuộc đời bạn, kể bằng tuần
+          </h2>
           <p className="mt-1 max-w-[34rem] text-base text-muted">Mỗi chấm là một tuần đời bạn.</p>
 
           <LifeStory
@@ -787,7 +812,7 @@ export function ConMayTetTool() {
               type="button"
               ref={undoButtonRef}
               onClick={undoReset}
-              className="flex min-h-11 shrink-0 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint"
+              className="flex min-h-11 shrink-0 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
             >
               Hoàn tác
             </button>
@@ -808,12 +833,17 @@ function ParentStage({
   est,
   livesWith,
   onOpenCalc,
+  onNext,
+  onEdit,
 }: {
   kind: 'father' | 'mother';
   birthYear: number | null;
   est: ParentEstimate;
   livesWith: boolean;
   onOpenCalc: () => void;
+  /** Hành động đi tiếp ĐÃ CÓ của Cảnh 2 (qua lưới tuần / qua gửi đi). */
+  onNext: () => void;
+  onEdit: () => void;
 }) {
   const stageRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -844,7 +874,7 @@ function ParentStage({
     <section
       ref={stageRef}
       aria-label={`Kết quả với ${isFather ? 'bố' : 'mẹ'}`}
-      className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
+      className="relative flex min-h-dvh flex-col items-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
     >
       {/* Hai cung phần tư vòng năm ở 2 góc đối của tờ (VISUAL-LAYER §2
           Cảnh 2): nét 3, stroke brand-30, r=128, tĩnh, pointer-events
@@ -866,64 +896,80 @@ function ParentStage({
         <circle cx="128" cy="128" r="128" stroke="currentColor" strokeWidth="3" />
       </svg>
 
-      <div className="flex items-center justify-center gap-2.5">
-        <ProfileAvatar role={kind} birthYear={birthYear} name={isFather ? 'Bố' : 'Mẹ'} size={32} />
-        <p className="text-[13px] font-semibold tracking-[0.08em] text-on-deep-muted uppercase">
-          Với {person} · {est.currentAge} tuổi
-        </p>
-      </div>
+      {/* V121 (T-2 ghế 4): khối nội dung chiếm phần flex-1 và canh giữa
+          trong phần đó; SceneNav bám chân sân khấu — màn reveal trước
+          đây chỉ có ~55,6% chiều cao là nội dung (đo @390×844), phần
+          còn lại là khoảng trống vô chủ và hành động đi tiếp nằm ngoài
+          viewport của sân khấu. */}
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex items-center justify-center gap-2.5">
+          <ProfileAvatar
+            role={kind}
+            birthYear={birthYear}
+            name={isFather ? 'Bố' : 'Mẹ'}
+            size={32}
+          />
+          <p className="text-[13px] font-semibold tracking-[0.08em] text-on-deep-muted uppercase">
+            Với {person} · {est.currentAge} tuổi
+          </p>
+        </div>
 
-      {/* Khung ngoài giữ reveal sân khấu (chạy 1 lần); con số bên trong
+        {/* Khung ngoài giữ reveal sân khấu (chạy 1 lần); con số bên trong
           dùng key theo giá trị để mỗi lần sửa input chỉ cross-fade. */}
-      <div className={revealed ? 'animate-stage-in' : 'opacity-0'}>
-        <p
-          key={est.tetsLeft}
-          className="animate-num-in font-display font-extrabold text-on-deep"
-          style={{ fontSize: 'clamp(120px, 38vw, 168px)', lineHeight: 0.95 }}
-        >
-          {nf.format(est.tetsLeft)}
-        </p>
-      </div>
-      <p className="mt-1 font-sans text-[24px] font-bold text-on-deep">cái Tết nữa</p>
-      <div aria-hidden className="mt-3 h-[3px] w-12 rounded bg-gold" />
+        <div className={revealed ? 'animate-stage-in' : 'opacity-0'}>
+          <p
+            key={est.tetsLeft}
+            className="animate-num-in font-display font-extrabold text-on-deep"
+            style={{ fontSize: 'clamp(120px, 38vw, 168px)', lineHeight: 0.95 }}
+          >
+            {nf.format(est.tetsLeft)}
+          </p>
+        </div>
+        <p className="mt-1 font-sans text-[24px] font-bold text-on-deep">cái Tết nữa</p>
+        <div aria-hidden className="mt-3 h-[3px] w-12 rounded bg-gold" />
 
-      {/* R1-F4 (Panel #02): trên desktop, dự trữ sẵn chiều cao 2 dòng
+        {/* R1-F4 (Panel #02): trên desktop, dự trữ sẵn chiều cao 2 dòng
           cho câu hy vọng (lg:min-h-12 = 48px) để vị trí con số không
           phụ thuộc số dòng của câu — chân số hai sân khấu thẳng hàng
           (trước đây lệch ±12px: bố 1 dòng 24px vs mẹ 2 dòng 48px,
           canh giữa chia đôi chênh lệch). Mobile giữ nguyên. */}
-      <p
-        className={`mt-5 max-w-[34rem] text-base font-semibold text-on-deep lg:min-h-12 ${
-          revealed ? 'animate-hope-in' : 'opacity-0'
-        }`}
-      >
-        {hope}
-      </p>
-
-      <p className="mt-3 max-w-[34rem] text-base text-on-deep-muted">
-        {livesWith
-          ? `và khoảng ${nf.format(est.meetingsLeft)} ngày còn bên nhau theo nhịp sống cùng hiện tại.`
-          : `và khoảng ${nf.format(est.meetingsLeft)} lần gặp nữa theo nhịp về thăm hiện tại.`}
-      </p>
-
-      <p className="mt-5 max-w-[34rem] text-sm leading-relaxed text-on-deep-muted">
-        Đây là <strong className="text-on-deep">ước tính thống kê</strong> theo tuổi thọ trung bình.
-        Nó{' '}
-        <strong className="text-on-deep">
-          không phải dự đoán cho riêng {isFather ? 'bố' : 'mẹ'}
-        </strong>
-        .
-      </p>
-      <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1 text-sm text-on-deep-muted">
-        Nguồn: bảng sống WHO Việt Nam 2019.
-        <button
-          type="button"
-          onClick={onOpenCalc}
-          className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-on-deep focus-visible:outline-2 focus-visible:outline-on-deep"
+        <p
+          className={`mt-5 max-w-[34rem] text-base font-semibold text-on-deep lg:min-h-12 ${
+            revealed ? 'animate-hope-in' : 'opacity-0'
+          }`}
         >
-          Cách tính <IconChevronRight size={14} aria-hidden />
-        </button>
-      </p>
+          {hope}
+        </p>
+
+        <p className="mt-3 max-w-[34rem] text-base text-on-deep-muted">
+          {livesWith
+            ? `và khoảng ${nf.format(est.meetingsLeft)} ngày còn bên nhau theo nhịp sống cùng hiện tại.`
+            : `và khoảng ${nf.format(est.meetingsLeft)} lần gặp nữa theo nhịp về thăm hiện tại.`}
+        </p>
+
+        <p className="mt-5 max-w-[34rem] text-sm leading-relaxed text-on-deep-muted">
+          Đây là <strong className="text-on-deep">ước tính thống kê</strong> theo tuổi thọ trung
+          bình. Nó{' '}
+          <strong className="text-on-deep">
+            không phải dự đoán cho riêng {isFather ? 'bố' : 'mẹ'}
+          </strong>
+          .
+        </p>
+        <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1 text-sm text-on-deep-muted">
+          Nguồn: bảng sống WHO Việt Nam 2019.
+          <button
+            type="button"
+            onClick={onOpenCalc}
+            className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-on-deep focus-visible:outline-2 focus-visible:outline-on-deep"
+          >
+            Cách tính <IconChevronRight size={14} aria-hidden />
+          </button>
+        </p>
+      </div>
+
+      <div className="pt-10">
+        <SceneNav onNext={onNext} onEdit={onEdit} onDeep />
+      </div>
     </section>
   );
 }
@@ -1097,7 +1143,8 @@ const LifeStory = memo(function LifeStory({
 /* ── Cảnh 4 «Gửi đi» ─────────────────────────────────────────────────
  * Xem trước thẻ vẽ lại từ canvas mỗi khi kết quả đổi; hàng hành động
  * chính bám đáy chỉ trong phạm vi cảnh này. «Làm lại từ đầu» đi qua
- * xác nhận tại chỗ + hoàn tác 8 giây, không bao giờ xoá sau 1 chạm. */
+ * modal xác nhận (V121: khoá cuộn nền + backdrop) + hoàn tác 8 giây,
+ * không bao giờ xoá sau 1 chạm. */
 function ShareScene({
   ref,
   result,
@@ -1186,14 +1233,14 @@ function ShareScene({
           <button
             type="button"
             onClick={onCopy}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
+            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             <IconCopy size={16} aria-hidden /> {copied ? 'Đã sao chép!' : 'Copy kết quả'}
           </button>
           <button
             type="button"
             onClick={onDownload}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full border border-brand-strong bg-canvas px-5 py-3 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint"
+            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full border border-brand-strong bg-canvas px-5 py-3 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             <IconDownload size={16} aria-hidden /> Tải ảnh thẻ kết quả
           </button>
@@ -1209,31 +1256,55 @@ function ShareScene({
             type="button"
             ref={resetButtonRef}
             onClick={onRequestReset}
-            className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-canvas px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand"
+            className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-canvas px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             <IconReset size={15} aria-hidden /> Làm lại từ đầu
           </button>
         )}
 
         {deletePhase === 'confirming' && (
-          <div className="rounded-xl border border-line bg-canvas p-4">
-            <p className="text-sm font-semibold text-ink">Xoá hết dữ liệu đã nhập?</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={onConfirmReset}
-                className="flex min-h-11 items-center rounded-xl bg-error-solid px-4 py-2 text-sm font-semibold text-white"
-              >
-                Xoá
-              </button>
-              <button
-                type="button"
-                ref={keepButtonRef}
-                onClick={onCancelReset}
-                className="flex min-h-11 items-center rounded-xl border border-line px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand"
-              >
-                Giữ lại
-              </button>
+          /* V121 (SERIOUS-2 của panel v1.2.0): xác nhận xoá là MODAL
+             phủ toàn màn — trước đây là khối tại chỗ trong luồng trang
+             nên người dùng cuộn/chạm đi nơi khác được trong lúc xác
+             nhận treo (và sửa form được sau lưng khối xác nhận). Nay:
+             nền bị khoá cuộn (effect ở component cha) + bị backdrop
+             che kín — chạm vào backdrop = nhánh AN TOÀN «Giữ lại»
+             (không bao giờ xoá, dữ liệu nguyên vẹn, focus về nút
+             «Làm lại từ đầu»); chạm vào panel không xuyên xuống
+             backdrop. Ngữ nghĩa giữ nguyên: «Xoá» mới xoá thật, sau
+             xoá vẫn là cửa sổ hoàn tác 8 giây ở component cha. */
+          <div
+            className="fixed inset-0 z-40 flex items-end justify-center p-4 sm:items-center"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reset-confirm-title"
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-neutral-100/60"
+              onClick={onCancelReset}
+            />
+            <div className="relative w-full max-w-[34rem] rounded-2xl border border-line bg-canvas p-5 shadow-[var(--shadow-lift)]">
+              <p id="reset-confirm-title" className="text-sm font-semibold text-ink">
+                Xoá hết dữ liệu đã nhập?
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={onConfirmReset}
+                  className="flex min-h-11 items-center rounded-xl bg-error-solid px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+                >
+                  Xoá
+                </button>
+                <button
+                  type="button"
+                  ref={keepButtonRef}
+                  onClick={onCancelReset}
+                  className="flex min-h-11 items-center rounded-xl border border-line px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+                >
+                  Giữ lại
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -1251,7 +1322,7 @@ function ShareScene({
           <button
             type="button"
             onClick={onEdit}
-            className="inline-flex min-h-11 items-center gap-1 px-1 font-semibold text-brand-strong"
+            className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 font-semibold text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
           >
             <IconArrowUp size={14} aria-hidden /> Sửa lại
           </button>

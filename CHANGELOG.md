@@ -12,6 +12,45 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
+## [1.2.1] — 2026-10-24 — Sửa 2 SERIOUS thật của Panel v1.2.0 + đóng 2 cáo buộc không tái lập
+
+### Fixed
+
+- **Modal xác nhận làm lại/xoá thành modal thật**: trước đây là
+  khối xác nhận tại chỗ (không overlay, không khoá cuộn — cuộn đi
+  được, sửa form sau lưng được). Nay: `role="dialog"` +
+  `aria-modal`, khoá cuộn html/body, backdrop bấm vào = huỷ an
+  toàn («Giữ lại»), chạm không xuyên. Ngữ nghĩa Xoá/Giữ lại/Esc
+  và cửa sổ hoàn tác 8s giữ nguyên; probe: wheel 1200px không
+  nhúc nhích nền, xoá→hoàn tác khôi phục storage byte-equal.
+- **Focus-visible cho đoạn lịch của ô ngày sinh** (#birth): điểm
+  dừng duy nhất bị nuốt outline (đúng S5-3 của panel). Thêm
+  `focus-within:outline-2` + gắn tường minh outline cho mọi phần
+  tử tương tác; Tab thật sau sửa: 27/27 điểm dừng có outline 2px.
+- **Tiêu đề lưới tuần** lệch +79px khỏi lề lưới ở mọi viewport →
+  khối riêng thẳng lề (Δ=0), `text-balance`, 1 dòng, hết từ mồ
+  côi «tuần».
+- **Màn reveal**: đưa điều hướng đi tiếp vào chân từng sân khấu
+  bố/mẹ — nội dung + hành động chiếm 88,6% chiều cao sân khấu
+  (trước 55,6%, nút đi tiếp nằm ngoài viewport). Không thêm
+  trang trí, không đổi luồng.
+
+### Not reproduced (panel cáo buộc, 3 nguồn đo độc lập đều sạch)
+
+- **Contrast**: cáo buộc 5 vai <4,5:1 (thấp nhất 2,58:1) KHÔNG
+  tái lập — verifier panel + tiebreak + đợt sửa quét 102–104
+  vai chữ ở 3 viewport: thấp nhất **5,02:1** (CTA trắng trên
+  seed), 0 vai dưới chuẩn. Số lạ sinh ra khi đo giữa animation
+  hoặc cặp sai nền. Không đổi token.
+- **Tràn ngang**: cáo buộc scrollWidth 403 (tràn 13px @390 /
+  83px @320) KHÔNG tái lập — lấy mẫu ~50–60ms xuyên animation:
+  0px ở 320/390/1440. Cụm Sửa/Nguồn trên bề mặt thật vốn là
+  `<button>` 14px, hàng nguồn flex-wrap. Không đổi layout.
+- Favicon 16px: đã là micro mark thật từ v1.2.0 (giống hệt
+  render micro 0/256px); chấm gold trên app-icon là chủ đích đã
+  khai ở BRAND.md + tokens.json (cap-mốc gold-30) — parent chuẩn
+  y giữ nguyên (xem review record v1.2.1).
+
 ## [1.2.0] — 2026-10-24 — REDESIGN-V4 (Carbon Green 60, Neutral-First)
 
 ### Changed

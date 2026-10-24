@@ -118,7 +118,7 @@ export function DisclosureSections() {
             Câu hỏi hay góp ý, hãy mở một issue tại{' '}
             <a
               href="https://github.com/changvn2002/conmaytet/issues"
-              className="font-semibold text-brand-strong underline"
+              className="rounded font-semibold text-brand-strong underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
             >
               GitHub Issues của dự án
             </a>
