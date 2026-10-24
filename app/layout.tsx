@@ -3,7 +3,6 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
 import RegisterSW from '@/components/conmaytet/register-sw';
 import './globals.css';
 
-import '@fontsource/baloo-2/700.css';
 import '@fontsource/baloo-2/800.css';
 import '@fontsource/be-vietnam-pro/400.css';
 import '@fontsource/be-vietnam-pro/500.css';
@@ -11,8 +10,8 @@ import '@fontsource/be-vietnam-pro/600.css';
 import '@fontsource/be-vietnam-pro/700.css';
 
 export const viewport: Viewport = {
-  // Màu brand — thanh trạng thái/trình duyệt trên mobile nhuộm theo app.
-  themeColor: '#1F4D3A',
+  // Seed Carbon Green 60 (tokens.json) — thanh trạng thái/trình duyệt trên mobile.
+  themeColor: '#198038',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -60,7 +59,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/og.jpg',
+        url: '/og.png',
         width: 1200,
         height: 630,
         alt: SITE_TITLE,
@@ -71,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ['/og.jpg'],
+    images: ['/og.png'],
   },
   appleWebApp: {
     capable: true,
@@ -80,7 +79,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/products/brand/conmaytet-logo.svg', type: 'image/svg+xml' },
+      { url: '/products/brand/conmaytet-mark.svg', type: 'image/svg+xml' },
       { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],

@@ -1,12 +1,21 @@
 'use client';
 
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, ChevronRight, Copy, Download, Eraser, MapPin } from 'lucide-react';
 import { calculate, validateInput } from '@/lib/calc';
 import { buildShareText, drawShareCard } from '@/lib/share-card';
 import { clearInput, loadInput, saveInput } from '@/lib/storage';
 import type { CalcResult, InputData, LifeGrid, ParentEstimate, Sex } from '@/lib/types';
 import { OfflineBar } from './offline-bar';
+import { ProfileAvatar } from './avatar';
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconChevronRight,
+  IconCopy,
+  IconDownload,
+  IconReset,
+  IconWeekRing,
+} from './icons';
 
 const nf = new Intl.NumberFormat('vi-VN');
 
@@ -118,7 +127,7 @@ function FieldNotices({
         <p
           key={e}
           role="alert"
-          className="mt-3 rounded-xl bg-error-bg px-4 py-3 text-sm font-medium text-error-text"
+          className="mt-3 rounded-xl border-l-4 border-error-solid bg-subtle px-4 py-3 text-sm font-medium text-error-ink"
         >
           {e}
         </p>
@@ -126,7 +135,7 @@ function FieldNotices({
       {warnings.map((w) => (
         <p
           key={w}
-          className="mt-3 rounded-xl bg-warn-bg px-4 py-3 text-sm font-medium text-warn-text"
+          className="mt-3 rounded-xl bg-warning-bg px-4 py-3 text-sm font-medium text-warning-ink"
         >
           {w}
         </p>
@@ -136,24 +145,28 @@ function FieldNotices({
 }
 
 /** Điều hướng giữa các cảnh: lối tắt có chủ đích, cuộn tự do vẫn chạy. */
-function SceneNav({ onNext, onEdit }: { onNext: (() => void) | null; onEdit: () => void }) {
+function SceneNav({
+  onNext,
+  onEdit,
+  onDeep = false,
+}: {
+  onNext: (() => void) | null;
+  onEdit: () => void;
+  /** Biến thể trên bề mặt reveal (Cảnh 2): chữ on-deep, hover reveal-alt. */
+  onDeep?: boolean;
+}) {
+  const btn = onDeep
+    ? 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-on-deep transition-colors hover:bg-reveal-alt focus-visible:outline-on-deep'
+    : 'flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint';
   return (
     <div className="flex items-center justify-center gap-2">
       {onNext && (
-        <button
-          type="button"
-          onClick={onNext}
-          className="flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
-        >
-          Tiếp <ArrowDown size={16} aria-hidden />
+        <button type="button" onClick={onNext} className={btn}>
+          Tiếp <IconArrowDown size={16} aria-hidden />
         </button>
       )}
-      <button
-        type="button"
-        onClick={onEdit}
-        className="flex min-h-11 items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
-      >
-        <ArrowUp size={16} aria-hidden /> Sửa lại
+      <button type="button" onClick={onEdit} className={btn}>
+        <IconArrowUp size={16} aria-hidden /> Sửa lại
       </button>
     </div>
   );
@@ -419,12 +432,18 @@ export function ConMayTetTool() {
         aria-label="Lời mời"
         className="flex min-h-[calc(100dvh-60px)] flex-col justify-center py-8"
       >
-        <h1 className="font-display text-[32px] leading-[1.15] font-bold text-balance text-brand-deep sm:text-[44px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/products/brand/conmaytet-hero-ring.svg"
+          alt="Vòng năm mười hai tháng và cành hoa xuân"
+          className="mb-6 h-auto w-[min(342px,88%)] self-center"
+        />
+        <h1 className="font-display text-[25px] leading-[1.15] font-extrabold text-balance text-ink">
           Đếm thử: còn mấy cái Tết bên bố mẹ?
         </h1>
 
         <div className="mt-8">
-          <label htmlFor="birth" className="mb-1.5 block text-sm font-semibold text-ink">
+          <label htmlFor="birth" className="mb-1.5 block text-[15px] font-semibold text-ink">
             Ngày sinh của bạn
           </label>
           <input
@@ -440,7 +459,7 @@ export function ConMayTetTool() {
                 ? 'notices-self'
                 : undefined
             }
-            className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
+            className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
           />
           <p className="mt-1.5 max-w-[34rem] text-sm text-pretty text-muted">
             Ngày đầy đủ để đếm lưới tuần đời của bạn theo tuần.
@@ -453,7 +472,7 @@ export function ConMayTetTool() {
         </div>
 
         <div className="mt-6">
-          <span className="mb-1.5 block text-sm font-semibold text-ink">Giới tính của bạn</span>
+          <span className="mb-1.5 block text-[15px] font-semibold text-ink">Giới tính của bạn</span>
           <div className="flex gap-2" role="radiogroup" aria-label="Giới tính của bạn">
             {(
               [
@@ -473,12 +492,15 @@ export function ConMayTetTool() {
                     setSexTouched(true);
                     updateForm({ ...form, sex: value });
                   }}
-                  className={`flex min-h-11 flex-1 items-center justify-center rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
+                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors ${
                     selected
-                      ? 'border-brand bg-brand text-white'
-                      : 'border-input-line bg-paper text-ink hover:border-brand'
+                      ? 'border-brand-strong bg-brand-tint font-semibold text-ink'
+                      : 'border-line-control bg-canvas font-medium text-ink hover:border-brand-strong'
                   }`}
                 >
+                  {selected && (
+                    <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-brand" />
+                  )}
                   {label}
                 </button>
               );
@@ -489,7 +511,10 @@ export function ConMayTetTool() {
         <div className="mt-6">
           <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
             <div>
-              <label htmlFor="father-year" className="mb-1.5 block text-sm font-semibold text-ink">
+              <label
+                htmlFor="father-year"
+                className="mb-1.5 block text-[15px] font-semibold text-ink"
+              >
                 Năm sinh của bố
               </label>
               <input
@@ -507,7 +532,7 @@ export function ConMayTetTool() {
                     ? 'notices-father'
                     : undefined
                 }
-                className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
+                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
               />
               <FieldNotices
                 id="notices-father"
@@ -516,7 +541,10 @@ export function ConMayTetTool() {
               />
             </div>
             <div>
-              <label htmlFor="mother-year" className="mb-1.5 block text-sm font-semibold text-ink">
+              <label
+                htmlFor="mother-year"
+                className="mb-1.5 block text-[15px] font-semibold text-ink"
+              >
                 Năm sinh của mẹ
               </label>
               <input
@@ -534,7 +562,7 @@ export function ConMayTetTool() {
                     ? 'notices-mother'
                     : undefined
                 }
-                className="min-h-12 w-full rounded-xl border border-input-line bg-card px-3.5 py-2.5 text-base text-ink transition-colors outline-none focus:border-brand"
+                className="min-h-12 w-full rounded-xl border border-line-control bg-canvas px-3.5 py-2.5 text-base text-ink transition-colors focus:border-brand focus-visible:outline-2 focus-visible:outline-brand-strong"
               />
               <FieldNotices
                 id="notices-mother"
@@ -563,13 +591,15 @@ export function ConMayTetTool() {
               }`}
             >
               <span
-                className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-canvas shadow transition-transform ${
                   form.livesWith ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
             </span>
             <span>
-              <span className="block text-sm font-semibold text-ink">Tôi đang sống cùng bố mẹ</span>
+              <span className="block text-[15px] font-semibold text-ink">
+                Tôi đang sống cùng bố mẹ
+              </span>
               <span className="mt-0.5 block text-sm text-muted">Sống cùng: tính theo ngày.</span>
             </span>
           </button>
@@ -578,10 +608,10 @@ export function ConMayTetTool() {
         {!form.livesWith && (
           <div className="mt-6">
             <div className="mb-1.5 flex items-baseline justify-between">
-              <label htmlFor="visits" className="text-sm font-semibold text-ink">
+              <label htmlFor="visits" className="text-[15px] font-semibold text-ink">
                 Về thăm mỗi năm?
               </label>
-              <span className="font-display text-[18px] font-bold text-brand">
+              <span className="font-sans text-[18px] font-bold text-brand-strong">
                 {form.visits} lần/năm
               </span>
             </div>
@@ -602,7 +632,7 @@ export function ConMayTetTool() {
               className="w-full"
             />
             {/* Các mốc nằm đúng tỉ lệ trên thang 0–24 (0%, 25%, 50%, 75%, 100%). */}
-            <div className="flex justify-between text-[13px] text-muted">
+            <div className="flex justify-between text-sm text-muted">
               <span>0</span>
               <span>6</span>
               <span>12</span>
@@ -628,9 +658,9 @@ export function ConMayTetTool() {
           <button
             type="button"
             onClick={hasParentResult ? goScene2 : undefined}
-            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
           >
-            Xem còn mấy cái Tết <ArrowDown size={16} aria-hidden />
+            Xem còn mấy cái Tết <IconArrowDown size={16} aria-hidden />
           </button>
           <p className="mt-3 text-center text-sm text-muted">
             {hasParentResult
@@ -642,7 +672,7 @@ export function ConMayTetTool() {
 
       {/* ── Cảnh 2 «Sân khấu số» ─────────────────────────────────── */}
       {hasParentResult && (
-        <section ref={scene2Ref} aria-label="Sân khấu số" className="scroll-mt-2">
+        <section ref={scene2Ref} aria-label="Sân khấu số" className="scene-reveal scroll-mt-2">
           <div aria-live="polite" className="sr-only">
             {ariaSummary ? `${ariaSummary}.` : ''}
           </div>
@@ -650,6 +680,7 @@ export function ConMayTetTool() {
             {result.father && (
               <ParentStage
                 kind="father"
+                birthYear={effectiveInput.fatherBirthYear}
                 est={result.father}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
@@ -658,6 +689,7 @@ export function ConMayTetTool() {
             {result.mother && (
               <ParentStage
                 kind="mother"
+                birthYear={effectiveInput.motherBirthYear}
                 est={result.mother}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
@@ -665,7 +697,7 @@ export function ConMayTetTool() {
             )}
           </div>
           <div className="pb-10">
-            <SceneNav onNext={afterScene2} onEdit={goScene1} />
+            <SceneNav onNext={afterScene2} onEdit={goScene1} onDeep />
           </div>
         </section>
       )}
@@ -673,18 +705,27 @@ export function ConMayTetTool() {
       {/* ── Cảnh 3 «Câu chuyện tuần đời» ─────────────────────────── */}
       {result.life && (
         <section ref={scene3Ref} aria-label="Câu chuyện tuần đời" className="scroll-mt-2 py-10">
-          {/* Minh hoạ duy nhất của luồng: chỉ đặt ở đầu Cảnh 3 để Cảnh 1
-              giữ trọn ngân sách 1 viewport (kể cả khi có khối lỗi). */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/calendar-spot.svg"
-            alt=""
-            aria-hidden
-            className="mx-auto mb-4 h-24 w-auto"
-          />
-          <h2 className="font-display text-[28px] leading-tight font-bold text-brand-deep">
-            Cuộc đời bạn, kể bằng tuần
-          </h2>
+          {/* Đầu Cảnh 3: mini-vòng 64px suy từ hình học hero-ring
+              (vòng + 12 vạch, bỏ hoa) thay cho calendar-spot của V2. */}
+          <div className="mb-4 flex justify-center">
+            <MiniRing />
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2">
+              <ProfileAvatar
+                role="self"
+                birthYear={Number(effectiveInput.myBirthDate.slice(0, 4))}
+                name="Bạn"
+                size={32}
+              />
+              {/* Tên chữ BVP cạnh avatar ở MỌI call-site (C-11.10) — đồng
+                  nhất với nhãn «Với BỐ/MẸ» ở sân khấu Cảnh 2. */}
+              <span className="text-sm font-semibold text-ink">Bạn</span>
+            </div>
+            <h2 className="font-display text-[25px] leading-tight font-extrabold text-ink">
+              Cuộc đời bạn, kể bằng tuần
+            </h2>
+          </div>
           <p className="mt-1 max-w-[34rem] text-base text-muted">Mỗi chấm là một tuần đời bạn.</p>
 
           <LifeStory
@@ -732,7 +773,7 @@ export function ConMayTetTool() {
               hẹp hơn ~3,5px làm thanh tự lật 2 dòng → 1 dòng ở ~7,05s). */}
           <div
             ref={deletedBarRef}
-            className="mx-auto flex max-w-[34rem] flex-nowrap items-center gap-x-2 rounded-xl border border-line bg-card p-4 shadow-[var(--shadow-lift)]"
+            className="mx-auto flex max-w-[34rem] flex-nowrap items-center gap-x-2 rounded-xl border border-line bg-canvas p-4 shadow-[var(--shadow-lift)]"
           >
             <p role="status" className="min-w-0 text-sm font-medium text-ink">
               Đã xoá.{' '}
@@ -746,7 +787,7 @@ export function ConMayTetTool() {
               type="button"
               ref={undoButtonRef}
               onClick={undoReset}
-              className="flex min-h-11 shrink-0 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
+              className="flex min-h-11 shrink-0 items-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint"
             >
               Hoàn tác
             </button>
@@ -763,11 +804,13 @@ export function ConMayTetTool() {
  * dữ liệu; sửa input sau đó chỉ cross-fade con số tại chỗ. */
 function ParentStage({
   kind,
+  birthYear,
   est,
   livesWith,
   onOpenCalc,
 }: {
   kind: 'father' | 'mother';
+  birthYear: number | null;
   est: ParentEstimate;
   livesWith: boolean;
   onOpenCalc: () => void;
@@ -801,24 +844,47 @@ function ParentStage({
     <section
       ref={stageRef}
       aria-label={`Kết quả với ${isFather ? 'bố' : 'mẹ'}`}
-      className="flex min-h-dvh flex-col items-center justify-center px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
+      className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
     >
-      <p className="text-[13px] font-semibold tracking-[0.08em] text-brand-deep uppercase">
-        Với {person} · {est.currentAge} tuổi
-      </p>
+      {/* Hai cung phần tư vòng năm ở 2 góc đối của tờ (VISUAL-LAYER §2
+          Cảnh 2): nét 3, stroke brand-30, r=128, tĩnh, pointer-events
+          none — khối nội dung ở trung tâm, không giao với cung. */}
+      <svg
+        aria-hidden
+        className="pointer-events-none absolute top-0 left-0 h-20 w-20 text-brand-30 sm:h-32 sm:w-32"
+        viewBox="0 0 128 128"
+        fill="none"
+      >
+        <circle cx="0" cy="0" r="128" stroke="currentColor" strokeWidth="3" />
+      </svg>
+      <svg
+        aria-hidden
+        className="pointer-events-none absolute right-0 bottom-0 h-20 w-20 text-brand-30 sm:h-32 sm:w-32"
+        viewBox="0 0 128 128"
+        fill="none"
+      >
+        <circle cx="128" cy="128" r="128" stroke="currentColor" strokeWidth="3" />
+      </svg>
+
+      <div className="flex items-center justify-center gap-2.5">
+        <ProfileAvatar role={kind} birthYear={birthYear} name={isFather ? 'Bố' : 'Mẹ'} size={32} />
+        <p className="text-[13px] font-semibold tracking-[0.08em] text-on-deep-muted uppercase">
+          Với {person} · {est.currentAge} tuổi
+        </p>
+      </div>
 
       {/* Khung ngoài giữ reveal sân khấu (chạy 1 lần); con số bên trong
           dùng key theo giá trị để mỗi lần sửa input chỉ cross-fade. */}
       <div className={revealed ? 'animate-stage-in' : 'opacity-0'}>
         <p
           key={est.tetsLeft}
-          className="animate-num-in font-display font-extrabold text-brand"
+          className="animate-num-in font-display font-extrabold text-on-deep"
           style={{ fontSize: 'clamp(120px, 38vw, 168px)', lineHeight: 0.95 }}
         >
           {nf.format(est.tetsLeft)}
         </p>
       </div>
-      <p className="font-display mt-1 text-[24px] font-bold text-ink">cái Tết nữa</p>
+      <p className="mt-1 font-sans text-[24px] font-bold text-on-deep">cái Tết nữa</p>
       <div aria-hidden className="mt-3 h-[3px] w-12 rounded bg-gold" />
 
       {/* R1-F4 (Panel #02): trên desktop, dự trữ sẵn chiều cao 2 dòng
@@ -827,34 +893,88 @@ function ParentStage({
           (trước đây lệch ±12px: bố 1 dòng 24px vs mẹ 2 dòng 48px,
           canh giữa chia đôi chênh lệch). Mobile giữ nguyên. */}
       <p
-        className={`mt-5 max-w-[34rem] text-base font-semibold text-ink lg:min-h-12 ${
+        className={`mt-5 max-w-[34rem] text-base font-semibold text-on-deep lg:min-h-12 ${
           revealed ? 'animate-hope-in' : 'opacity-0'
         }`}
       >
         {hope}
       </p>
 
-      <p className="mt-3 max-w-[34rem] text-base text-muted">
+      <p className="mt-3 max-w-[34rem] text-base text-on-deep-muted">
         {livesWith
           ? `và khoảng ${nf.format(est.meetingsLeft)} ngày còn bên nhau theo nhịp sống cùng hiện tại.`
           : `và khoảng ${nf.format(est.meetingsLeft)} lần gặp nữa theo nhịp về thăm hiện tại.`}
       </p>
 
-      <p className="mt-5 max-w-[34rem] text-sm leading-relaxed text-muted">
-        Đây là <strong className="text-ink">ước tính thống kê</strong> theo tuổi thọ trung bình. Nó{' '}
-        <strong className="text-ink">không phải dự đoán cho riêng {isFather ? 'bố' : 'mẹ'}</strong>.
+      <p className="mt-5 max-w-[34rem] text-sm leading-relaxed text-on-deep-muted">
+        Đây là <strong className="text-on-deep">ước tính thống kê</strong> theo tuổi thọ trung bình.
+        Nó{' '}
+        <strong className="text-on-deep">
+          không phải dự đoán cho riêng {isFather ? 'bố' : 'mẹ'}
+        </strong>
+        .
       </p>
-      <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1 text-[13px] text-muted">
+      <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1 text-sm text-on-deep-muted">
         Nguồn: bảng sống WHO Việt Nam 2019.
         <button
           type="button"
           onClick={onOpenCalc}
-          className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-brand"
+          className="inline-flex min-h-11 items-center gap-0.5 px-1 font-semibold text-on-deep focus-visible:outline-2 focus-visible:outline-on-deep"
         >
-          Cách tính <ChevronRight size={14} aria-hidden />
+          Cách tính <IconChevronRight size={14} aria-hidden />
         </button>
       </p>
     </section>
+  );
+}
+
+/* ── Mini-vòng 64px ở đầu Cảnh 3 ─────────────────────────────────────
+ * Suy ĐÚNG TỈ LỆ từ hero-ring.svg của hồ sơ: vành r=128 trong hệ 256,
+ * 12 vạch hướng tâm đều 30° hướng vào trong, dài 14/128 bán kính;
+ * vạch tháng 1 (góc −60°) dài 22/128 + gold — phân biệt bằng độ dài
+ * trước, màu sau. Bỏ hoa. Tâm vòng trống, không đường chia cung,
+ * không vòng đệm (VETO-V4-2). */
+function MiniRing() {
+  const cx = 128;
+  const cy = 128;
+  const r = 110;
+  const ticks = Array.from({ length: 12 }, (_, i) => {
+    const angle = ((-90 + i * 30) * Math.PI) / 180;
+    const isJanuary = i === 1;
+    const len = (r * (isJanuary ? 22 : 14)) / 128;
+    return {
+      x1: cx + Math.cos(angle) * r,
+      y1: cy + Math.sin(angle) * r,
+      x2: cx + Math.cos(angle) * (r - len),
+      y2: cy + Math.sin(angle) * (r - len),
+      isJanuary,
+    };
+  });
+  return (
+    <svg
+      width={64}
+      height={64}
+      viewBox="0 0 256 256"
+      fill="none"
+      stroke="currentColor"
+      className="text-ink"
+      aria-hidden
+      focusable={false}
+    >
+      <circle cx={cx} cy={cy} r={r} strokeWidth={6} />
+      {ticks.map((t, i) => (
+        <line
+          key={i}
+          x1={t.x1.toFixed(2)}
+          y1={t.y1.toFixed(2)}
+          x2={t.x2.toFixed(2)}
+          y2={t.y2.toFixed(2)}
+          stroke={t.isJanuary ? 'var(--gold-30)' : 'currentColor'}
+          strokeWidth={t.isJanuary ? 7 : 6}
+          strokeLinecap="round"
+        />
+      ))}
+    </svg>
   );
 }
 
@@ -868,26 +988,6 @@ const LifeStory = memo(function LifeStory({
   life: LifeGrid;
   birthYear: number;
 }) {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [weekRevealed, setWeekRevealed] = useState(false);
-
-  // Chấm «tuần này» pulse đúng 1 lần khi lưới đầu tiên vào viewport.
-  useEffect(() => {
-    const el = gridRef.current;
-    if (!el || weekRevealed) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setWeekRevealed(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [weekRevealed]);
-
   const rows = Math.ceil(life.totalWeeks / 52);
   const currentRow = Math.floor(life.weeksLived / 52);
   const milestones = [30, 40, 50, 60];
@@ -905,7 +1005,7 @@ const LifeStory = memo(function LifeStory({
           }`}
         >
           <span className="flex-1 border-t border-dashed border-line" />
-          <span className="text-[13px] font-semibold text-gold-text">
+          <span className="text-[13px] font-semibold text-muted">
             {m} tuổi · {birthYear + m}
           </span>
         </div>,
@@ -920,15 +1020,14 @@ const LifeStory = memo(function LifeStory({
         {Array.from({ length: 52 }, (_, c) => {
           const i = r * 52 + c;
           if (i >= life.totalWeeks) return <span key={c} className="aspect-square w-full" />;
-          // Chấm «tuần này»: lõi VÀNG ĐẬM (gold-text) thay cho gold
-          // tươi — lõi cũ chỉ đạt 1,75:1 trên nền giấy (tồn dư T-F,
-          // Panel #01); vòng pine + nhãn ghim bên dưới vẫn là kênh
-          // nhận diện chính, giữ nguyên.
+          // Chấm «tuần này» (M6 của hồ sơ V4): bg-brand-strong + vòng
+          // brand-strong TĨNH — nhịp pulse cũ đã bị giết đích danh ở hồ
+          // sơ; nhãn chữ ghim bên dưới là kênh nhận diện phụ (D4-CM-5).
           const cls =
             i < life.weeksLived
               ? 'bg-brand'
               : i === life.weeksLived
-                ? `bg-gold-text ring-2 ring-brand ${weekRevealed ? 'week-pulse' : ''}`
+                ? 'bg-brand-strong ring-2 ring-brand-strong'
                 : 'bg-line';
           return <span key={c} className={`aspect-square w-full rounded-full ${cls}`} />;
         })}
@@ -937,8 +1036,8 @@ const LifeStory = memo(function LifeStory({
     if (r === currentRow) {
       rowEls.push(
         <div key="current-label" className="flex items-center gap-1.5 py-1" aria-hidden>
-          <MapPin size={14} className="shrink-0 text-brand" />
-          <span className="text-sm font-semibold text-brand-deep">Bạn đang ở tuần này</span>
+          <IconWeekRing size={14} className="shrink-0 text-brand-strong" />
+          <span className="text-sm font-semibold text-brand-strong">Bạn đang ở tuần này</span>
         </div>,
       );
     }
@@ -947,7 +1046,6 @@ const LifeStory = memo(function LifeStory({
   return (
     <div className="mt-5">
       <div
-        ref={gridRef}
         className="flex flex-col gap-[3px]"
         role="img"
         aria-label={`Lưới tuần cuộc đời: đã sống ${nf.format(life.weeksLived)} trên tổng số khoảng ${nf.format(life.totalWeeks)} tuần`}
@@ -960,7 +1058,7 @@ const LifeStory = memo(function LifeStory({
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand" /> Đã sống
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gold-text ring-2 ring-brand" />{' '}
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand-strong ring-2 ring-brand-strong" />{' '}
           Tuần này
         </span>
         <span className="flex items-center gap-1.5">
@@ -973,24 +1071,22 @@ const LifeStory = memo(function LifeStory({
           xuống dòng mà hàng không khoá chiều cao). Desktop 1 hàng
           không đổi. */}
       <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl bg-brand-soft px-3 py-3 text-center">
-          <p className="font-display text-[20px] font-bold text-ink">{nf.format(life.daysLived)}</p>
+        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
+          <p className="font-sans text-[20px] font-bold text-ink">{nf.format(life.daysLived)}</p>
           <p className="mt-0.5 text-[13px] text-muted">ngày đã sống</p>
         </div>
-        <div className="rounded-xl bg-brand-soft px-3 py-3 text-center">
-          <p className="font-display text-[20px] font-bold text-ink">
-            ≈ {nf.format(life.fullMoons)}
-          </p>
+        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
+          <p className="font-sans text-[20px] font-bold text-ink">≈ {nf.format(life.fullMoons)}</p>
           <p className="mt-0.5 text-[13px] text-muted">lần trăng tròn đã qua</p>
         </div>
-        <div className="rounded-xl bg-brand-soft px-3 py-3 text-center">
-          <p className="font-display text-[20px] font-bold text-ink">
+        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
+          <p className="font-sans text-[20px] font-bold text-ink">
             {nf.format(life.tetsExperienced)}
           </p>
           <p className="mt-0.5 text-[13px] text-muted">cái Tết bạn đã trải qua</p>
         </div>
-        <div className="rounded-xl bg-brand-soft px-3 py-3 text-center">
-          <p className="font-display text-[20px] font-bold text-ink">{fmt1(life.percentLived)}%</p>
+        <div className="rounded-xl bg-brand-tint px-3 py-3 text-center">
+          <p className="font-sans text-[20px] font-bold text-ink">{fmt1(life.percentLived)}%</p>
           <p className="mt-0.5 text-[13px] text-muted">đời người đã qua (thống kê)</p>
         </div>
       </div>
@@ -1072,7 +1168,7 @@ function ShareScene({
       aria-label="Gửi đi"
       className="flex min-h-[calc(100dvh-60px)] scroll-mt-2 flex-col justify-center py-10"
     >
-      <h2 className="font-display text-[28px] leading-tight font-bold text-brand-deep">
+      <h2 className="font-display text-[25px] leading-tight font-extrabold text-ink">
         Gửi cho người thân
       </h2>
 
@@ -1081,25 +1177,25 @@ function ShareScene({
         <img
           src={cardUrl}
           alt="Thẻ kết quả Còn Mấy Cái Tết Nữa?"
-          className="mx-auto mt-5 w-full max-w-[320px] rounded-2xl border border-line shadow-[var(--shadow-card)]"
+          className="mx-auto mt-5 w-full max-w-[320px] rounded-2xl border border-line"
         />
       )}
 
-      <div className="sticky bottom-3 z-10 mt-6 bg-paper py-2">
+      <div className="sticky bottom-3 z-10 mt-6 bg-canvas py-2">
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
             onClick={onCopy}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
           >
-            <Copy size={16} aria-hidden /> {copied ? 'Đã sao chép!' : 'Copy kết quả'}
+            <IconCopy size={16} aria-hidden /> {copied ? 'Đã sao chép!' : 'Copy kết quả'}
           </button>
           <button
             type="button"
             onClick={onDownload}
-            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl border border-brand bg-card px-5 py-3 text-sm font-semibold text-brand transition-colors hover:bg-brand-soft"
+            className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-full border border-brand-strong bg-canvas px-5 py-3 text-sm font-semibold text-brand-strong transition-colors hover:bg-brand-tint"
           >
-            <Download size={16} aria-hidden /> Tải ảnh thẻ kết quả
+            <IconDownload size={16} aria-hidden /> Tải ảnh thẻ kết quả
           </button>
         </div>
         <span aria-live="polite" className="sr-only">
@@ -1113,20 +1209,20 @@ function ShareScene({
             type="button"
             ref={resetButtonRef}
             onClick={onRequestReset}
-            className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-paper px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand"
+            className="flex min-h-11 items-center gap-1.5 rounded-xl border border-line bg-canvas px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-brand"
           >
-            <Eraser size={15} aria-hidden /> Làm lại từ đầu
+            <IconReset size={15} aria-hidden /> Làm lại từ đầu
           </button>
         )}
 
         {deletePhase === 'confirming' && (
-          <div className="rounded-xl border border-line bg-paper p-4">
+          <div className="rounded-xl border border-line bg-canvas p-4">
             <p className="text-sm font-semibold text-ink">Xoá hết dữ liệu đã nhập?</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={onConfirmReset}
-                className="flex min-h-11 items-center rounded-xl bg-error-text px-4 py-2 text-sm font-semibold text-white"
+                className="flex min-h-11 items-center rounded-xl bg-error-solid px-4 py-2 text-sm font-semibold text-white"
               >
                 Xoá
               </button>
@@ -1155,9 +1251,9 @@ function ShareScene({
           <button
             type="button"
             onClick={onEdit}
-            className="inline-flex min-h-11 items-center gap-1 px-1 font-semibold text-brand"
+            className="inline-flex min-h-11 items-center gap-1 px-1 font-semibold text-brand-strong"
           >
-            <ArrowUp size={14} aria-hidden /> Sửa lại
+            <IconArrowUp size={14} aria-hidden /> Sửa lại
           </button>
         </p>
       )}

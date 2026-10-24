@@ -12,6 +12,32 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
+## [1.2.0] — 2026-10-24 — REDESIGN-V4 (Carbon Green 60, Neutral-First)
+
+### Changed
+
+- Toàn bộ giao diện theo hồ sơ REDESIGN-V4 đã khoá: seed IBM
+  Carbon Green 60 `#198038` nguyên văn + Yellow 30 `#F1C21B` chỉ ở
+  khoảnh khắc ăn mừng, canvas trung tính chiếm ưu thế; Baloo 2 800
+  cho hiển thị (dấu tiếng Việt kiểm crop thật ở mọi cỡ), Be Vietnam
+  Pro cho nội dung; bộ icon «Vòng Năm» tự vẽ (0 import lucide);
+  mark/lockup/OG/favicon sinh lại từ assets hồ sơ byte-identical.
+- Avatar mặc định = DiceBear `initials` 9.4.3 với glyph từ luật X1
+  của app (chữ cuối của tên gọi — B/M/B) + seed canonical chỉ chọn
+  bảng màu trong 4 cặp khoá.
+- Thẻ chia sẻ: bỏ motif lì xì và thông bị cấm, thêm dải vòng + hoa
+  outline theo palette V4.
+- tokens:verify mới (7 nhóm, bóc comment XML theo LK4-51) PASS
+  7/7 + fixture đối kháng hai chiều.
+- Nhãn nấc thang trượt (0/6/12/18/24) nâng 13px → 14px theo sàn
+  hồ sơ (phân xử parent tại phát hành, §10-8).
+
+### Invariants
+
+- Suite **193/193** (184 baseline + 9 test X1 initials); hành vi
+  lõi giữ nguyên; WebGL = 0 (chết theo khoá hồ sơ — cổng người
+  thật G-06 chưa chạy).
+
 ## [1.1.0] — 2026-10-24 — hygiene wave sau Panel #02 + hotfix SEC-10
 
 ### Added

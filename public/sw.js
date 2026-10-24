@@ -3,8 +3,8 @@
  *
  * Chiến lược cache:
  * - App shell (cache `shell`): precache các URL ỔN ĐỊNH (không hash)
- *   lúc install — trang gốc, manifest, icon PWA, favicon, logo và ảnh
- *   OG — để app mở được offline ngay từ lần tải thứ hai.
+ *   lúc install — trang gốc, manifest, icon PWA, favicon, lockup, hero
+ *   và ảnh OG — để app mở được offline ngay từ lần tải thứ hai.
  * - Runtime (cache `runtime`): tài nguyên biến thiên theo bản build.
  *   `/_next/static/` dùng cache-first (tên file có hash nội dung,
  *   không bao giờ đổi nội dung dưới cùng một URL); điều hướng
@@ -25,7 +25,7 @@
  * dọn cache cũ và precache lại shell mới ở lần ghé tiếp theo.
  */
 
-const CACHE_VERSION = 'v1-2026-10-23';
+const CACHE_VERSION = 'v4-2026-10-24';
 const SHELL_CACHE = `conmaytet-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `conmaytet-runtime-${CACHE_VERSION}`;
 const CURRENT_CACHES = [SHELL_CACHE, RUNTIME_CACHE];
@@ -39,8 +39,9 @@ const PRECACHE_URLS = [
   '/icons/icon-maskable-512.png',
   '/icons/apple-touch-icon.png',
   '/favicon.ico',
-  '/products/brand/conmaytet-logo.svg',
-  '/og.jpg',
+  '/products/brand/conmaytet-lockup.svg',
+  '/products/brand/conmaytet-hero-ring.svg',
+  '/og.png',
 ];
 
 self.addEventListener('install', (event) => {

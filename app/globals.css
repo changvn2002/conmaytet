@@ -1,60 +1,81 @@
 @import 'tailwindcss';
+@import './tokens.css';
 
 @source "../components";
 @source "../lib";
 @source "../app";
 
+/* Hệ token REDESIGN-V4 — nguồn sự thật: design/tokens.conmaytet-v4.json
+   (bản sao nguyên vẹn của tokens.json trong hồ sơ redesign-v4/conmaytet).
+   File tokens.css cạnh file này là FILE SINH từ JSON đó (kiểm bằng
+   `pnpm tokens:verify`) — không sửa tay. Mọi màu ở tầng này đều là var()
+   trỏ vào token trong tokens.css; KHÔNG hex nào của hệ V2 (thông + giấy ấm)
+   được sống sót — chúng nằm trong danh sách cấm của scripts/verify-tokens.mjs.
+   Canvas thường trú = trắng + thang Gray của IBM Carbon (NEUTRAL-FIRST);
+   seed Green 60 #198038 chỉ là accent; gold Yellow 30 chỉ ở các vai khoá
+   (reveal, hero, nền warning) — không bao giờ là chữ trên nền sáng.
+   Quy ước lớp semantic (V4-IMPL-STATE §9): canvas / subtle / ink / muted /
+   line / line-control / brand / brand-strong / brand-tint / brand-10..100 /
+   gold / success-* / error-* / warning-* / info-*. */
 :root {
   color-scheme: light;
-  /* Font tự host (Fontsource, import trong app/layout.tsx):
-     Baloo 2 cho chữ trưng bày/con số sân khấu, Be Vietnam Pro cho thân bài. */
-  --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Baloo 2', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-  --ink: #1c2420;
-  --muted: #44564b;
-  --line: #d8ddd0;
-  --paper: #fbf7ec;
-  --card: #ffffff;
-  /* Màu thương hiệu: xanh thông (pine) — không gradient. */
-  --brand: #1f4d3a;
-  --brand-deep: #14342a;
-  --brand-hover: #2a6248;
-  --brand-soft: #e3ede6;
-  /* Vàng lì xì — CHỈ đồ hoạ (đường nhấn, vòng mốc), không bao giờ làm chữ
-     trên nền sáng (2.26:1); dạng chữ hợp lệ duy nhất là --gold-text. */
-  --gold: #c9a227;
-  --gold-soft: #e9d48a;
-  --gold-text: #6b5510;
-  /* Viền ô nhập ở trạng thái nghỉ — đạt non-text 3:1 trên giấy ấm. */
-  --input-line: #7e9384;
-  /* Màu ngữ nghĩa cho thông báo (không phải màu brand). */
-  --warn-bg: #fbf0d3;
-  --warn-text: #5c4a0e;
-  --error-bg: #fdecea;
-  --error-text: #8a2a20;
-  --shadow-card: 0 1px 2px rgba(28, 36, 32, 0.05), 0 8px 24px rgba(28, 36, 32, 0.06);
-  --shadow-lift: 0 2px 4px rgba(28, 36, 32, 0.06), 0 16px 40px rgba(28, 36, 32, 0.1);
+  /* Bóng đổ: color-mix trên mực neutral-100 (không literal rgb/rgba —
+     luật sink của tokens:verify). Chỉ còn --shadow-lift cho thanh nổi
+     động (hoàn tác); bề mặt tĩnh = 0 bóng theo INTERFACE-SPEC §1 nên
+     --shadow-card đã gỡ cùng các call-site của nó. */
+  --shadow-lift:
+    0 2px 4px color-mix(in srgb, var(--neutral-100) 6%, transparent),
+    0 16px 40px color-mix(in srgb, var(--neutral-100) 10%, transparent);
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
+  --color-canvas: var(--canvas);
+  --color-subtle: var(--neutral-10);
+  --color-ink: var(--neutral-100);
+  --color-muted: var(--neutral-70);
   --color-line: var(--line);
-  --color-paper: var(--paper);
-  --color-card: var(--card);
-  --color-brand: var(--brand);
-  --color-brand-deep: var(--brand-deep);
-  --color-brand-hover: var(--brand-hover);
-  --color-brand-soft: var(--brand-soft);
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-gold-text: var(--gold-text);
-  --color-input-line: var(--input-line);
-  --color-warn-bg: var(--warn-bg);
-  --color-warn-text: var(--warn-text);
-  --color-error-bg: var(--error-bg);
-  --color-error-text: var(--error-text);
-  --font-sans: var(--font-sans);
+  --color-line-control: var(--line-control);
+  --color-brand: var(--brand-60);
+  --color-brand-strong: var(--brand-70);
+  --color-brand-tint: var(--brand-10);
+  --color-brand-10: var(--brand-10);
+  --color-brand-20: var(--brand-20);
+  --color-brand-30: var(--brand-30);
+  --color-brand-40: var(--brand-40);
+  --color-brand-50: var(--brand-50);
+  --color-brand-60: var(--brand-60);
+  --color-brand-70: var(--brand-70);
+  --color-brand-80: var(--brand-80);
+  --color-brand-90: var(--brand-90);
+  --color-brand-100: var(--brand-100);
+  --color-neutral-10: var(--neutral-10);
+  --color-neutral-20: var(--neutral-20);
+  --color-neutral-30: var(--neutral-30);
+  --color-neutral-40: var(--neutral-40);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-60: var(--neutral-60);
+  --color-neutral-70: var(--neutral-70);
+  --color-neutral-80: var(--neutral-80);
+  --color-neutral-90: var(--neutral-90);
+  --color-neutral-100: var(--neutral-100);
+  --color-gold: var(--gold-30);
+  /* Chỉ sống trong scope .scene-reveal (tokens.css) — utility dùng ngoài
+     scope đó sẽ không resolve được biến, đúng kỷ luật LK4-12. */
+  --color-reveal: var(--reveal-bg);
+  --color-reveal-alt: var(--reveal-bg-alt);
+  --color-on-deep: var(--on-deep);
+  --color-on-deep-muted: var(--on-deep-muted);
+  --color-gold-on-deep: var(--gold-on-deep);
+  --color-success-solid: var(--success-solid);
+  --color-success-ink: var(--success-ink);
+  --color-success-bg: var(--success-bg);
+  --color-error-solid: var(--error-solid);
+  --color-error-ink: var(--error-ink);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-ink: var(--warning-ink);
+  --color-info-solid: var(--info-solid);
+  --color-info-ink: var(--info-ink);
+  --font-sans: var(--font-body);
   --font-display: var(--font-display);
 }
 
@@ -64,53 +85,53 @@ html {
 
 html,
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--canvas);
+  color: var(--neutral-100);
 }
 
 body {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
 }
 
 .font-display {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-family: var(--font-display), var(--font-body), sans-serif;
   /* Con số không bao giờ nhảy bề ngang khi giá trị thay đổi. */
   font-variant-numeric: tabular-nums;
 }
 
 /* ── Bề mặt trình duyệt cũng thuộc về thiết kế ─────────────────── */
 
-/* Bôi chọn văn bản: tint xanh thông, chữ thông sâu. */
+/* Bôi chọn văn bản: tint Green 10, chữ Green 70. */
 ::selection {
-  background: var(--brand-soft);
-  color: var(--brand-deep);
+  background: var(--brand-10);
+  color: var(--brand-70);
 }
 
-/* Vòng focus bàn phím nhìn rõ trên mọi thành phần tương tác. */
+/* Vòng focus bàn phím: Green 70 trên sáng (7,72 trắng / 7,02 Gray 10 —
+   COLOR-SYSTEM §3.3), nhìn rõ trên mọi thành phần tương tác. */
 :focus-visible {
-  outline: 2px solid var(--brand-deep);
+  outline: 2px solid var(--brand-70);
   outline-offset: 2px;
 }
 
 /* Con trỏ soạn thảo trong ô nhập theo màu thương hiệu. */
 input {
-  caret-color: var(--brand);
+  caret-color: var(--brand-60);
 }
 
-/* Placeholder ô nhập: token Mực Nhạt toàn opacity — 7,84:1 trên nền ô
-   trắng, thay cho màu mặc định của trình duyệt chỉ đạt 3,19:1
-   (điều kiện chấm lại Panel #01). */
+/* Placeholder ô nhập: Gray 60 trên trắng = 5,02:1 (COLOR-SYSTEM §3.4);
+   trên bề mặt subtle phải dùng Gray 70 — component tự chọn qua class. */
 ::placeholder {
-  color: var(--muted);
+  color: var(--neutral-60);
   opacity: 1;
 }
 
 /* Mũi tên mở/đóng của FAQ theo màu thương hiệu. */
 summary::marker {
-  color: var(--brand);
+  color: var(--brand-60);
 }
 
 /* ── Slider số lần về thăm: track mảnh, núm 26px, vùng chạm dọc 44px ── */
@@ -135,9 +156,9 @@ input[type='range']::-webkit-slider-thumb {
   width: 26px;
   height: 26px;
   border-radius: 9999px;
-  background: var(--brand);
-  border: 3px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(28, 36, 32, 0.3);
+  background: var(--brand-60);
+  border: 3px solid var(--canvas);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--neutral-100) 30%, transparent);
 }
 input[type='range']::-moz-range-track {
   height: 6px;
@@ -148,12 +169,14 @@ input[type='range']::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 9999px;
-  background: var(--brand);
-  border: 3px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(28, 36, 32, 0.3);
+  background: var(--brand-60);
+  border: 3px solid var(--canvas);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--neutral-100) 30%, transparent);
 }
 
-/* ── Chuyển động: chỉ phục vụ khoảnh khắc con số lên sân khấu ──── */
+/* ── Chuyển động: chỉ phục vụ khoảnh khắc con số lên sân khấu ────
+   Easing LUÔN qua biến token (--ease-ceremony / --ease-ui từ tokens.css);
+   cấm easing viết tay trong file này (V-M0). */
 
 /* Reveal con số ở Cảnh 2: hiện như được lật mở (scale + fade), không
    đếm tăng — số không bao giờ gợi đồng hồ đếm ngược. */
@@ -168,7 +191,7 @@ input[type='range']::-moz-range-thumb {
   }
 }
 .animate-stage-in {
-  animation: stage-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: stage-in 480ms var(--ease-ceremony) both;
 }
 
 /* Câu hy vọng đi kèm con số: trễ 120ms sau số, nhẹ nhàng nhô lên. */
@@ -183,7 +206,7 @@ input[type='range']::-moz-range-thumb {
   }
 }
 .animate-hope-in {
-  animation: hope-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  animation: hope-in 380ms var(--ease-ceremony) 120ms both;
 }
 
 /* Cập nhật số khi sửa input (đang ở Cảnh 2): chỉ cross-fade tại chỗ. */
@@ -196,22 +219,11 @@ input[type='range']::-moz-range-thumb {
   }
 }
 .animate-num-in {
-  animation: num-in 160ms ease-out both;
+  animation: num-in 160ms var(--ease-ui) both;
 }
 
-/* Chấm «tuần này» trong lưới tuần: pulse vòng xanh thông đúng 1 lần
-   khi lưới vào khung hình, giúp mắt tìm thấy hiện tại giữa hàng nghìn chấm. */
-@keyframes week-pulse {
-  from {
-    box-shadow: 0 0 0 0 rgba(31, 77, 58, 0.45);
-  }
-  to {
-    box-shadow: 0 0 0 10px rgba(31, 77, 58, 0);
-  }
-}
-.week-pulse {
-  animation: week-pulse 600ms cubic-bezier(0.22, 1, 0.36, 1) 1 both;
-}
+/* Chấm «tuần này» trong lưới tuần: TĨNH tuyệt đối (M6 hồ sơ V4 —
+   week-pulse đã bị giết đích danh; không animation nào cho mốc này). */
 
 @media (prefers-reduced-motion: reduce) {
   html {

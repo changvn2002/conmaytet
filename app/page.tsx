@@ -30,14 +30,14 @@ export default function Page() {
       />
 
       <header className="flex items-center gap-3 border-b border-line py-3">
+        {/* Lockup V4: mark «Một Vòng Năm» + wordmark Baloo 2 800 outline
+            đã nằm trong chính file SVG — header không còn chữ HTML. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/products/brand/conmaytet-logo.svg"
-          alt="Logo Còn Mấy Cái Tết Nữa?"
-          width={36}
-          height={36}
+          src="/products/brand/conmaytet-lockup.svg"
+          alt="Còn Mấy Cái Tết Nữa?"
+          className="h-9 w-auto"
         />
-        <p className="font-display text-lg leading-tight font-bold text-ink">{SITE_NAME}</p>
       </header>
 
       <main className="flex-1">

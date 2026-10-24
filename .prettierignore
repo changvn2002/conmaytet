@@ -7,3 +7,6 @@ pnpm-lock.yaml
 next-env.d.ts
 public
 *.md
+# File sinh/bản sao nguyên vẹn của hồ sơ REDESIGN-V4 — format do bộ sinh/hồ sơ sở hữu (tiền lệ dichbome)
+app/tokens.css
+design/tokens.conmaytet-v4.json

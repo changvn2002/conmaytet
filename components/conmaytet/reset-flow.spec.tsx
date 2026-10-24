@@ -191,11 +191,11 @@ describe('Cụm C1 — focus ở các lối ra còn lại', () => {
 });
 
 describe('Gói kèm Panel #01 — TC-3 + aria ô lỗi', () => {
-  it('TC-3: chip giới tính chưa chọn dùng border-input-line (#7E9384), không còn border-line (#D8DDD0)', () => {
+  it('TC-3: chip giới tính chưa chọn dùng border-line-control (Gray 70), không còn border-line (Gray 30)', () => {
     seedAndRender();
     // Dữ liệu nạp sẵn: Nam đã chọn; Nữ/Không chọn là chip chưa chọn.
     const unselected = screen.getByRole('radio', { name: 'Nữ' });
-    expect(unselected.className).toContain('border-input-line');
+    expect(unselected.className).toContain('border-line-control');
     expect(unselected.className.split(/\s+/)).not.toContain('border-line');
   });
 
