@@ -12,6 +12,29 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
+## [1.2.3] — 2026-10-24 — Sửa nóng S-NEW-2: nút «Tiếp» của sân khấu bố bỏ qua sân khấu mẹ
+
+### Fixed
+
+- **Panel chấm lại v1.2.2, S-NEW-2 (SERIOUS, 2 ghế tái hiện độc
+  lập bằng 2 phương pháp gồm click chuột thật):** cả hai sân
+  khấu bố/mẹ cùng dùng một đích cuộn `afterScene2`, nên «Tiếp»
+  của bố nhảy thẳng xuống lưới tuần (scrollY 2733 thay vì ≈1889)
+  — người dùng theo luồng dẫn dắt không bao giờ dừng xem được
+  kết quả của mẹ. Nay: «Tiếp» của bố cuộn tới đúng sân khấu mẹ
+  (`#san-khau-me`) khi có kết quả của mẹ, ngược lại giữ đích cũ;
+  «Tiếp» của mẹ giữ nguyên đích sau Cảnh 2. Chuỗi đúng: bố → mẹ
+  → lưới tuần → Gửi đi.
+
+### Notes
+
+- Panel v1.2.2 đồng thời xác nhận MỌI mục chức năng được giao
+  đã đóng thật (modal + focus trap, focus-visible, kiểm chéo
+  năm sinh, H2 lưới tuần, kiểm thường lệ) — rule 12 chỉ fail vì
+  S-NEW-2 này. §6 FAIL (3/5 ghế AI-made, tell trùng khớp lý do
+  người dùng bác diện mạo V4) — không vá trên diện mạo cũ; chờ
+  chương trình redesign, chấm lại trên diện mạo mới.
+
 ## [1.2.2] — 2026-10-24 — Focus trap cho dialog + kiểm chéo năm sinh
 
 ### Fixed

@@ -430,6 +430,15 @@ export function ConMayTetTool() {
   const goScene4 = () => scrollToEl(scene4Ref.current);
   // Cảnh kế tiếp sau Cảnh 2: có lưới tuần thì tới Cảnh 3, không thì Cảnh 4.
   const afterScene2 = result.life ? goScene3 : goScene4;
+  // «Tiếp» của sân khấu BỐ phải dừng ở sân khấu MẸ trước (Panel
+  // v1.2.2 S-NEW-2: cả hai sân khấu cùng dùng afterScene2 nên nút
+  // của bố nhảy thẳng qua mẹ xuống lưới tuần — người dùng theo
+  // luồng dẫn dắt không bao giờ dừng xem được kết quả của mẹ).
+  const goMomStage = () => {
+    const el = document.getElementById('san-khau-me');
+    if (el) scrollToEl(el);
+    else afterScene2();
+  };
 
   const ariaSummary = [
     result.father ? `Còn khoảng ${nf.format(result.father.tetsLeft)} cái Tết với bố` : null,
@@ -700,13 +709,14 @@ export function ConMayTetTool() {
                 est={result.father}
                 livesWith={effectiveInput.livesWithParents}
                 onOpenCalc={openCalc}
-                onNext={afterScene2}
+                onNext={result.mother ? goMomStage : afterScene2}
                 onEdit={goScene1}
               />
             )}
             {result.mother && (
               <ParentStage
                 kind="mother"
+                stageId="san-khau-me"
                 birthYear={effectiveInput.motherBirthYear}
                 est={result.mother}
                 livesWith={effectiveInput.livesWithParents}
@@ -835,6 +845,7 @@ function ParentStage({
   onOpenCalc,
   onNext,
   onEdit,
+  stageId,
 }: {
   kind: 'father' | 'mother';
   birthYear: number | null;
@@ -844,6 +855,8 @@ function ParentStage({
   /** Hành động đi tiếp ĐÃ CÓ của Cảnh 2 (qua lưới tuần / qua gửi đi). */
   onNext: () => void;
   onEdit: () => void;
+  /** Id neo để nút «Tiếp» của sân khấu trước cuộn tới đúng sân khấu này. */
+  stageId?: string;
 }) {
   const stageRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -873,8 +886,9 @@ function ParentStage({
   return (
     <section
       ref={stageRef}
+      id={stageId}
       aria-label={`Kết quả với ${isFather ? 'bố' : 'mẹ'}`}
-      className="relative flex min-h-dvh flex-col items-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
+      className="relative flex min-h-dvh scroll-mt-2 flex-col items-center overflow-hidden px-2 py-12 text-center lg:min-h-[calc(100dvh-124px)]"
     >
       {/* Hai cung phần tư vòng năm ở 2 góc đối của tờ (VISUAL-LAYER §2
           Cảnh 2): nét 3, stroke brand-30, r=128, tĩnh, pointer-events
