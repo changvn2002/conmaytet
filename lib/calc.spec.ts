@@ -106,3 +106,71 @@ describe('validateInput', () => {
     expect(v.warnings).toHaveLength(0);
   });
 });
+
+describe('validateInput — kiểm chéo năm sinh bố/mẹ phải nhỏ hơn năm sinh của bạn (V122)', () => {
+  // MINOR mới của ghế 5 (panel v1.2.1): trước V122, bố/mẹ bằng hoặc
+  // trẻ hơn người dùng chỉ nhận cảnh báo mềm và app vẫn sinh kết quả
+  // vô nghĩa («bố 1 tuổi · 70 cái Tết nữa»). Nay là lỗi cứng.
+  const ME = '1990-06-15'; // nữ 1990 — bộ dữ liệu chuẩn của ghế 5
+
+  it('ca hợp lệ của ghế 5 (nữ 1990, bố 1960, mẹ 1963): không lỗi, không cảnh báo', () => {
+    const v = validateInput(
+      input({ myBirthDate: ME, mySex: 'female', fatherBirthYear: 1960, motherBirthYear: 1963 }),
+      NOW,
+    );
+    expect(v.errors).toHaveLength(0);
+    expect(v.warnings).toHaveLength(0);
+  });
+
+  it('bố sinh SAU người dùng (2025 vs 1990 — ca ghế 5) → lỗi cứng, không cảnh báo mềm', () => {
+    const v = validateInput(input({ myBirthDate: ME, fatherBirthYear: 2025 }), NOW);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('của bố');
+    expect(v.errors[0]).toContain('nhỏ hơn năm sinh của bạn (1990)');
+    expect(v.warnings.some((w) => w.includes('bố'))).toBe(false);
+  });
+
+  it('bố sinh CÙNG năm người dùng (1990) → lỗi cứng', () => {
+    const v = validateInput(input({ myBirthDate: ME, fatherBirthYear: 1990 }), NOW);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('của bố');
+  });
+
+  it('mẹ sinh CÙNG năm người dùng (1990) → lỗi cứng cho mẹ, bố hợp lệ không bị kéo theo', () => {
+    const v = validateInput(
+      input({ myBirthDate: ME, fatherBirthYear: 1960, motherBirthYear: 1990 }),
+      NOW,
+    );
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('của mẹ');
+  });
+
+  it('mẹ sinh SAU người dùng (2001 vs 1990) → lỗi cứng', () => {
+    const v = validateInput(input({ myBirthDate: ME, motherBirthYear: 2001 }), NOW);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('của mẹ');
+  });
+
+  it('bố sinh năm HIỆN TẠI (2026) → lỗi cứng kiểm chéo (không chỉ lỗi khoảng)', () => {
+    const v = validateInput(input({ myBirthDate: ME, fatherBirthYear: 2026 }), NOW);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('nhỏ hơn năm sinh của bạn (1990)');
+  });
+
+  it('người dùng sinh năm hiện tại, bố cũng sinh năm hiện tại → lỗi cứng (gap = 0)', () => {
+    const v = validateInput(input({ myBirthDate: '2026-01-15', fatherBirthYear: 2026 }), NOW);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('nhỏ hơn năm sinh của bạn (2026)');
+  });
+
+  it('bố lớn hơn con 1–14 tuổi vẫn chỉ là cảnh báo mềm (1979 vs 1990 = 11 tuổi)', () => {
+    const v = validateInput(input({ myBirthDate: ME, fatherBirthYear: 1979 }), NOW);
+    expect(v.errors).toHaveLength(0);
+    expect(v.warnings.some((w) => w.includes('bố') && w.includes('11 tuổi'))).toBe(true);
+  });
+
+  it('chưa nhập ngày sinh của bạn → không kiểm chéo (giữ hành vi cũ)', () => {
+    const v = validateInput(input({ fatherBirthYear: 2026, motherBirthYear: 2026 }), NOW);
+    expect(v.errors).toHaveLength(0);
+  });
+});

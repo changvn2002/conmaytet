@@ -139,7 +139,7 @@ describe('W3-1 fuzz ngày sinh của mình', () => {
   });
 });
 
-describe('W3-1 chênh lệch tuổi bố mẹ – con phi lý → cảnh báo mềm theo thiết kế', () => {
+describe('W3-1 chênh lệch tuổi bố mẹ – con: <15 tuổi cảnh báo mềm; bằng/trẻ hơn con → lỗi cứng V122', () => {
   it('mẹ 10 tuổi khi sinh con → cảnh báo mềm, không lỗi, vẫn tính', () => {
     const v = validateInput(inp({ myBirthDate: '1996-06-15', motherBirthYear: 1986 }), NOW);
     expect(v.errors).toHaveLength(0);
@@ -155,27 +155,36 @@ describe('W3-1 chênh lệch tuổi bố mẹ – con phi lý → cảnh báo m�
     expect(v15.warnings).toHaveLength(0);
   });
 
-  it('bố bằng tuổi con → cảnh báo mềm, kết quả xác định không âm', () => {
+  it('[V122] bố bằng tuổi con → lỗi cứng kiểm chéo (trước V122 là cảnh báo mềm)', () => {
+    // Panel v1.2.1 (ghế 5) nâng ca bằng/trẻ hơn con thành chặn cứng:
+    // năm sinh bố/mẹ phải NHỎ HƠN năm sinh của người dùng, vi phạm
+    // thì tầng UI không sinh kết quả cho người đó.
     const v = validateInput(inp({ myBirthDate: '1996-06-15', fatherBirthYear: 1996 }), NOW);
-    expect(v.errors).toHaveLength(0);
-    expect(v.warnings.some((w) => w.includes('bố'))).toBe(true);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('nhỏ hơn năm sinh của bạn (1996)');
+    expect(v.warnings.some((w) => w.includes('bố'))).toBe(false);
   });
 
-  it('bố nhỏ tuổi hơn con → vẫn cảnh báo (không lỗi cứng, không số âm trong kết quả)', () => {
+  it('[V122] bố nhỏ tuổi hơn con → lỗi cứng kiểm chéo, không còn cảnh báo mềm', () => {
     const v = validateInput(inp({ myBirthDate: '1996-06-15', fatherBirthYear: 2000 }), NOW);
-    expect(v.errors).toHaveLength(0);
-    expect(v.warnings.some((w) => w.includes('bố'))).toBe(true);
+    expect(v.errors).toHaveLength(1);
+    expect(v.errors[0]).toContain('của bố');
+    expect(v.warnings.some((w) => w.includes('bố'))).toBe(false);
+    // calculate() thuần toán không tự validate — cổng chặn là
+    // validateInput (tầng component null-hoá phần có lỗi cứng).
     const r = calculate(inp({ myBirthDate: '1996-06-15', fatherBirthYear: 2000 }), NOW);
     expect(r.father!.currentAge).toBe(26);
-    expect(r.father!.tetsLeft).toBeGreaterThan(0);
   });
 
-  it('[FINDING F6] câu cảnh báo khi bố NHỎ hơn con không được in số tuổi âm', () => {
-    // Tái hiện: con sinh 1996, bố sinh 2000 → app in
-    // "bố chỉ lớn hơn bạn -4 tuổi" — câu chữ sai logic ("lớn hơn" với số âm).
+  it('[FINDING F6 → V122] bố NHỎ hơn con: thông báo lỗi không in số tuổi âm', () => {
+    // Tái hiện gốc: con sinh 1996, bố sinh 2000 → app từng in
+    // "bố chỉ lớn hơn bạn -4 tuổi". Nay ca này là lỗi cứng kiểm chéo
+    // và thông báo không chứa diễn đạt tuổi âm nào.
     const v = validateInput(inp({ myBirthDate: '1996-06-15', fatherBirthYear: 2000 }), NOW);
-    const warn = v.warnings.find((w) => w.includes('bố')) ?? '';
-    expect(warn).not.toMatch(/lớn hơn bạn -\d/);
+    const err = v.errors.find((w) => w.includes('bố')) ?? '';
+    expect(err).toContain('nhỏ hơn năm sinh của bạn');
+    expect(err).not.toMatch(/lớn hơn bạn -\d/);
+    expect(v.warnings.find((w) => w.includes('bố'))).toBeUndefined();
   });
 });
 

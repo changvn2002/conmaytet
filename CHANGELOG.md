@@ -12,6 +12,25 @@ phiên bản theo [SemVer](https://semver.org/).
 > [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md): `v1.0.0` → `ed2c358`,
 > `v1.0.1` → `084bb36`.
 
+## [1.2.2] — 2026-10-24 — Focus trap cho dialog + kiểm chéo năm sinh
+
+### Fixed
+
+- **Dialog xác nhận xoá đã nhốt được focus** (S-NEW-1 của vòng
+  chấm lại v1.2.1, tái lập 24/24 Tab thoát ra nền + Enter kích
+  hoạt được `<details>` nền khi dialog mở): thêm trap
+  Tab/Shift+Tab vòng trong dialog; focus lỡ ở nền thì Tab kéo
+  về trong. Sau sửa: Tab ×24 → 0 thoát, nền không kích hoạt
+  được bằng bàn phím; Esc/backdrop/hoàn tác giữ nguyên byte-
+  equal (verifier độc lập xác nhận toàn bộ trước phát hành).
+- **Kiểm chéo năm sinh bố/mẹ**: năm sinh bố/mẹ bằng hoặc sau
+  năm sinh của người dùng là lỗi cứng tại chỗ («Năm sinh của
+  bố/mẹ phải nhỏ hơn năm sinh của bạn…»), không còn sinh kết
+  quả vô nghĩa kiểu bố sinh 2025 → «1 tuổi · 70 cái Tết». Ghi
+  chú: 3 test W3 cũ khoá hành vi cảnh-báo-mềm (W3-F6) đã được
+  viết lại theo yêu cầu mới này — thay đổi hành vi có chủ đích,
+  ghi trong review record v1.2.2.
+
 ## [1.2.1] — 2026-10-24 — Sửa 2 SERIOUS thật của Panel v1.2.0 + đóng 2 cáo buộc không tái lập
 
 ### Fixed

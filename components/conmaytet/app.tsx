@@ -1175,6 +1175,54 @@ function ShareScene({
   onEdit: () => void;
 }) {
   const [cardUrl, setCardUrl] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // V122 (S-NEW-1, ghế 2 panel v1.2.1): FOCUS TRAP cho dialog xác
+  // nhận xoá. v1.2.1 đã có role="dialog" aria-modal="true" + khoá
+  // cuộn + backdrop, nhưng KHÔNG chứa được focus: Tab thoát ra nền
+  // ngay từ phím đầu tiên (đo lại: 24/24 Tab ra ngoài) và Enter kích
+  // hoạt được <details> nền trong lúc dialog còn mở — nền không hề
+  // inert như aria-modal tuyên bố. Nay khi dialog mở, keydown
+  // Tab/Shift+Tab chỉ vòng trong các phần tử focus được của dialog;
+  // focus lỡ nằm ngoài dialog (mở bằng chạm, script…) thì Tab kéo
+  // về trong thay vì đi tiếp ở nền, nên không phần tử nền nào nhận
+  // focus/kích hoạt bàn phím được khi dialog còn mở. Mẫu tham chiếu:
+  // useFocusTrap của dichbome — ở đây app chỉ có MỘT dialog tại một
+  // thời điểm nên không cần ngăn xếp trap; Esc, focus mở («Giữ
+  // lại»), trả focus và khoá cuộn giữ nguyên các effect hiện hữu.
+  useEffect(() => {
+    if (deletePhase !== 'confirming') return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const getFocusable = () =>
+      Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusable();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || !dialog.contains(active)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+        return;
+      }
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [deletePhase]);
 
   // Vẽ lại ảnh xem trước khi kết quả/input đổi — chờ font trưng bày
   // sẵn sàng để số trên thẻ dùng đúng Baloo 2. Lỗi canvas thì ẩn xem
@@ -1268,12 +1316,14 @@ function ShareScene({
              nên người dùng cuộn/chạm đi nơi khác được trong lúc xác
              nhận treo (và sửa form được sau lưng khối xác nhận). Nay:
              nền bị khoá cuộn (effect ở component cha) + bị backdrop
-             che kín — chạm vào backdrop = nhánh AN TOÀN «Giữ lại»
+             che kín + focus bị trap trong dialog (V122, S-NEW-1 —
+             effect ngay trên ShareScene) — chạm vào backdrop = nhánh AN TOÀN «Giữ lại»
              (không bao giờ xoá, dữ liệu nguyên vẹn, focus về nút
              «Làm lại từ đầu»); chạm vào panel không xuyên xuống
              backdrop. Ngữ nghĩa giữ nguyên: «Xoá» mới xoá thật, sau
              xoá vẫn là cửa sổ hoàn tác 8 giây ở component cha. */
           <div
+            ref={dialogRef}
             className="fixed inset-0 z-40 flex items-end justify-center p-4 sm:items-center"
             role="dialog"
             aria-modal="true"
